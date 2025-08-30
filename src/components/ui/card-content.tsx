@@ -179,7 +179,7 @@ export function VibeContent({ content, images, className }: VibeContentProps) {
                 className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer"
               >
                 {/* 这里可以替换为真实的图片组件 */}
-                <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">图片 {index + 1}</span>
                 </div>
               </div>

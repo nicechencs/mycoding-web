@@ -192,7 +192,7 @@ export default function CommunityPage() {
 
       {/* Community Stats */}
       <section className="container">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-8 text-white text-center">
+        <div className="bg-blue-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">加入我们的社区</h2>
           <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
             与数千名开发者一起学习、分享、成长。分享你的知识，获得他人的帮助。

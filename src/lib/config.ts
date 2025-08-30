@@ -1,7 +1,7 @@
 import type { SiteConfig } from '@/types'
 
 export const siteConfig: SiteConfig = {
-  name: 'MyCoding Web',
+  name: 'MyCoding',
   description: '基于 Next.js 14 构建的现代化Web应用',
   url: 'https://mycoding-web.vercel.app',
   ogImage: 'https://mycoding-web.vercel.app/og.jpg',

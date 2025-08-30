@@ -73,7 +73,7 @@ export default function VibesPage() {
       )}
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 mb-8">
+      <div className="bg-blue-50 rounded-lg p-6 mb-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">

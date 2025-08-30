@@ -195,7 +195,7 @@ export default function PostsPage() {
 
       {/* Content Stats */}
       <section className="container">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-8 text-white text-center">
+        <div className="bg-blue-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">开始创作</h2>
           <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
             分享你的知识和经验，帮助更多开发者成长。写文章、发推荐、记录成长。

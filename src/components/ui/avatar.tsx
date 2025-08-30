@@ -10,13 +10,13 @@ const avatarSizes = {
   xl: 'w-14 h-14 text-lg'
 } as const
 
-// 渐变主题配置
+// 纯色主题配置
 const avatarThemes = {
-  primary: 'from-green-500 to-blue-500',
-  secondary: 'from-purple-500 to-blue-500',
-  tertiary: 'from-blue-500 to-purple-500',
-  warm: 'from-orange-500 to-red-500',
-  cool: 'from-cyan-500 to-blue-500'
+  primary: 'bg-blue-500',
+  secondary: 'bg-purple-500',
+  tertiary: 'bg-indigo-500',
+  warm: 'bg-red-500',
+  cool: 'bg-cyan-500'
 } as const
 
 interface AvatarProps {
@@ -39,7 +39,7 @@ export function Avatar({
   return (
     <div 
       className={cn(
-        'bg-gradient-to-r rounded-full flex items-center justify-center text-white font-medium flex-shrink-0',
+        'rounded-full flex items-center justify-center text-white font-medium flex-shrink-0',
         avatarSizes[size],
         avatarThemes[theme],
         onClick && 'cursor-pointer hover:shadow-lg transition-shadow',

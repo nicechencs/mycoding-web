@@ -15,7 +15,7 @@ export function Header() {
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-2xl">💻</span>
-            <span className="inline-block font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="inline-block font-bold text-xl text-blue-600">
               {siteConfig.name}
             </span>
           </Link>
