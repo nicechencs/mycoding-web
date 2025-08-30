@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { getLatestVibes } from '@/lib/mock/vibes'
 import { VibeCard } from '@/components/features/vibes/vibe-card'
 import { VibeComposer } from '@/components/features/vibes/vibe-composer'
+import { Avatar, FloatingAvatar } from '@/components/ui/avatar'
 
 export default function VibesPage() {
   const [vibes, setVibes] = useState(getLatestVibes())
@@ -50,9 +51,9 @@ export default function VibesPage() {
           className="w-full p-4 text-left bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
         >
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+            <Avatar size="md" theme="primary">
               我
-            </div>
+            </Avatar>
             <div className="flex-1">
               <p className="text-gray-500">分享你的编程动态...</p>
             </div>
@@ -137,13 +138,13 @@ export default function VibesPage() {
       )}
 
       {/* Floating Action Button */}
-      <button
+      <FloatingAvatar
         onClick={() => setShowComposer(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center text-2xl z-50"
+        theme="primary"
         title="发布动态"
       >
         ✨
-      </button>
+      </FloatingAvatar>
     </div>
   )
 }

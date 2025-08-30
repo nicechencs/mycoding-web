@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Article } from '@/types'
+import { Avatar } from '@/components/ui/avatar'
 
 interface ArticleCardProps {
   article: Article
@@ -22,9 +23,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200 group">
       {/* Header */}
       <div className="flex items-center space-x-3 mb-4">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+        <Avatar size="md" theme="secondary">
           {article.author.name.charAt(0)}
-        </div>
+        </Avatar>
         <div className="flex-1 min-w-0">
           <div className="font-medium text-gray-900">{article.author.name}</div>
           <div className="text-sm text-gray-500">

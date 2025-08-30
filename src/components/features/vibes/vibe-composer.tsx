@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Avatar } from '@/components/ui/avatar'
 
 interface VibeComposerProps {
   onSubmit: (content: string, tags: string[]) => void
@@ -48,9 +49,9 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       {/* Header */}
       <div className="flex items-center space-x-3 mb-4">
-        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+        <Avatar size="md" theme="primary">
           我
-        </div>
+        </Avatar>
         <div>
           <div className="font-medium text-gray-900">分享你的编程动态</div>
           <div className="text-sm text-gray-500">让其他开发者了解你的想法</div>

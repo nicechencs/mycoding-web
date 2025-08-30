@@ -2,52 +2,30 @@
 
 import { useState } from 'react'
 import { Vibe } from '@/types'
+import { Avatar } from '@/components/ui/avatar'
+import { useLike } from '@/hooks/use-like'
+import { formatRelativeTime } from '@/utils/date'
 
 interface VibeCardProps {
   vibe: Vibe
 }
 
 export function VibeCard({ vibe }: VibeCardProps) {
-  const [isLiked, setIsLiked] = useState(vibe.isLiked)
-  const [likeCount, setLikeCount] = useState(vibe.likeCount)
+  const { likeCount, isLiked, handleLike } = useLike(vibe.likeCount, vibe.isLiked)
   const [showComments, setShowComments] = useState(false)
-
-  const handleLike = () => {
-    if (isLiked) {
-      setLikeCount(prev => prev - 1)
-      setIsLiked(false)
-    } else {
-      setLikeCount(prev => prev + 1)
-      setIsLiked(true)
-    }
-  }
-
-  const formatTime = (date: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(diff / 3600000)
-    const days = Math.floor(diff / 86400000)
-
-    if (minutes < 1) return '刚刚'
-    if (minutes < 60) return `${minutes}分钟前`
-    if (hours < 24) return `${hours}小时前`
-    if (days < 7) return `${days}天前`
-    return date.toLocaleDateString('zh-CN')
-  }
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
       {/* Header */}
       <div className="flex items-start space-x-3 mb-4">
-        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium flex-shrink-0">
+        <Avatar size="lg" theme="primary">
           {vibe.author.name.charAt(0)}
-        </div>
+        </Avatar>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
             <span className="font-medium text-gray-900">{vibe.author.name}</span>
             <span className="text-sm text-gray-500">
-              {formatTime(vibe.createdAt)}
+              {formatRelativeTime(vibe.createdAt)}
             </span>
           </div>
         </div>
@@ -159,9 +137,9 @@ export function VibeCard({ vibe }: VibeCardProps) {
           <div className="space-y-3">
             {/* Comment Input */}
             <div className="flex space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+              <Avatar size="sm" theme="secondary">
                 我
-              </div>
+              </Avatar>
               <div className="flex-1">
                 <input
                   type="text"
