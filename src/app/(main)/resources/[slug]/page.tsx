@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getResourceBySlug, getResourceComments, getRelatedResources, getResourceRatingDistribution } from '@/lib/mock/resources'
+import { getResourceBySlug, getResourceComments, getRelatedResources } from '@/lib/mock/resources'
 import { RatingStars } from '@/components/features/resources/rating-stars'
 import { Avatar } from '@/components/ui/avatar'
 import { formatDistanceToNow } from 'date-fns'
@@ -14,8 +14,24 @@ export default function ResourceDetailPage() {
   const params = useParams()
   const slug = params.slug as string
   
-  const resource = getResourceBySlug(slug)
   const [activeTab, setActiveTab] = useState<'description' | 'comments' | 'ratings'>('description')
+  
+  // 安全地获取资源
+  let resource = null
+  let comments: any[] = []
+  let relatedResources: any[] = []
+  let ratingDistribution = null
+  
+  try {
+    resource = getResourceBySlug(slug)
+    if (resource) {
+      comments = getResourceComments(resource.id)
+      relatedResources = getRelatedResources(resource.id, 3)
+      ratingDistribution = resource.ratingDistribution || { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+    }
+  } catch (error) {
+    console.error('获取资源详情时出错:', error)
+  }
   
   if (!resource) {
     return (
@@ -32,10 +48,6 @@ export default function ResourceDetailPage() {
       </div>
     )
   }
-
-  const comments = getResourceComments(resource.id)
-  const relatedResources = getRelatedResources(resource.id, 3)
-  const ratingDistribution = getResourceRatingDistribution(resource.id)
 
   return (
     <div className="container py-8">
