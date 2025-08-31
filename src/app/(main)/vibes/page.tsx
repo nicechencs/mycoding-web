@@ -119,7 +119,7 @@ export default function VibesPage() {
               成为第一个分享编程动态的人
             </p>
             <button 
-              onClick={() => setShowComposer(true)}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="btn-primary"
             >
               发布第一条Vibe
@@ -139,7 +139,7 @@ export default function VibesPage() {
 
       {/* Floating Action Button */}
       <FloatingAvatar
-        onClick={() => setShowComposer(true)}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         theme="primary"
         title="发布动态"
       >
