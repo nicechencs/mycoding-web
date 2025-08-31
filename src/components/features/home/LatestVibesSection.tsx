@@ -1,12 +1,25 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getLatestVibes } from '@/lib/mock/vibes'
 import { Avatar } from '@/components/ui/avatar'
 
 export default function LatestVibesSection() {
   const latestVibes = getLatestVibes(3)
+  const router = useRouter()
+
+  const handleCardClick = (vibeId: string, e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button')) {
+      return
+    }
+    router.push(`/vibes/${vibeId}`)
+  }
 
   return (
-    <section className="container">
+    <section className="py-16">
+      <div className="container">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">最新动态</h2>
@@ -24,7 +37,8 @@ export default function LatestVibesSection() {
         {latestVibes.map((vibe) => (
           <div
             key={vibe.id}
-            className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+            className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={(e) => handleCardClick(vibe.id, e)}
           >
             <div className="flex items-start space-x-3">
               <Avatar size="md" theme="primary">
@@ -58,6 +72,7 @@ export default function LatestVibesSection() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </section>
   )

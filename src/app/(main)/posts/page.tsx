@@ -1,10 +1,22 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getFeaturedArticles, getLatestArticles } from '@/lib/mock/articles'
 import { Avatar } from '@/components/ui/avatar'
 
 export default function PostsPage() {
   const featuredArticles = getFeaturedArticles()
   const latestArticles = getLatestArticles()
+  const router = useRouter()
+
+  const handleCardClick = (slug: string, e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button')) {
+      return
+    }
+    router.push(`/posts/articles/${slug}`)
+  }
 
   return (
     <div className="space-y-16 py-8">
@@ -53,7 +65,8 @@ export default function PostsPage() {
           {featuredArticles.map((article) => (
             <div
               key={article.id}
-              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={(e) => handleCardClick(article.slug, e)}
             >
               <div className="flex items-center space-x-3 mb-4">
                 <Avatar size="md" theme="secondary">
@@ -139,7 +152,8 @@ export default function PostsPage() {
             {latestArticles.slice(0, 8).map((article) => (
               <div
                 key={article.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={(e) => handleCardClick(article.slug, e)}
               >
                 <div className="flex items-start space-x-4">
                   <Avatar size="lg" theme="tertiary">

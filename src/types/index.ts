@@ -45,10 +45,15 @@ export interface Resource {
   category: string
   tags: string[]
   rating: number
+  ratingCount: number
   author: string
   createdAt: Date
   updatedAt: Date
   featured?: boolean
+  image?: string
+  viewCount: number
+  likeCount: number
+  commentCount: number
 }
 
 export interface ResourceCategory {
@@ -57,6 +62,35 @@ export interface ResourceCategory {
   description: string
   icon: string
   count: number
+}
+
+export interface ResourceRating {
+  id: string
+  resourceId: string
+  userId: string
+  rating: number
+  createdAt: Date
+}
+
+export interface ResourceComment {
+  id: string
+  resourceId: string
+  content: string
+  author: User
+  parentId?: string
+  likeCount: number
+  createdAt: Date
+  updatedAt: Date
+  replies?: ResourceComment[]
+  isLiked?: boolean
+}
+
+export interface ResourceRatingDistribution {
+  1: number
+  2: number
+  3: number
+  4: number
+  5: number
 }
 
 // Community types

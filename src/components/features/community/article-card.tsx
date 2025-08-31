@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Article } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
 
@@ -7,6 +10,7 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
+  const router = useRouter()
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       '前端开发': 'bg-blue-100 text-blue-700',
@@ -19,8 +23,20 @@ export function ArticleCard({ article }: ArticleCardProps) {
     return colors[category] || 'bg-gray-100 text-gray-700'
   }
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // 阻止点击特定元素时触发卡片跳转
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
+      return
+    }
+    router.push(`/community/articles/${article.slug}`)
+  }
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200 group">
+    <div 
+      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1"
+      onClick={handleCardClick}
+    >
       {/* Header */}
       <div className="flex items-center space-x-3 mb-4">
         <Avatar size="md" theme="secondary">
@@ -43,17 +59,14 @@ export function ArticleCard({ article }: ArticleCardProps) {
       </div>
       
       {/* Content */}
-      <Link 
-        href={`/community/articles/${article.slug}`}
-        className="block mb-4 group"
-      >
+      <div className="mb-4">
         <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg group-hover:text-purple-600 transition-colors">
           {article.title}
         </h3>
         <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
           {article.excerpt}
         </p>
-      </Link>
+      </div>
       
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -61,6 +74,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <span
             key={tag}
             className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors cursor-pointer"
+            data-no-click
           >
             #{tag}
           </span>
@@ -75,15 +89,15 @@ export function ArticleCard({ article }: ArticleCardProps) {
       {/* Stats and Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <div className="flex items-center space-x-4 text-xs text-gray-500">
-          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer">
+          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
             <span>👀</span>
             <span>{article.viewCount}</span>
           </span>
-          <span className="flex items-center space-x-1 hover:text-red-600 transition-colors cursor-pointer">
+          <span className="flex items-center space-x-1 hover:text-red-600 transition-colors cursor-pointer" data-no-click>
             <span>❤️</span>
             <span>{article.likeCount}</span>
           </span>
-          <span className="flex items-center space-x-1 hover:text-green-600 transition-colors cursor-pointer">
+          <span className="flex items-center space-x-1 hover:text-green-600 transition-colors cursor-pointer" data-no-click>
             <span>💬</span>
             <span>{article.commentCount}</span>
           </span>

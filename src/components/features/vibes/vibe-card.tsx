@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Vibe } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
 import { useLike } from '@/hooks/use-like'
@@ -13,9 +14,18 @@ interface VibeCardProps {
 export function VibeCard({ vibe }: VibeCardProps) {
   const { likeCount, isLiked, handleLike } = useLike(vibe.likeCount, vibe.isLiked)
   const [showComments, setShowComments] = useState(false)
+  const router = useRouter()
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button') || target.closest('input') || target.closest('[data-no-click]')) {
+      return
+    }
+    router.push(`/vibes/${vibe.id}`)
+  }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer" onClick={handleCardClick}>
       {/* Header */}
       <div className="flex items-start space-x-3 mb-4">
         <Avatar size="lg" theme="primary">

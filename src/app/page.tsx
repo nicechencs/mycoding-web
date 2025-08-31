@@ -8,7 +8,7 @@ import {
 
 export default function HomePage() {
   return (
-    <div className="space-y-20">
+    <div>
       <HeroSection />
       <FeaturesSection />
       <FeaturedResourcesSection />

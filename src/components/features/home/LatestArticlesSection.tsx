@@ -1,9 +1,21 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getFeaturedArticles } from '@/lib/mock/articles'
 import { Avatar } from '@/components/ui/avatar'
 
 export default function LatestArticlesSection() {
   const featuredArticles = getFeaturedArticles()
+  const router = useRouter()
+
+  const handleCardClick = (slug: string, e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button')) {
+      return
+    }
+    router.push(`/posts/articles/${slug}`)
+  }
 
   return (
     <section className="bg-gray-50 py-16">
@@ -25,7 +37,8 @@ export default function LatestArticlesSection() {
           {featuredArticles.slice(0, 4).map((article) => (
             <div
               key={article.id}
-              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              onClick={(e) => handleCardClick(article.slug, e)}
             >
               <div className="flex items-center space-x-3 mb-3">
                 <Avatar size="sm" theme="secondary">

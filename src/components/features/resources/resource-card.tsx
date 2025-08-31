@@ -1,11 +1,17 @@
-import { Resource } from '@/types'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { Resource } from '@/types/resource'
 import { Avatar } from '@/components/ui/avatar'
+import { RatingStars } from './rating-stars'
 
 interface ResourceCardProps {
   resource: Resource
 }
 
 export function ResourceCard({ resource }: ResourceCardProps) {
+  const router = useRouter()
+  
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       '前端开发': 'bg-blue-100 text-blue-700',
@@ -18,26 +24,39 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     return colors[category] || 'bg-gray-100 text-gray-700'
   }
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // 阻止点击特定元素时触发卡片跳转
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
+      return
+    }
+    // 跳转到资源详情页
+    router.push(`/resources/${resource.slug}`)
+  }
+
   return (
-    <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200 group">
+    <div 
+      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1"
+      onClick={handleCardClick}
+    >
       <div className="flex items-start justify-between mb-4">
         <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryColor(resource.category)}`}>
           {resource.category}
         </span>
         <div className="flex items-center space-x-2">
-          <div className="flex items-center text-yellow-500">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="text-sm font-medium ml-1">{resource.rating}</span>
-          </div>
+          <RatingStars 
+            rating={resource.rating} 
+            totalCount={resource.ratingCount}
+            size="sm"
+            showCount={false}
+          />
           {resource.featured && (
             <div className="w-2 h-2 bg-red-500 rounded-full" title="精选资源"></div>
           )}
         </div>
       </div>
       
-      <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+      <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-purple-600 transition-colors">
         {resource.title}
       </h3>
       
@@ -51,6 +70,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           <span
             key={tag}
             className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
+            data-no-click
           >
             #{tag}
           </span>
@@ -70,22 +90,34 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           <span className="text-sm text-gray-600">{resource.author}</span>
         </div>
         
-        <a
-          href={resource.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
+        <button
+          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded transition-colors"
+          data-no-click
         >
-          访问资源
+          查看详情
           <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-        </a>
+        </button>
       </div>
       
       <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-        <span>创建于 {resource.createdAt.toLocaleDateString('zh-CN')}</span>
-        <span>更新于 {resource.updatedAt.toLocaleDateString('zh-CN')}</span>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            {resource.viewCount.toLocaleString()}
+          </span>
+          <span className="flex items-center gap-1">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            {resource.commentCount}
+          </span>
+        </div>
+        <span className="text-yellow-500 font-medium">{resource.rating.toFixed(1)}</span>
       </div>
     </div>
   )

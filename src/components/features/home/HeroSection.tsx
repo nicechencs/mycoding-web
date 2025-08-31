@@ -30,20 +30,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
-          <Link
-            href="/resources"
-            className="btn-primary px-8 py-3 text-base font-semibold"
-          >
-            探索资源
-          </Link>
-          <Link
-            href="/posts"
-            className="btn-secondary px-8 py-3 text-base font-semibold"
-          >
-            发布内容
-          </Link>
-        </div>
       </div>
     </section>
   )

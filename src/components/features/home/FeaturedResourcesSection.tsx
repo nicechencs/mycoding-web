@@ -1,11 +1,24 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getFeaturedResources } from '@/lib/mock/resources'
 
 export default function FeaturedResourcesSection() {
   const featuredResources = getFeaturedResources()
+  const router = useRouter()
+
+  const handleCardClick = (slug: string, e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest('a') || target.closest('button')) {
+      return
+    }
+    router.push(`/resources/${slug}`)
+  }
 
   return (
-    <section className="container">
+    <section className="py-16">
+      <div className="container">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">精选资源</h2>
@@ -23,7 +36,8 @@ export default function FeaturedResourcesSection() {
         {featuredResources.map((resource) => (
           <div
             key={resource.id}
-            className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+            className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={(e) => handleCardClick(resource.slug, e)}
           >
             <div className="flex items-start justify-between mb-3">
               <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded">
@@ -55,6 +69,7 @@ export default function FeaturedResourcesSection() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </section>
   )
