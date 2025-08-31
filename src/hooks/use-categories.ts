@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { getCategoryColor as getCategoryColorFromManager, CategoryColors } from '@/lib/utils/category'
 
 export interface Category {
   id: string
@@ -9,25 +10,9 @@ export interface Category {
   count?: number
 }
 
-// 预定义的分类颜色方案
-const defaultCategoryColors: Record<string, { bg: string; text: string }> = {
-  '前端开发': { bg: 'bg-blue-100', text: 'text-blue-700' },
-  '后端开发': { bg: 'bg-green-100', text: 'text-green-700' },
-  '移动开发': { bg: 'bg-purple-100', text: 'text-purple-700' },
-  '数据库': { bg: 'bg-orange-100', text: 'text-orange-700' },
-  'DevOps': { bg: 'bg-red-100', text: 'text-red-700' },
-  'AI/ML': { bg: 'bg-indigo-100', text: 'text-indigo-700' },
-  '技术文章': { bg: 'bg-blue-100', text: 'text-blue-700' },
-  '项目推荐': { bg: 'bg-green-100', text: 'text-green-700' },
-  '学习笔记': { bg: 'bg-purple-100', text: 'text-purple-700' },
-  '经验分享': { bg: 'bg-orange-100', text: 'text-orange-700' },
-  '工具资源': { bg: 'bg-red-100', text: 'text-red-700' },
-  'default': { bg: 'bg-gray-100', text: 'text-gray-700' }
-}
-
 interface UseCategoriesReturn {
   categories: Category[]
-  getCategoryColor: (categoryName: string) => { bg: string; text: string }
+  getCategoryColor: (categoryName: string) => CategoryColors
   getCategoryBadgeClass: (categoryName: string) => string
   getCategoryById: (id: string) => Category | undefined
   getCategoryByName: (name: string) => Category | undefined
@@ -37,20 +22,16 @@ interface UseCategoriesReturn {
 /**
  * 分类管理Hook
  * @param categories 分类列表
- * @param customColors 自定义颜色映射
  * @returns 分类相关的工具方法和数据
  */
 export function useCategories(
-  categories: Category[],
-  customColors?: Record<string, { bg: string; text: string }>
+  categories: Category[]
 ): UseCategoriesReturn {
-  const colorMap = { ...defaultCategoryColors, ...customColors }
-
   const getCategoryColor = useMemo(() => {
     return (categoryName: string) => {
-      return colorMap[categoryName] || colorMap['default']
+      return getCategoryColorFromManager(categoryName)
     }
-  }, [colorMap])
+  }, [])
 
   const getCategoryBadgeClass = useMemo(() => {
     return (categoryName: string) => {

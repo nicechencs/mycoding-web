@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
+import { getCategoryColor } from '@/lib/utils/category'
 
 // 标签类型
 interface Tag {
@@ -221,18 +222,6 @@ interface CategoryBadgeProps {
   size?: 'xs' | 'sm' | 'md'
   className?: string
   onClick?: () => void
-}
-
-const getCategoryColor = (category: string) => {
-  const colors: Record<string, { bg: string; text: string }> = {
-    '前端开发': { bg: 'bg-blue-100', text: 'text-blue-700' },
-    '后端开发': { bg: 'bg-green-100', text: 'text-green-700' },
-    '数据库': { bg: 'bg-purple-100', text: 'text-purple-700' },
-    '移动开发': { bg: 'bg-orange-100', text: 'text-orange-700' },
-    '人工智能': { bg: 'bg-red-100', text: 'text-red-700' },
-    '云计算': { bg: 'bg-cyan-100', text: 'text-cyan-700' }
-  }
-  return colors[category] || { bg: 'bg-gray-100', text: 'text-gray-700' }
 }
 
 export function CategoryBadge({ category, size = 'sm', className, onClick }: CategoryBadgeProps) {

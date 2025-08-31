@@ -1,6 +1,7 @@
 import React from 'react'
 import { Avatar } from './avatar'
 import { cn } from '@/lib/utils'
+import { getCategoryClasses } from '@/lib/utils/category'
 
 // 卡片头部组件
 interface CardHeaderProps {
@@ -16,18 +17,6 @@ interface CardHeaderProps {
   className?: string
   rightContent?: React.ReactNode
   onAuthorClick?: () => void
-}
-
-const getCategoryColor = (category: string) => {
-  const colors: Record<string, string> = {
-    '前端开发': 'bg-blue-100 text-blue-700',
-    '后端开发': 'bg-green-100 text-green-700', 
-    '数据库': 'bg-purple-100 text-purple-700',
-    '移动开发': 'bg-orange-100 text-orange-700',
-    '人工智能': 'bg-red-100 text-red-700',
-    '云计算': 'bg-cyan-100 text-cyan-700',
-  }
-  return colors[category] || 'bg-gray-100 text-gray-700'
 }
 
 const formatTime = (date: Date | string) => {
@@ -99,7 +88,7 @@ export function CardHeader({
           </div>
           
           {category && (
-            <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryColor(category)}`}>
+            <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}>
               {category}
             </span>
           )}
@@ -137,7 +126,7 @@ export function CardHeader({
       
       <div className="flex items-center space-x-2">
         {category && (
-          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryColor(category)}`}>
+          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}>
             {category}
           </span>
         )}
@@ -165,7 +154,7 @@ export function SimpleCardHeader({ category, featured, rating, className, rightC
   return (
     <div className={cn('flex items-start justify-between', className)}>
       {category && (
-        <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryColor(category)}`}>
+        <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryClasses(category)}`}>
           {category}
         </span>
       )}

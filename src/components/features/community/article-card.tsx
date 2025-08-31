@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Article } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
+import { getCategoryClasses } from '@/lib/utils/category'
 
 interface ArticleCardProps {
   article: Article
@@ -11,17 +12,6 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   const router = useRouter()
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      '前端开发': 'bg-blue-100 text-blue-700',
-      '后端开发': 'bg-green-100 text-green-700', 
-      '数据库': 'bg-purple-100 text-purple-700',
-      '移动开发': 'bg-orange-100 text-orange-700',
-      '人工智能': 'bg-red-100 text-red-700',
-      '云计算': 'bg-cyan-100 text-cyan-700',
-    }
-    return colors[category] || 'bg-gray-100 text-gray-700'
-  }
 
   const handleCardClick = (e: React.MouseEvent) => {
     // 阻止点击特定元素时触发卡片跳转
@@ -49,7 +39,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryColor(article.category)}`}>
+          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(article.category)}`}>
             {article.category}
           </span>
           {article.featured && (
