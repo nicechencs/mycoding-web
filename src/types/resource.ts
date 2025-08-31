@@ -47,6 +47,14 @@ export interface ResourceComment {
   updatedAt: Date
 }
 
+export interface ResourceRatingDistribution {
+  1: number
+  2: number
+  3: number
+  4: number
+  5: number
+}
+
 export interface ResourceRating {
   id: string
   resourceId: string
