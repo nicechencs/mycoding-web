@@ -1,4 +1,4 @@
-export const APP_NAME = 'MyCoding Web'
+export const APP_NAME = 'MyCoding'
 export const APP_DESCRIPTION = '基于 Next.js 14 构建的现代化Web应用'
 
 export const ROUTES = {

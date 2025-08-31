@@ -29,7 +29,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
     if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
       return
     }
-    router.push(`/community/articles/${article.slug}`)
+    router.push(`/posts/${article.slug}`)
   }
 
   return (
@@ -104,7 +104,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         </div>
         
         <Link
-          href={`/community/articles/${article.slug}`}
+          href={`/posts/${article.slug}`}
           className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm hover:bg-purple-50 px-2 py-1 rounded transition-colors"
         >
           阅读全文

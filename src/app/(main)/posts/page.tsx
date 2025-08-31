@@ -15,7 +15,7 @@ export default function PostsPage() {
     if (target.closest('a') || target.closest('button')) {
       return
     }
-    router.push(`/posts/articles/${slug}`)
+    router.push(`/posts/${slug}`)
   }
 
   return (
@@ -119,7 +119,7 @@ export default function PostsPage() {
               </div>
 
               <Link
-                href={`/posts/articles/${article.slug}`}
+                href={`/posts/${article.slug}`}
                 className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
               >
                 阅读全文
@@ -172,7 +172,7 @@ export default function PostsPage() {
                     </div>
                     
                     <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1 hover:text-purple-600 transition-colors">
-                      <Link href={`/posts/articles/${article.slug}`}>
+                      <Link href={`/posts/${article.slug}`}>
                         {article.title}
                       </Link>
                     </h3>

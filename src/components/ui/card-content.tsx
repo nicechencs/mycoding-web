@@ -142,7 +142,7 @@ export function ArticleContent({
     <CardContent 
       title={title}
       description={excerpt}
-      link={{ href: `/community/articles/${slug}` }}
+      link={{ href: `/posts/${slug}` }}
       titleSize="md"
       descriptionLines={3}
       className={className}

@@ -1,4 +1,4 @@
-import { Vibe } from '@/types'
+import { Vibe, VibeComment } from '@/types'
 import { mockUsers } from './users'
 
 export const mockVibes: Vibe[] = [
@@ -108,4 +108,73 @@ export const getVibeById = (id: string): Vibe | undefined => {
 
 export const getVibesByUser = (userId: string): Vibe[] => {
   return mockVibes.filter(vibe => vibe.author.id === userId)
+}
+
+// Mock评论数据
+export const mockVibeComments: VibeComment[] = [
+  {
+    id: 'c1',
+    content: 'App Router确实比Pages Router好用很多，组件的分离让代码更清晰了',
+    author: mockUsers[1],
+    createdAt: new Date('2024-08-30T11:00:00'),
+    vibeId: '1'
+  },
+  {
+    id: 'c2',
+    content: '能分享一下具体遇到了哪些坑吗？我也准备迁移到App Router',
+    author: mockUsers[2],
+    createdAt: new Date('2024-08-30T11:30:00'),
+    vibeId: '1'
+  },
+  {
+    id: 'c3',
+    content: '这个插件看起来很不错，有GitHub链接吗？',
+    author: mockUsers[0],
+    createdAt: new Date('2024-08-30T09:45:00'),
+    vibeId: '2'
+  },
+  {
+    id: 'c4',
+    content: 'TypeScript真的能避免很多低级错误，迁移的时候注意类型声明就行',
+    author: mockUsers[4],
+    createdAt: new Date('2024-08-30T09:15:00'),
+    vibeId: '3'
+  },
+  {
+    id: 'c5',
+    content: 'clinic.js这个工具我也在用，性能分析很直观',
+    author: mockUsers[1],
+    createdAt: new Date('2024-08-30T08:00:00'),
+    vibeId: '4'
+  },
+]
+
+/**
+ * 获取指定Vibe的评论
+ */
+export const getVibeComments = (vibeId: string): VibeComment[] => {
+  return mockVibeComments
+    .filter(comment => comment.vibeId === vibeId)
+    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+}
+
+/**
+ * 获取相关Vibes（基于标签匹配）
+ */
+export const getRelatedVibes = (vibeId: string, limit: number = 5): Vibe[] => {
+  const currentVibe = mockVibes.find(vibe => vibe.id === vibeId)
+  if (!currentVibe) return []
+
+  const currentTags = currentVibe.tags
+  
+  return mockVibes
+    .filter(vibe => vibe.id !== vibeId) // 排除当前vibe
+    .map(vibe => ({
+      vibe,
+      matchCount: vibe.tags.filter(tag => currentTags.includes(tag)).length
+    }))
+    .filter(item => item.matchCount > 0) // 至少有一个标签匹配
+    .sort((a, b) => b.matchCount - a.matchCount) // 按匹配度排序
+    .slice(0, limit)
+    .map(item => item.vibe)
 }

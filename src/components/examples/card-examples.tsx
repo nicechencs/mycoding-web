@@ -174,7 +174,7 @@ export function NewArticleCard({ article }: { article: Article }) {
           <CardActions 
             primaryAction={{
               label: '阅读全文',
-              href: `/community/articles/${article.slug}`,
+              href: `/posts/${article.slug}`,
               variant: 'default'
             }}
           />

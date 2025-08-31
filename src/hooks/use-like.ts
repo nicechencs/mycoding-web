@@ -65,19 +65,19 @@ export function useLikeWithApi(
     try {
       if (isLiked && options?.onUnlike) {
         await options.onUnlike(itemId)
-        setLikeCount(prev => Math.max(0, prev - 1))
+        setLikeCount((prev: number) => Math.max(0, prev - 1))
         setIsLiked(false)
       } else if (!isLiked && options?.onLike) {
         await options.onLike(itemId)
-        setLikeCount(prev => prev + 1)
+        setLikeCount((prev: number) => prev + 1)
         setIsLiked(true)
       } else {
         // 没有API调用时的本地处理
         if (isLiked) {
-          setLikeCount(prev => Math.max(0, prev - 1))
+          setLikeCount((prev: number) => Math.max(0, prev - 1))
           setIsLiked(false)
         } else {
-          setLikeCount(prev => prev + 1)
+          setLikeCount((prev: number) => prev + 1)
           setIsLiked(true)
         }
       }
@@ -85,9 +85,9 @@ export function useLikeWithApi(
       setError(err instanceof Error ? err.message : '点赞操作失败')
       // 回滚状态
       if (isLiked) {
-        setLikeCount(prev => prev + 1)
+        setLikeCount((prev: number) => prev + 1)
       } else {
-        setLikeCount(prev => Math.max(0, prev - 1))
+        setLikeCount((prev: number) => Math.max(0, prev - 1))
       }
     } finally {
       setLoading(false)

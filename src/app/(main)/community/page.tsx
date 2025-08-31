@@ -20,7 +20,7 @@ export default function CommunityPage() {
         {/* Quick Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <Link
-            href="/community/articles"
+            href="/posts/articles"
             className="btn-primary px-8 py-3 text-base font-semibold"
           >
             浏览文章
@@ -39,7 +39,7 @@ export default function CommunityPage() {
             <p className="text-gray-600 mt-2">社区推荐的优质技术文章</p>
           </div>
           <Link
-            href="/community/articles"
+            href="/posts/articles"
             className="text-purple-600 hover:text-purple-700 font-medium"
           >
             查看全部 →
@@ -103,7 +103,7 @@ export default function CommunityPage() {
               </div>
 
               <Link
-                href={`/community/articles/${article.slug}`}
+                href={`/posts/${article.slug}`}
                 className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
               >
                 阅读全文
@@ -125,7 +125,7 @@ export default function CommunityPage() {
               <p className="text-gray-600 mt-2">社区成员的最新技术分享</p>
             </div>
             <Link
-              href="/community/articles"
+              href="/posts/articles"
               className="text-purple-600 hover:text-purple-700 font-medium"
             >
               查看更多 →
@@ -155,7 +155,7 @@ export default function CommunityPage() {
                     </div>
                     
                     <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1 hover:text-purple-600 transition-colors">
-                      <Link href={`/community/articles/${article.slug}`}>
+                      <Link href={`/posts/${article.slug}`}>
                         {article.title}
                       </Link>
                     </h3>

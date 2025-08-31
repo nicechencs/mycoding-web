@@ -135,6 +135,7 @@ export interface Vibe {
 
 export interface VibeComment {
   id: string
+  vibeId: string
   content: string
   author: User
   createdAt: Date

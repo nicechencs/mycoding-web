@@ -14,7 +14,7 @@ export default function LatestArticlesSection() {
     if (target.closest('a') || target.closest('button')) {
       return
     }
-    router.push(`/posts/articles/${slug}`)
+    router.push(`/posts/${slug}`)
   }
 
   return (
