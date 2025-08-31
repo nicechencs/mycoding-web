@@ -36,25 +36,8 @@ export interface SiteConfig {
   }
 }
 
-// Resource types
-export interface Resource {
-  id: string
-  title: string
-  description: string
-  url: string
-  category: string
-  tags: string[]
-  rating: number
-  ratingCount: number
-  author: string
-  createdAt: Date
-  updatedAt: Date
-  featured?: boolean
-  image?: string
-  viewCount: number
-  likeCount: number
-  commentCount: number
-}
+// Resource types - 从resource.ts导出
+export type { Resource, ResourceComment } from './resource'
 
 export interface ResourceCategory {
   id: string
@@ -72,18 +55,7 @@ export interface ResourceRating {
   createdAt: Date
 }
 
-export interface ResourceComment {
-  id: string
-  resourceId: string
-  content: string
-  author: User
-  parentId?: string
-  likeCount: number
-  createdAt: Date
-  updatedAt: Date
-  replies?: ResourceComment[]
-  isLiked?: boolean
-}
+// ResourceComment 已从 './resource' 导出
 
 export interface ResourceRatingDistribution {
   1: number

@@ -129,7 +129,7 @@ export const mockResources: Resource[] = [
     viewCount: 15600,
     likeCount: 890,
     commentCount: 156,
-    downloadCount: 0,
+    downloadCount: 0
   },
   {
     id: '2',
@@ -191,7 +191,7 @@ export const mockResources: Resource[] = [
     viewCount: 12400,
     likeCount: 720,
     commentCount: 89,
-    downloadCount: 0,
+    downloadCount: 0
   },
   {
     id: '3',
@@ -214,6 +214,7 @@ export const mockResources: Resource[] = [
     likeCount: 456,
     commentCount: 67,
     downloadCount: 0,
+    featured: false
   },
   {
     id: '4',
@@ -236,6 +237,7 @@ export const mockResources: Resource[] = [
     likeCount: 389,
     commentCount: 45,
     downloadCount: 0,
+    featured: false
   },
   {
     id: '5',
@@ -258,6 +260,7 @@ export const mockResources: Resource[] = [
     likeCount: 298,
     commentCount: 34,
     downloadCount: 0,
+    featured: false
   },
   {
     id: '6',
@@ -280,6 +283,7 @@ export const mockResources: Resource[] = [
     likeCount: 267,
     commentCount: 28,
     downloadCount: 0,
+    featured: false
   },
   {
     id: '7',
@@ -302,6 +306,7 @@ export const mockResources: Resource[] = [
     likeCount: 234,
     commentCount: 22,
     downloadCount: 0,
+    featured: false
   },
   {
     id: '8',
@@ -324,7 +329,7 @@ export const mockResources: Resource[] = [
     viewCount: 9800,
     likeCount: 567,
     commentCount: 78,
-    downloadCount: 0,
+    downloadCount: 0
   },
 ]
 
