@@ -28,25 +28,6 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* Categories Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        {mockResourceCategories.map((category) => (
-          <div
-            key={category.id}
-            className={`text-center p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-              selectedCategory === category.name
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setSelectedCategory(category.name)}
-          >
-            <div className="text-2xl mb-2">{category.icon}</div>
-            <h3 className="font-medium text-gray-900 text-sm mb-1">{category.name}</h3>
-            <p className="text-xs text-gray-500">{category.count} 个资源</p>
-          </div>
-        ))}
-      </div>
-
       {/* Filter and Search */}
       <ResourceFilter
         selectedCategory={selectedCategory}

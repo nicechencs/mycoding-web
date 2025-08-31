@@ -35,7 +35,7 @@ export default function VibesPage() {
   }
 
   return (
-    <div className="container py-8 max-w-4xl">
+    <div className="container py-8">
       {/* Header */}
       <div className="text-center space-y-4 mb-12">
         <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
