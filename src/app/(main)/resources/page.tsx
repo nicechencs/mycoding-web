@@ -44,7 +44,7 @@ export default function ResourcesPage() {
     <div className="container py-8">
       {/* Header */}
       <div className="text-center space-y-4 mb-12">
-        <h1 className="text-4xl font-bold text-gray-900">资源导航</h1>
+        <h1 className="text-4xl font-bold text-gray-900">资源</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           精选优质编程资源，涵盖前端、后端、移动端、AI等各个技术领域
         </p>

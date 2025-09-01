@@ -15,7 +15,7 @@ export default function FeaturesSection() {
         <Link href="/resources" className="group block">
           <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
             <div className="text-4xl mb-4">📚</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">资源导航</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">资源</h3>
             <p className="text-gray-600 mb-4">
               精选优质编程资源，涵盖前端、后端、移动端、AI等各个领域
             </p>

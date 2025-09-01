@@ -24,9 +24,15 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   return (
     <div 
-      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1"
+      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
       onClick={handleCardClick}
     >
+      {/* 精选书签 */}
+      {article.featured && (
+        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
+          精
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center space-x-3 mb-4">
         <Avatar size="md" theme="secondary">
@@ -42,9 +48,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(article.category)}`}>
             {article.category}
           </span>
-          {article.featured && (
-            <div className="w-2 h-2 bg-red-500 rounded-full" title="精选文章"></div>
-          )}
         </div>
       </div>
       

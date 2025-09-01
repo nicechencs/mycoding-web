@@ -8,9 +8,12 @@ export default function HeroSection() {
           <span className="text-blue-600">
             MyCoding
           </span>
+          <span className="text-base md:text-lg font-normal text-gray-900 ml-3">
+            Where code meets vibe
+          </span>
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Where code meets vibe
+          现代化编程学习平台，让代码与创意完美融合
         </p>
       </div>
     </section>

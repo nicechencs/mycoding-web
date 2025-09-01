@@ -31,9 +31,16 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 
   return (
     <div 
-      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1"
+      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
       onClick={handleCardClick}
     >
+      {/* 精选书签 */}
+      {resource.featured && (
+        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
+          精
+        </div>
+      )}
+      
       <div className="flex items-start justify-between mb-4">
         <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryClasses(resource.category)}`}>
           {resource.category}
@@ -45,9 +52,6 @@ export function ResourceCard({ resource }: ResourceCardProps) {
             size="sm"
             showCount={false}
           />
-          {resource.featured && (
-            <div className="w-2 h-2 bg-red-500 rounded-full" title="精选资源"></div>
-          )}
         </div>
       </div>
       

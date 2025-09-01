@@ -15,7 +15,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-sm text-gray-600 max-w-xs">
-              现代化编程学习平台，集资源导航、社区交流、动态分享于一体。
+              现代化编程学习平台，集资源、文章、动态分享于一体。
             </p>
           </div>
 
@@ -25,17 +25,17 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/resources" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  资源导航
+                  资源
                 </Link>
               </li>
               <li>
                 <Link href="/posts" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  社区文章
+                  文章
                 </Link>
               </li>
               <li>
                 <Link href="/vibes" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Vibe动态
+                  Vibe
                 </Link>
               </li>
             </ul>
