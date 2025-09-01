@@ -32,7 +32,7 @@ export const ResourceCard = React.memo(({ resource }: ResourceCardProps) => {
     >
       {/* 精选书签 */}
       {resource.featured && (
-        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
+        <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
           精
         </div>
       )}

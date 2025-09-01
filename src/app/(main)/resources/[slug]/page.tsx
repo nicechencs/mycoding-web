@@ -48,7 +48,7 @@ export default function ResourceDetailPage() {
         <div className="space-x-4">
           <button 
             onClick={refresh}
-            className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             重试
           </button>
@@ -84,9 +84,9 @@ export default function ResourceDetailPage() {
     <div className="container py-8">
       {/* 面包屑导航 */}
       <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-        <Link href="/" className="hover:text-purple-600 transition-colors">首页</Link>
+        <Link href="/" className="hover:text-blue-600 transition-colors">首页</Link>
         <span>/</span>
-        <Link href="/resources" className="hover:text-purple-600 transition-colors">资源</Link>
+        <Link href="/resources" className="hover:text-blue-600 transition-colors">资源</Link>
         <span>/</span>
         <span className="text-gray-900">{resource.title}</span>
       </nav>
@@ -130,7 +130,7 @@ export default function ResourceDetailPage() {
               {resource.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-sm rounded-full hover:bg-purple-100 transition-colors cursor-pointer"
+                  className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm rounded-full hover:bg-blue-100 transition-colors cursor-pointer"
                 >
                   #{tag}
                 </span>
@@ -167,7 +167,7 @@ export default function ResourceDetailPage() {
                 onClick={() => setActiveTab('description')}
                 className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === 'description'
-                    ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -177,7 +177,7 @@ export default function ResourceDetailPage() {
                 onClick={() => setActiveTab('comments')}
                 className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === 'comments'
-                    ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -187,7 +187,7 @@ export default function ResourceDetailPage() {
                 onClick={() => setActiveTab('ratings')}
                 className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === 'ratings'
-                    ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -247,13 +247,13 @@ export default function ResourceDetailPage() {
                               </div>
                               <p className="text-gray-700 mb-3">{comment.content}</p>
                               <div className="flex items-center gap-4">
-                                <button className={`flex items-center gap-1 text-sm ${comment.isLiked ? 'text-purple-600' : 'text-gray-500'} hover:text-purple-600 transition-colors`}>
+                                <button className={`flex items-center gap-1 text-sm ${comment.isLiked ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 transition-colors`}>
                                   <svg className="w-4 h-4" fill={comment.isLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                   </svg>
                                   <span>{comment.likeCount}</span>
                                 </button>
-                                <button className="text-sm text-gray-500 hover:text-purple-600 transition-colors">
+                                <button className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
                                   回复
                                 </button>
                               </div>
@@ -340,7 +340,7 @@ export default function ResourceDetailPage() {
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full px-6 py-3 bg-purple-600 text-white text-center font-medium rounded-lg hover:bg-purple-700 transition-colors"
+              className="block w-full px-6 py-3 bg-blue-600 text-white text-center font-medium rounded-lg hover:bg-blue-700 transition-colors"
             >
               访问资源网站
               <svg className="inline-block w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -369,7 +369,7 @@ export default function ResourceDetailPage() {
                     href={`/resources/${related.slug}`}
                     className="block group"
                   >
-                    <h4 className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors mb-1">
+                    <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
                       {related.title}
                     </h4>
                     <p className="text-sm text-gray-600 line-clamp-2">{related.description}</p>

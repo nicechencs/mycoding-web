@@ -19,14 +19,14 @@ export const colors = {
     900: '#1e3a8a',
   },
   
-  // 辅助色 - 紫色系（限制使用）
+  // 辅助色 - 灰色系
   secondary: {
-    50: '#faf5ff',
-    100: '#f3e8ff',
-    200: '#e9d5ff',
-    500: '#a855f7',
-    600: '#9333ea',
-    700: '#7c3aed',
+    50: '#f9fafb',
+    100: '#f3f4f6',
+    200: '#e5e7eb',
+    500: '#6b7280',
+    600: '#4b5563',
+    700: '#374151',
   },
   
   // 状态色系 - 语义化颜色
@@ -80,13 +80,13 @@ export const colorClasses = {
     ring: 'ring-blue-500',
   },
   secondary: {
-    bg: 'bg-purple-600',
-    bgLight: 'bg-purple-50',
-    bgHover: 'hover:bg-purple-700',
-    text: 'text-purple-600',
-    textLight: 'text-purple-700',
-    border: 'border-purple-200',
-    ring: 'ring-purple-500',
+    bg: 'bg-gray-600',
+    bgLight: 'bg-gray-50',
+    bgHover: 'hover:bg-gray-700',
+    text: 'text-gray-600',
+    textLight: 'text-gray-700',
+    border: 'border-gray-200',
+    ring: 'ring-gray-500',
   },
   neutral: {
     bg: 'bg-gray-100',
