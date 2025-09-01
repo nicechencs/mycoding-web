@@ -9,6 +9,11 @@ import { taxonomyManager } from '@/lib/taxonomy'
 export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [displayQuery, setDisplayQuery] = useState('')
+
+  const handleSearch = () => {
+    setDisplayQuery(searchQuery)
+  }
 
   // 映射资源分类到新的taxonomy系统
   const mapResourceCategory = (category: string): string => {
@@ -26,9 +31,11 @@ export default function ResourcesPage() {
   const filteredResources = mockResources.filter(resource => {
     const resourceCategoryId = mapResourceCategory(resource.category)
     const matchesCategory = selectedCategory === 'all' || resourceCategoryId === selectedCategory
-    const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resource.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    const searchTerm = displayQuery || searchQuery
+    const matchesSearch = !searchTerm || 
+                         resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         resource.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         resource.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     
     return matchesCategory && matchesSearch
   })
@@ -50,12 +57,9 @@ export default function ResourcesPage() {
         onCategoryChange={setSelectedCategory}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onSearch={handleSearch}
         placeholder="搜索资源标题、描述或标签..."
-        actions={
-          <button className="btn-primary px-4 py-2 text-sm">
-            推荐资源
-          </button>
-        }
+        showCategoryDropdown={false}
       />
 
       {/* Results */}
@@ -66,7 +70,7 @@ export default function ResourcesPage() {
             const category = taxonomyManager.getCategory('resources', selectedCategory)
             return category ? ` (${category.name})` : ''
           })()}
-          {searchQuery && ` 关于 "${searchQuery}"`}
+          {(displayQuery || searchQuery) && ` 关于 "${displayQuery || searchQuery}"`}
         </p>
       </div>
 

@@ -11,7 +11,9 @@ interface ContentFilterProps {
   onCategoryChange: (categoryId: string) => void
   searchQuery: string
   onSearchChange: (query: string) => void
+  onSearch?: () => void
   showSearch?: boolean
+  showCategoryDropdown?: boolean
   showQuickFilters?: boolean
   className?: string
   placeholder?: string
@@ -28,7 +30,9 @@ export function ContentFilter({
   onCategoryChange,
   searchQuery,
   onSearchChange,
+  onSearch,
   showSearch = true,
+  showCategoryDropdown = true,
   showQuickFilters = true,
   className,
   placeholder = '搜索内容...',
@@ -45,42 +49,62 @@ export function ContentFilter({
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
               搜索内容
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="search"
-                placeholder={placeholder}
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  id="search"
+                  placeholder={placeholder}
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && onSearch) {
+                      onSearch()
+                    }
+                  }}
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
+                />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
               </div>
+              {onSearch && (
+                <button
+                  onClick={onSearch}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  搜索
+                </button>
+              )}
             </div>
           </div>
         )}
 
         {/* 分类筛选 */}
-        <div className="lg:w-64">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-            内容分类
-          </label>
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => onCategoryChange(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {showCategoryDropdown && (
+          <div className="lg:w-64">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+              内容分类
+            </label>
+            <select
+              id="category"
+              value={selectedCategory}
+              onChange={(e) => onCategoryChange(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* 操作按钮 */}
         {actions && (

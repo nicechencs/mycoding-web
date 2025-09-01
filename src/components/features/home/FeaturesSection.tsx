@@ -28,7 +28,7 @@ export default function FeaturesSection() {
         <Link href="/posts" className="group block">
           <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer h-full">
             <div className="text-4xl mb-4">✍️</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Posts内容</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">文章内容</h3>
             <p className="text-gray-600 mb-4">
               写技术文章、发项目推荐、记录学习笔记，分享你的编程心得
             </p>

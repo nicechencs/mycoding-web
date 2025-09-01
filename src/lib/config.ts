@@ -21,7 +21,7 @@ export const navConfig = {
       href: '/resources',
     },
     {
-      title: 'Posts',
+      title: '文章',
       href: '/posts',
     },
     {

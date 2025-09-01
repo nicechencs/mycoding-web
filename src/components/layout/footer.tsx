@@ -29,7 +29,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/community" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <Link href="/posts" className="text-gray-600 hover:text-blue-600 transition-colors">
                   社区文章
                 </Link>
               </li>
@@ -41,21 +41,29 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Friendly Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-gray-900">技术分类</h3>
+            <h3 className="font-semibold text-gray-900">友情链接</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <span className="text-gray-600">前端开发</span>
+                <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
+                  Next.js
+                </a>
               </li>
               <li>
-                <span className="text-gray-600">后端开发</span>
+                <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
+                  Tailwind CSS
+                </a>
               </li>
               <li>
-                <span className="text-gray-600">移动开发</span>
+                <a href="https://react.dev" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
+                  React
+                </a>
               </li>
               <li>
-                <span className="text-gray-600">人工智能</span>
+                <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
+                  Vercel
+                </a>
               </li>
             </ul>
           </div>
