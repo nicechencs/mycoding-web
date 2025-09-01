@@ -57,7 +57,7 @@ export function SimpleAnimatedComposer({ onSubmit }: SimpleAnimatedComposerProps
   return (
     <motion.div
       layout
-      className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
+      className="bg-white rounded-lg shadow-sm overflow-hidden"
       initial={false}
       animate={{
         height: isExpanded ? 'auto' : 76,

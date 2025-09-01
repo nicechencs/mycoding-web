@@ -41,7 +41,7 @@ export function ContentFilter({
   const { categories, getCategoryColors } = useCategories(module)
 
   return (
-    <div className={cn('bg-white border border-gray-200 rounded-lg p-6', className)}>
+    <div className={cn('bg-white rounded-lg p-6 shadow-sm', className)}>
       <div className="flex flex-col lg:flex-row gap-6">
         {/* 搜索框 */}
         {showSearch && (

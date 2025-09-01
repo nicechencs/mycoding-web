@@ -55,7 +55,7 @@ export function BasicAnimatedComposer({ onSubmit }: BasicAnimatedComposerProps) 
 
   return (
     <div
-      className={`bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 ease-out ${
+      className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 ease-out ${
         isExpanded ? 'min-h-96' : 'h-20'
       }`}
     >

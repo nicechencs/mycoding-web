@@ -13,7 +13,7 @@ export default function FeaturesSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <Link href="/resources" className="group block">
-          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div className="text-center p-6 rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer h-full bg-white">
             <div className="text-4xl mb-4">📚</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">资源</h3>
             <p className="text-gray-600 mb-4">
@@ -26,7 +26,7 @@ export default function FeaturesSection() {
         </Link>
 
         <Link href="/posts" className="group block">
-          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div className="text-center p-6 rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer h-full bg-white">
             <div className="text-4xl mb-4">✍️</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">文章内容</h3>
             <p className="text-gray-600 mb-4">
@@ -39,7 +39,7 @@ export default function FeaturesSection() {
         </Link>
 
         <Link href="/vibes" className="group block">
-          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div className="text-center p-6 rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer h-full bg-white">
             <div className="text-4xl mb-4">⚡</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Vibe动态</h3>
             <p className="text-gray-600 mb-4">

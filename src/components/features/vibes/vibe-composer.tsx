@@ -46,7 +46,7 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+    <div className="bg-white rounded-lg p-6 shadow-sm">
       {/* Header */}
       <div className="flex items-center space-x-3 mb-4">
         <Avatar size="md" theme="primary">

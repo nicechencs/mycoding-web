@@ -27,7 +27,7 @@ export const ResourceCard = React.memo(({ resource }: ResourceCardProps) => {
 
   return (
     <div 
-      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
+      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
       onClick={handleCardClick}
     >
       {/* 精选书签 */}

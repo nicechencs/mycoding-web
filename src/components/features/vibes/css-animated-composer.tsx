@@ -129,7 +129,7 @@ export function CSSAnimatedComposer({ onSubmit }: CSSAnimatedComposerProps) {
       `}</style>
       
       <div
-        className={`bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-400 ${
+        className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-400 ${
           isExpanded ? 'expand shadow-lg' : 'collapse shadow-sm hover:shadow-md'
         }`}
         style={{ 

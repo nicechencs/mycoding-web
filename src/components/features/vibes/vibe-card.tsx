@@ -25,7 +25,7 @@ export function VibeCard({ vibe }: VibeCardProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer" onClick={handleCardClick}>
+    <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={handleCardClick}>
       {/* Header */}
       <div className="flex items-start space-x-3 mb-4">
         <Avatar size="lg" theme="primary">

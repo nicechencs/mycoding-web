@@ -3,7 +3,7 @@ import { siteConfig } from '@/lib/config'
 
 export function Footer() {
   return (
-    <footer className="border-t bg-gray-50/80 backdrop-blur-sm py-12">
+    <footer className="border-t bg-white py-12 mt-16">
       <div className="container">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

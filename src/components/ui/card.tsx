@@ -11,9 +11,9 @@ interface BaseCardProps {
 }
 
 const cardVariants = {
-  default: 'bg-white border border-gray-200 rounded-lg',
-  hover: 'bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 group',
-  elevated: 'bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+  default: 'bg-white rounded-lg shadow-sm',
+  hover: 'bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 group',
+  elevated: 'bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow'
 }
 
 const cardPadding = {

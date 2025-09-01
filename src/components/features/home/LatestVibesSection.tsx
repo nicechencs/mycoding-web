@@ -37,7 +37,7 @@ export default function LatestVibesSection() {
         {latestVibes.map((vibe) => (
           <div
             key={vibe.id}
-            className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
+            className="rounded-lg p-6 shadow-sm hover:shadow-lg transition-shadow cursor-pointer bg-white"
             onClick={(e) => handleCardClick(vibe.id, e)}
           >
             <div className="flex items-start space-x-3">
