@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'MyCoding Web - 现代化编程学习平台',
-  description: '集资源导航、社区交流、动态分享于一体的现代化编程学习平台',
+  description: '集资源、文章、动态分享于一体的现代化编程学习平台',
 }
 
 export default function RootLayout({

@@ -20,13 +20,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
       return
     }
     // 跳转到资源详情页
-    const path = `/resources/${resource.slug}`
-    console.log('ResourceCard: 跳转到资源详情页', { 
-      path, 
-      slug: resource.slug,
-      resource: resource.title 
-    })
-    router.push(path)
+    router.push(`/resources/${resource.slug}`)
   }
 
   return (

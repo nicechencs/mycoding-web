@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getResourceBySlug, getResourceComments, getRelatedResources } from '@/lib/mock/resources'
+import { useResourceDetail } from '@/hooks/use-resource-detail'
 import { RatingStars } from '@/components/features/resources/rating-stars'
 import { Avatar } from '@/components/ui/avatar'
 import { formatDistanceToNow } from 'date-fns'
@@ -16,23 +16,53 @@ export default function ResourceDetailPage() {
   
   const [activeTab, setActiveTab] = useState<'description' | 'comments' | 'ratings'>('description')
   
-  // 安全地获取资源
-  let resource = null
-  let comments: any[] = []
-  let relatedResources: any[] = []
-  let ratingDistribution = null
+  // 使用自定义 Hook 管理资源详情数据
+  const {
+    resource,
+    comments,
+    relatedResources,
+    ratingDistribution,
+    loading,
+    error,
+    refresh
+  } = useResourceDetail(slug)
   
-  try {
-    resource = getResourceBySlug(slug)
-    if (resource) {
-      comments = getResourceComments(resource.id)
-      relatedResources = getRelatedResources(resource.id, 3)
-      ratingDistribution = resource.ratingDistribution || { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
-    }
-  } catch (error) {
-    console.error('获取资源详情时出错:', error)
+  // 加载状态
+  if (loading) {
+    return (
+      <div className="container py-16 text-center">
+        <div className="animate-spin w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-gray-600">正在加载资源详情...</p>
+      </div>
+    )
   }
   
+  // 错误状态
+  if (error) {
+    return (
+      <div className="container py-16 text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">加载出错</h1>
+        <p className="text-gray-600 mb-6">{error}</p>
+        <div className="space-x-4">
+          <button 
+            onClick={refresh}
+            className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            重试
+          </button>
+          <Link 
+            href="/resources" 
+            className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            返回资源列表
+          </Link>
+        </div>
+      </div>
+    )
+  }
+  
+  // 资源不存在
   if (!resource) {
     return (
       <div className="container py-16 text-center">
@@ -55,7 +85,7 @@ export default function ResourceDetailPage() {
       <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
         <Link href="/" className="hover:text-purple-600 transition-colors">首页</Link>
         <span>/</span>
-        <Link href="/resources" className="hover:text-purple-600 transition-colors">资源导航</Link>
+        <Link href="/resources" className="hover:text-purple-600 transition-colors">资源</Link>
         <span>/</span>
         <span className="text-gray-900">{resource.title}</span>
       </nav>
@@ -272,11 +302,11 @@ export default function ResourceDetailPage() {
                       <div className="text-sm text-gray-600 mt-1">{resource.ratingCount} 人评分</div>
                     </div>
                     
-                    {resource.ratingDistribution && (
+                    {ratingDistribution && (
                       <div className="flex-1">
                         {[5, 4, 3, 2, 1].map((star) => {
-                          const count = resource.ratingDistribution![star as keyof typeof resource.ratingDistribution]
-                          const percentage = (count / resource.ratingCount) * 100
+                          const count = ratingDistribution[star as keyof typeof ratingDistribution]
+                          const percentage = resource.ratingCount > 0 ? (count / resource.ratingCount) * 100 : 0
                           
                           return (
                             <div key={star} className="flex items-center gap-3 mb-2">

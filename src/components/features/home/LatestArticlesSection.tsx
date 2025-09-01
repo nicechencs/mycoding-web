@@ -22,7 +22,7 @@ export default function LatestArticlesSection() {
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">精选Posts</h2>
+            <h2 className="text-3xl font-bold text-gray-900">精选文章</h2>
             <p className="text-gray-600 mt-2">最新的文章、推荐和笔记分享</p>
           </div>
           <Link

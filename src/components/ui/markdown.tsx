@@ -4,7 +4,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
-import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 import { cn } from '@/lib/utils'
 
 interface MarkdownProps {
@@ -17,7 +17,7 @@ export function Markdown({ children, className }: MarkdownProps) {
     <div className={cn('prose prose-gray max-w-none', className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeRaw]}
+        rehypePlugins={[rehypeHighlight, rehypeSanitize]}
         components={{
           h1: ({ children }) => (
             <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4 first:mt-0">
@@ -94,17 +94,22 @@ export function Markdown({ children, className }: MarkdownProps) {
           em: ({ children }) => (
             <em className="italic text-gray-700">{children}</em>
           ),
-          a: ({ children, href, ...props }) => (
-            <a 
-              href={href} 
-              className="text-purple-600 hover:text-purple-700 underline" 
-              target="_blank"
-              rel="noopener noreferrer"
-              {...props}
-            >
-              {children}
-            </a>
-          ),
+          a: ({ children, href, ...props }) => {
+            // 安全的href验证
+            const isValidHref = href && (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('/') || href.startsWith('#'))
+            
+            return (
+              <a 
+                href={isValidHref ? href : '#'} 
+                className="text-purple-600 hover:text-purple-700 underline" 
+                target={href?.startsWith('http') ? "_blank" : undefined}
+                rel={href?.startsWith('http') ? "noopener noreferrer" : undefined}
+                {...props}
+              >
+                {children}
+              </a>
+            )
+          },
           table: ({ children }) => (
             <div className="overflow-x-auto mb-4">
               <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
