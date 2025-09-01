@@ -197,7 +197,74 @@ export const mockResources: Resource[] = [
     id: '3',
     title: 'TypeScript 5.0 新功能',
     slug: 'typescript-5-features',
-    description: 'TypeScript 5.0版本的新增功能、性能改进和重大变更。包含装饰器、const assertion、模板字面量类型等重要特性。',
+    description: 'TypeScript 5.0版本的**新增功能**、性能改进和重大变更。包含**装饰器**、const assertion、模板字面量类型等重要特性。支持`ES2022装饰器`提案。',
+    detailedDescription: `
+      TypeScript 5.0 是一个重要的版本更新，带来了许多令人兴奋的新特性和改进。这个版本专注于提升开发者体验和代码质量。
+
+      ## 主要新特性
+
+      ### 装饰器（Decorators）正式支持
+      TypeScript 5.0 正式支持了 ES2022 装饰器提案，这是一个等待已久的功能：
+
+      \`\`\`typescript
+      function logged(target: any, key: string, descriptor: PropertyDescriptor) {
+        const original = descriptor.value;
+        descriptor.value = function(...args: any[]) {
+          console.log(\`Calling \${key} with\`, args);
+          return original.apply(this, args);
+        };
+      }
+
+      class Calculator {
+        @logged
+        add(a: number, b: number) {
+          return a + b;
+        }
+      }
+      \`\`\`
+
+      ### const 断言的增强
+      现在可以在更多场景中使用 const 断言，提供更精确的类型推断：
+
+      \`\`\`typescript
+      const routes = [
+        { path: '/home', component: 'Home' },
+        { path: '/about', component: 'About' }
+      ] as const;
+      // routes 的类型现在是只读的元组类型
+      \`\`\`
+
+      ### 模板字面量类型改进
+      模板字面量类型现在支持更复杂的模式匹配：
+
+      \`\`\`typescript
+      type EventName<T extends string> = \`on\${Capitalize<T>}\`;
+      type ClickEvent = EventName<'click'>; // "onClick"
+      \`\`\`
+
+      ## 性能优化
+
+      - **更快的类型检查**: 编译器性能提升 10-20%
+      - **更小的内存占用**: 减少了内存使用
+      - **改进的增量编译**: 更智能的缓存策略
+
+      ## 破坏性变更
+
+      ### 严格的 null 检查改进
+      对 null 和 undefined 的检查更加严格，可能需要更新现有代码。
+
+      ### 更严格的函数类型检查
+      函数参数和返回值的类型检查更加严格。
+
+      ## 升级建议
+
+      1. **渐进式升级**: 不要一次性升级所有代码
+      2. **使用 TypeScript 迁移工具**: 自动化处理大部分升级工作
+      3. **更新类型定义**: 确保第三方库的类型定义兼容
+      4. **测试覆盖**: 升级后进行充分的测试
+
+      这个版本为 TypeScript 生态系统带来了显著的改进，是值得升级的重要版本。
+    `,
     url: 'https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html',
     category: '前端开发',
     tags: ['TypeScript', 'JavaScript', '类型系统'],

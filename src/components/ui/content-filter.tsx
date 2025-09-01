@@ -62,7 +62,7 @@ export function ContentFilter({
                       onSearch()
                     }
                   }}
-                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ export function ContentFilter({
               {onSearch && (
                 <button
                   onClick={onSearch}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -95,7 +95,7 @@ export function ContentFilter({
               id="category"
               value={selectedCategory}
               onChange={(e) => onCategoryChange(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
             >
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -140,7 +140,7 @@ export function ContentFilter({
                   className={cn(
                     'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
                     isSelected
-                      ? 'bg-purple-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : cn(colors.bg, colors.text, colors.hover)
                   )}
                 >
@@ -190,7 +190,7 @@ export function QuickFilterBar({
             className={cn(
               'inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors',
               isSelected
-                ? 'bg-purple-600 text-white hover:bg-purple-700'
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
                 : cn(colors.bg, colors.text, colors.hover)
             )}
           >
@@ -199,7 +199,7 @@ export function QuickFilterBar({
             {category.count !== undefined && (
               <span className={cn(
                 'ml-2 px-2 py-0.5 text-xs rounded-full',
-                isSelected ? 'bg-purple-500' : 'bg-white bg-opacity-50'
+                isSelected ? 'bg-blue-500' : 'bg-white bg-opacity-50'
               )}>
                 {category.count}
               </span>

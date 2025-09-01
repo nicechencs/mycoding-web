@@ -57,7 +57,7 @@ const MARKDOWN_COMPONENTS = {
             <li className="text-gray-700">{children}</li>
           ),
           blockquote: ({ children }: { children: React.ReactNode }) => (
-            <blockquote className="border-l-4 border-purple-200 pl-4 my-4 italic text-gray-600 bg-gray-50 py-2">
+            <blockquote className="border-l-4 border-blue-200 pl-4 my-4 italic text-gray-600 bg-gray-50 py-2">
               {children}
             </blockquote>
           ),
@@ -77,7 +77,7 @@ const MARKDOWN_COMPONENTS = {
             }
             
             return (
-              <code className="bg-gray-100 text-purple-600 px-1 py-0.5 rounded text-sm font-mono" {...props}>
+              <code className="bg-gray-100 text-blue-600 px-1 py-0.5 rounded text-sm font-mono" {...props}>
                 {children}
               </code>
             )
@@ -100,7 +100,7 @@ const MARKDOWN_COMPONENTS = {
             return (
               <a 
                 href={isValidHref ? href : '#'} 
-                className="text-purple-600 hover:text-purple-700 underline" 
+                className="text-blue-600 hover:text-blue-700 underline" 
                 target={href?.startsWith('http') ? "_blank" : undefined}
                 rel={href?.startsWith('http') ? "noopener noreferrer" : undefined}
                 {...props}

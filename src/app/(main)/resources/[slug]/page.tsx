@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useResourceDetail } from '@/hooks/use-resource-detail'
 import { RatingStars } from '@/components/features/resources/rating-stars'
 import { Avatar } from '@/components/ui/avatar'
+import { Markdown } from '@/components/ui/markdown'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { ResourceCard } from '@/components/features/resources/resource-card'
@@ -104,7 +105,9 @@ export default function ResourceDetailPage() {
               )}
             </div>
 
-            <p className="text-gray-600 mb-6 leading-relaxed">{resource.description}</p>
+            <div className="text-gray-600 mb-6 leading-relaxed">
+              <Markdown>{resource.description}</Markdown>
+            </div>
 
             <div className="flex flex-wrap items-center gap-4 mb-6">
               <div className="flex items-center gap-2">
@@ -197,11 +200,9 @@ export default function ResourceDetailPage() {
               {activeTab === 'description' && (
                 <div className="prose prose-gray max-w-none">
                   {resource.detailedDescription ? (
-                    <div className="whitespace-pre-line leading-relaxed text-gray-700">
-                      {resource.detailedDescription}
-                    </div>
+                    <Markdown>{resource.detailedDescription}</Markdown>
                   ) : (
-                    <p className="text-gray-600">{resource.description}</p>
+                    <Markdown>{resource.description}</Markdown>
                   )}
                   
                   {resource.screenshots && resource.screenshots.length > 0 && (

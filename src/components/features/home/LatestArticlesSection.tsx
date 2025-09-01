@@ -27,7 +27,7 @@ export default function LatestArticlesSection() {
           </div>
           <Link
             href="/posts"
-            className="text-purple-600 hover:text-purple-700 font-medium"
+            className="text-blue-600 hover:text-blue-700 font-medium"
           >
             查看全部 →
           </Link>
@@ -65,7 +65,7 @@ export default function LatestArticlesSection() {
                   <span>❤️ {article.likeCount}</span>
                   <span>💬 {article.commentCount}</span>
                 </div>
-                <span className="inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded">
+                <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded">
                   {article.category}
                 </span>
               </div>

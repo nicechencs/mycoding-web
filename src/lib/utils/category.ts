@@ -20,88 +20,102 @@ export interface CategoryConfig {
 class CategoryManager {
   private static instance: CategoryManager
   
-  // 统一的分类颜色映射
+  // 统一的分类颜色映射 - 全部使用蓝色系保持一致性
   private readonly colorMap: Record<string, CategoryColors> = {
-    '前端开发': { 
-      bg: 'bg-blue-100', 
+    '全部': { 
+      bg: 'bg-blue-50', 
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-200'
+      hover: 'hover:bg-blue-100'
+    },
+    '前端开发': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     '后端开发': { 
-      bg: 'bg-green-100', 
-      text: 'text-green-700',
-      border: 'border-green-200',
-      hover: 'hover:bg-green-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     '移动开发': { 
-      bg: 'bg-purple-100', 
-      text: 'text-purple-700',
-      border: 'border-purple-200',
-      hover: 'hover:bg-purple-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
-    '数据科学': { 
-      bg: 'bg-orange-100', 
-      text: 'text-orange-700',
-      border: 'border-orange-200',
-      hover: 'hover:bg-orange-200'
+    'AI & 机器学习': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
-    '人工智能': { 
-      bg: 'bg-red-100', 
-      text: 'text-red-700',
-      border: 'border-red-200',
-      hover: 'hover:bg-red-200'
+    '数据库': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     '云计算': { 
-      bg: 'bg-indigo-100', 
-      text: 'text-indigo-700',
-      border: 'border-indigo-200',
-      hover: 'hover:bg-indigo-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
+    },
+    'DevOps': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
+    },
+    '网络安全': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     '区块链': { 
-      bg: 'bg-yellow-100', 
-      text: 'text-yellow-700',
-      border: 'border-yellow-200',
-      hover: 'hover:bg-yellow-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     '游戏开发': { 
-      bg: 'bg-pink-100', 
-      text: 'text-pink-700',
-      border: 'border-pink-200',
-      hover: 'hover:bg-pink-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
-    '安全': { 
-      bg: 'bg-gray-100', 
-      text: 'text-gray-700',
-      border: 'border-gray-200',
-      hover: 'hover:bg-gray-200'
-    },
-    '运维': { 
-      bg: 'bg-cyan-100', 
-      text: 'text-cyan-700',
-      border: 'border-cyan-200',
-      hover: 'hover:bg-cyan-200'
+    '其他': { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     },
     'default': { 
-      bg: 'bg-gray-100', 
-      text: 'text-gray-700',
-      border: 'border-gray-200',
-      hover: 'hover:bg-gray-200'
+      bg: 'bg-blue-50', 
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-100'
     }
   }
 
   // 分类图标映射
   private readonly iconMap: Record<string, string> = {
+    '全部': '📚',
     '前端开发': '🎨',
     '后端开发': '⚙️',
     '移动开发': '📱',
-    '数据科学': '📊',
-    '人工智能': '🤖',
+    'AI & 机器学习': '🤖',
+    '数据库': '💾',
     '云计算': '☁️',
-    '区块链': '🔗',
+    'DevOps': '🔧',
+    '网络安全': '🔐',
+    '区块链': '⛓️',
     '游戏开发': '🎮',
-    '安全': '🔒',
-    '运维': '🛠️'
+    '其他': '📦'
   }
 
   /**

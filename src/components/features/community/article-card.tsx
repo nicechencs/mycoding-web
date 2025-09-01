@@ -54,7 +54,7 @@ export const ArticleCard = React.memo(({ article }: ArticleCardProps) => {
       
       {/* Content */}
       <div className="mb-4">
-        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg group-hover:text-purple-600 transition-colors">
+        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg group-hover:text-blue-600 transition-colors">
           {article.title}
         </h3>
         <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
@@ -87,11 +87,11 @@ export const ArticleCard = React.memo(({ article }: ArticleCardProps) => {
             <span>👀</span>
             <span>{article.viewCount}</span>
           </span>
-          <span className="flex items-center space-x-1 hover:text-red-600 transition-colors cursor-pointer" data-no-click>
+          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
             <span>❤️</span>
             <span>{article.likeCount}</span>
           </span>
-          <span className="flex items-center space-x-1 hover:text-green-600 transition-colors cursor-pointer" data-no-click>
+          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
             <span>💬</span>
             <span>{article.commentCount}</span>
           </span>
@@ -99,7 +99,7 @@ export const ArticleCard = React.memo(({ article }: ArticleCardProps) => {
         
         <Link
           href={`/posts/${article.slug}`}
-          className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm hover:bg-purple-50 px-2 py-1 rounded transition-colors"
+          className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm hover:bg-blue-50 px-2 py-1 rounded transition-colors"
         >
           阅读全文
           <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -6,6 +6,7 @@ import { Resource } from '@/types/resource'
 import { Avatar } from '@/components/ui/avatar'
 import { RatingStars } from './rating-stars'
 import { getCategoryClasses } from '@/lib/utils/category'
+import { Markdown } from '@/components/ui/markdown'
 
 interface ResourceCardProps {
   resource: Resource
@@ -50,13 +51,15 @@ export const ResourceCard = React.memo(({ resource }: ResourceCardProps) => {
         </div>
       </div>
       
-      <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-purple-600 transition-colors">
+      <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
         {resource.title}
       </h3>
       
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
-        {resource.description}
-      </p>
+      <div className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed prose-sm prose-gray max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <Markdown className="[&_p]:mb-0 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_ul]:my-0 [&_ol]:my-0">
+          {resource.description}
+        </Markdown>
+      </div>
       
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -85,7 +88,7 @@ export const ResourceCard = React.memo(({ resource }: ResourceCardProps) => {
         </div>
         
         <button
-          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded transition-colors"
+          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
           data-no-click
         >
           查看详情

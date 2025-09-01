@@ -26,26 +26,26 @@ export default function FeaturesSection() {
         </Link>
 
         <Link href="/posts" className="group block">
-          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
             <div className="text-4xl mb-4">✍️</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">文章内容</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">文章内容</h3>
             <p className="text-gray-600 mb-4">
               写技术文章、发项目推荐、记录学习笔记，分享你的编程心得
             </p>
-            <span className="text-purple-600 group-hover:text-purple-700 font-medium">
+            <span className="text-blue-600 group-hover:text-blue-700 font-medium">
               开始创作 →
             </span>
           </div>
         </Link>
 
         <Link href="/vibes" className="group block">
-          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-green-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div className="text-center p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer h-full">
             <div className="text-4xl mb-4">⚡</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">Vibe动态</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Vibe动态</h3>
             <p className="text-gray-600 mb-4">
               快速分享编程想法、学习心得，记录你的编程生活点滴
             </p>
-            <span className="text-green-600 group-hover:text-green-700 font-medium">
+            <span className="text-blue-600 group-hover:text-blue-700 font-medium">
               查看动态 →
             </span>
           </div>

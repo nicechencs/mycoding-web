@@ -3,27 +3,27 @@ import { cn } from '@/lib/utils'
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive'
   size?: 'default' | 'sm' | 'lg' | 'icon'
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
+  ({ className, variant = 'primary', size = 'default', ...props }, ref) => {
     return (
       <button
         className={cn(
           'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
           {
-            'bg-primary text-primary-foreground hover:bg-primary/90':
-              variant === 'default',
-            'bg-destructive text-destructive-foreground hover:bg-destructive/90':
-              variant === 'destructive',
-            'border border-input hover:bg-accent hover:text-accent-foreground':
-              variant === 'outline',
-            'bg-secondary text-secondary-foreground hover:bg-secondary/80':
+            'bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500':
+              variant === 'primary',
+            'bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500':
               variant === 'secondary',
-            'hover:bg-accent hover:text-accent-foreground':
+            'border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 focus-visible:ring-blue-500':
+              variant === 'outline',
+            'text-blue-600 hover:bg-blue-50 focus-visible:ring-blue-500':
               variant === 'ghost',
+            'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500':
+              variant === 'destructive',
           },
           {
             'h-10 py-2 px-4': size === 'default',
