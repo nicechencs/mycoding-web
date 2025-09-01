@@ -38,10 +38,10 @@ export const resourcesCategoryConfig: CategoryConfig = {
       description: '服务端技术和架构资源',
       icon: '⚙️',
       colors: {
-        bg: 'bg-green-100',
-        text: 'text-green-700',
-        border: 'border-green-300',
-        hover: 'hover:bg-green-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 18
     },
@@ -51,10 +51,10 @@ export const resourcesCategoryConfig: CategoryConfig = {
       description: '数据库设计和优化资源',
       icon: '🗄️',
       colors: {
-        bg: 'bg-purple-100',
-        text: 'text-purple-700',
-        border: 'border-purple-300',
-        hover: 'hover:bg-purple-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 12
     },
@@ -64,10 +64,10 @@ export const resourcesCategoryConfig: CategoryConfig = {
       description: 'iOS、Android和跨平台开发',
       icon: '📱',
       colors: {
-        bg: 'bg-orange-100',
-        text: 'text-orange-700',
-        border: 'border-orange-300',
-        hover: 'hover:bg-orange-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 15
     },
@@ -90,10 +90,10 @@ export const resourcesCategoryConfig: CategoryConfig = {
       description: '云服务和DevOps工具',
       icon: '☁️',
       colors: {
-        bg: 'bg-cyan-100',
-        text: 'text-cyan-700',
-        border: 'border-cyan-300',
-        hover: 'hover:bg-cyan-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 10
     }

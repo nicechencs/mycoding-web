@@ -27,7 +27,7 @@ export default function LatestVibesSection() {
         </div>
         <Link
           href="/vibes"
-          className="text-green-600 hover:text-green-700 font-medium"
+          className="text-blue-600 hover:text-blue-700 font-medium"
         >
           查看全部 →
         </Link>
@@ -63,7 +63,7 @@ export default function LatestVibesSection() {
                     <span>💬</span>
                     <span>{vibe.commentCount}</span>
                   </button>
-                  <button className="flex items-center space-x-1 hover:text-green-500 transition-colors">
+                  <button className="flex items-center space-x-1 hover:text-blue-500 transition-colors">
                     <span>🔄</span>
                     <span>{vibe.shareCount}</span>
                   </button>

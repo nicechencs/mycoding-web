@@ -93,7 +93,7 @@ const MARKDOWN_COMPONENTS = {
           em: ({ children }: { children: React.ReactNode }) => (
             <em className="italic text-gray-700">{children}</em>
           ),
-          a: ({ children, href, ...props }: { children: React.ReactNode; href?: string; [key: string]: any }) => {
+          a: ({ children, href, ...props }: { children?: React.ReactNode; href?: string; [key: string]: any }) => {
             // 安全的href验证
             const isValidHref = href && (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('/') || href.startsWith('#'))
             
@@ -142,6 +142,13 @@ const MARKDOWN_COMPONENTS = {
 }
 
 export function Markdown({ children, className }: MarkdownProps) {
+  // 处理模板字符串中的缩进问题
+  const processedContent = useMemo(() => {
+    if (!children) return ''
+    // 移除每行的前导空格，保留Markdown格式
+    return children.split('\n').map(line => line.trimStart()).join('\n').trim()
+  }, [children])
+  
   return (
     <div className={cn('prose prose-gray max-w-none', className)}>
       <ReactMarkdown
@@ -149,7 +156,7 @@ export function Markdown({ children, className }: MarkdownProps) {
         rehypePlugins={REHYPE_PLUGINS}
         components={MARKDOWN_COMPONENTS}
       >
-        {children}
+        {processedContent}
       </ReactMarkdown>
     </div>
   )

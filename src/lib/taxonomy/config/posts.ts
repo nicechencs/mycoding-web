@@ -38,10 +38,10 @@ export const postsCategoryConfig: CategoryConfig = {
       description: '优秀开源项目推荐',
       icon: '🚀',
       colors: {
-        bg: 'bg-purple-100',
-        text: 'text-purple-700',
-        border: 'border-purple-300',
-        hover: 'hover:bg-purple-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 23
     },
@@ -51,10 +51,10 @@ export const postsCategoryConfig: CategoryConfig = {
       description: '学习记录和心得',
       icon: '📚',
       colors: {
-        bg: 'bg-green-100',
-        text: 'text-green-700',
-        border: 'border-green-300',
-        hover: 'hover:bg-green-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 38
     },
@@ -64,10 +64,10 @@ export const postsCategoryConfig: CategoryConfig = {
       description: '开发经验和最佳实践',
       icon: '💡',
       colors: {
-        bg: 'bg-yellow-100',
-        text: 'text-yellow-700',
-        border: 'border-yellow-300',
-        hover: 'hover:bg-yellow-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 29
     },
@@ -77,10 +77,10 @@ export const postsCategoryConfig: CategoryConfig = {
       description: '开发工具和资源推荐',
       icon: '🛠️',
       colors: {
-        bg: 'bg-orange-100',
-        text: 'text-orange-700',
-        border: 'border-orange-300',
-        hover: 'hover:bg-orange-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 17
     },
@@ -90,10 +90,10 @@ export const postsCategoryConfig: CategoryConfig = {
       description: '职业规划和面试经验',
       icon: '🎯',
       colors: {
-        bg: 'bg-indigo-100',
-        text: 'text-indigo-700',
-        border: 'border-indigo-300',
-        hover: 'hover:bg-indigo-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 12
     }

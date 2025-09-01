@@ -26,10 +26,10 @@ export const vibesCategoryConfig: CategoryConfig = {
       description: '编程感悟和技巧分享',
       icon: '💻',
       colors: {
-        bg: 'bg-green-100',
-        text: 'text-green-700',
-        border: 'border-green-300',
-        hover: 'hover:bg-green-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 85
     },
@@ -52,10 +52,10 @@ export const vibesCategoryConfig: CategoryConfig = {
       description: '项目进展和成果',
       icon: '🚀',
       colors: {
-        bg: 'bg-purple-100',
-        text: 'text-purple-700',
-        border: 'border-purple-300',
-        hover: 'hover:bg-purple-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 43
     },
@@ -78,10 +78,10 @@ export const vibesCategoryConfig: CategoryConfig = {
       description: '编程技巧和快捷方式',
       icon: '💡',
       colors: {
-        bg: 'bg-yellow-100',
-        text: 'text-yellow-700',
-        border: 'border-yellow-300',
-        hover: 'hover:bg-yellow-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 58
     },
@@ -91,10 +91,10 @@ export const vibesCategoryConfig: CategoryConfig = {
       description: '技术观点和讨论',
       icon: '💬',
       colors: {
-        bg: 'bg-cyan-100',
-        text: 'text-cyan-700',
-        border: 'border-cyan-300',
-        hover: 'hover:bg-cyan-200'
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        hover: 'hover:bg-blue-100'
       },
       count: 27
     }

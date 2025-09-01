@@ -147,8 +147,8 @@ export function ResourceRating({
           </div>
           
           {selectedRating > 0 && !isSubmitting && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm text-green-700">
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700">
                 感谢您的评分！您的反馈将帮助其他用户更好地了解这个资源。
               </p>
             </div>

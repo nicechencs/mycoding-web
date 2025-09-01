@@ -45,7 +45,7 @@ export default function PostsPage() {
           </div>
           <Link
             href="/posts/articles"
-            className="text-purple-600 hover:text-purple-700 font-medium"
+            className="text-blue-600 hover:text-blue-700 font-medium"
           >
             查看全部 →
           </Link>
@@ -68,7 +68,7 @@ export default function PostsPage() {
             </div>
             <Link
               href="/posts/articles"
-              className="text-purple-600 hover:text-purple-700 font-medium"
+              className="text-blue-600 hover:text-blue-700 font-medium"
             >
               查看更多 →
             </Link>
@@ -86,34 +86,34 @@ export default function PostsPage() {
       <section className="container">
         <div className="bg-blue-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">开始创作</h2>
-          <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             分享你的知识和经验，帮助更多开发者成长。写文章、发推荐、记录成长。
           </p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
             <div>
               <div className="text-3xl font-bold">1,234</div>
-              <div className="text-purple-200 text-sm">创作者</div>
+              <div className="text-blue-200 text-sm">创作者</div>
             </div>
             <div>
               <div className="text-3xl font-bold">567</div>
-              <div className="text-purple-200 text-sm">技术文章</div>
+              <div className="text-blue-200 text-sm">技术文章</div>
             </div>
             <div>
               <div className="text-3xl font-bold">89</div>
-              <div className="text-purple-200 text-sm">项目推荐</div>
+              <div className="text-blue-200 text-sm">项目推荐</div>
             </div>
             <div>
               <div className="text-3xl font-bold">2.1k</div>
-              <div className="text-purple-200 text-sm">博客内容</div>
+              <div className="text-blue-200 text-sm">博客内容</div>
             </div>
           </div>
           
           <div className="flex gap-4 justify-center">
-            <button className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+            <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
               写文章
             </button>
-            <button className="bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-colors">
+            <button className="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors">
               发布推荐
             </button>
           </div>

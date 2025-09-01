@@ -5,12 +5,12 @@ import { getCategoryColor } from '@/lib/utils/category'
 // 标签类型
 interface Tag {
   label: string
-  color?: 'default' | 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'cyan'
+  color?: 'default' | 'blue' | 'red'
   variant?: 'default' | 'outline' | 'filled'
   onClick?: () => void
 }
 
-// 标签颜色配置
+// 标签颜色配置 - 统一蓝色系
 const tagColors = {
   default: {
     default: 'bg-gray-100 text-gray-600 hover:bg-gray-200',
@@ -18,34 +18,14 @@ const tagColors = {
     filled: 'bg-gray-600 text-white hover:bg-gray-700'
   },
   blue: {
-    default: 'bg-blue-100 text-blue-700 hover:bg-blue-200',
-    outline: 'border border-blue-300 text-blue-600 hover:bg-blue-50', 
+    default: 'bg-blue-50 text-blue-700 hover:bg-blue-100',
+    outline: 'border border-blue-200 text-blue-600 hover:bg-blue-50', 
     filled: 'bg-blue-600 text-white hover:bg-blue-700'
-  },
-  green: {
-    default: 'bg-green-100 text-green-700 hover:bg-green-200',
-    outline: 'border border-green-300 text-green-600 hover:bg-green-50',
-    filled: 'bg-green-600 text-white hover:bg-green-700'
-  },
-  purple: {
-    default: 'bg-purple-100 text-purple-700 hover:bg-purple-200',
-    outline: 'border border-purple-300 text-purple-600 hover:bg-purple-50',
-    filled: 'bg-purple-600 text-white hover:bg-purple-700'
-  },
-  orange: {
-    default: 'bg-orange-100 text-orange-700 hover:bg-orange-200',
-    outline: 'border border-orange-300 text-orange-600 hover:bg-orange-50',
-    filled: 'bg-orange-600 text-white hover:bg-orange-700'
   },
   red: {
     default: 'bg-red-100 text-red-700 hover:bg-red-200',
     outline: 'border border-red-300 text-red-600 hover:bg-red-50',
     filled: 'bg-red-600 text-white hover:bg-red-700'
-  },
-  cyan: {
-    default: 'bg-cyan-100 text-cyan-700 hover:bg-cyan-200',
-    outline: 'border border-cyan-300 text-cyan-600 hover:bg-cyan-50',
-    filled: 'bg-cyan-600 text-white hover:bg-cyan-700'
   }
 }
 
@@ -92,7 +72,7 @@ interface CardTagsProps {
   tags: (string | Tag)[]
   maxVisible?: number
   size?: 'xs' | 'sm' | 'md'
-  color?: 'default' | 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'cyan'
+  color?: 'default' | 'blue' | 'red'
   variant?: 'default' | 'outline' | 'filled'
   onTagClick?: (tag: string) => void
   className?: string
@@ -159,7 +139,7 @@ export function CardTags({
 
 // 预设的标签组合
 
-// 资源标签 - 灰色主题
+// 资源标签 - 蓝色主题
 export function ResourceTags({ 
   tags, 
   maxVisible, 
@@ -170,7 +150,7 @@ export function ResourceTags({
     <CardTags 
       tags={tags}
       maxVisible={maxVisible}
-      color="default"
+      color="blue"
       variant="default"
       onTagClick={onTagClick}
       className={className}
@@ -178,7 +158,7 @@ export function ResourceTags({
   )
 }
 
-// 文章标签 - 灰色主题，带点击效果
+// 文章标签 - 蓝色主题，带点击效果
 export function ArticleTags({ 
   tags, 
   maxVisible, 
@@ -189,7 +169,7 @@ export function ArticleTags({
     <CardTags 
       tags={tags}
       maxVisible={maxVisible}
-      color="default"
+      color="blue"
       variant="default"
       onTagClick={onTagClick}
       className={className}

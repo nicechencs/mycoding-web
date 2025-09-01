@@ -153,7 +153,7 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="分享你的编程想法、学习心得、项目进展或技术思考..."
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
                   rows={4}
                   maxLength={500}
                   autoFocus
@@ -163,7 +163,7 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                     {content.length}/500 字符
                   </div>
                   {content.length > 400 && (
-                    <div className="text-xs text-orange-600">
+                    <div className="text-xs text-blue-600">
                       内容即将达到上限
                     </div>
                   )}
@@ -189,7 +189,7 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={handleTagInputKeyPress}
                     placeholder="输入标签并按回车"
-                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors text-sm"
+                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm"
                     disabled={tags.length >= 5}
                   />
                   <button
@@ -200,7 +200,7 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                       }
                     }}
                     disabled={!tagInput.trim() || tags.length >= 5}
-                    className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     添加
                   </button>
@@ -222,12 +222,12 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.8 }}
                           transition={{ delay: index * 0.05 }}
-                          className="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full"
+                          className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
                         >
                           #{tag}
                           <button
                             onClick={() => removeTag(tag)}
-                            className="ml-2 text-green-500 hover:text-green-700 transition-colors"
+                            className="ml-2 text-blue-500 hover:text-blue-700 transition-colors"
                           >
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -304,7 +304,7 @@ export function AnimatedComposer({ onSubmit }: AnimatedComposerProps) {
                     whileTap={{ scale: 0.98 }}
                     onClick={handleSubmit}
                     disabled={!content.trim()}
-                    className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     发布动态
                   </motion.button>

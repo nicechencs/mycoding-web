@@ -27,7 +27,7 @@ export default function PostDetailPage() {
         <p className="text-gray-600 mb-6">抱歉，您访问的文章不存在或已被删除</p>
         <Link 
           href="/posts" 
-          className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           返回文章列表
         </Link>
@@ -70,11 +70,11 @@ export default function PostDetailPage() {
     <div className="container py-8">
       {/* 面包屑导航 */}
       <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-        <Link href="/" className="hover:text-purple-600 transition-colors">首页</Link>
+        <Link href="/" className="hover:text-blue-600 transition-colors">首页</Link>
         <span>/</span>
-        <Link href="/posts" className="hover:text-purple-600 transition-colors">博客文章</Link>
+        <Link href="/posts" className="hover:text-blue-600 transition-colors">博客文章</Link>
         <span>/</span>
-        <Link href={`/posts/articles?category=${encodeURIComponent(article.category)}`} className="hover:text-purple-600 transition-colors">
+        <Link href={`/posts/articles?category=${encodeURIComponent(article.category)}`} className="hover:text-blue-600 transition-colors">
           {article.category}
         </Link>
         <span>/</span>
@@ -152,7 +152,7 @@ export default function PostDetailPage() {
                   <Link
                     key={tag}
                     href={`/posts/articles?tag=${encodeURIComponent(tag)}`}
-                    className="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-sm rounded-full hover:bg-purple-100 transition-colors"
+                    className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm rounded-full hover:bg-blue-100 transition-colors"
                   >
                     #{tag}
                   </Link>
@@ -209,7 +209,7 @@ export default function PostDetailPage() {
                 onClick={() => setActiveTab('content')}
                 className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === 'content'
-                    ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -219,7 +219,7 @@ export default function PostDetailPage() {
                 onClick={() => setActiveTab('comments')}
                 className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === 'comments'
-                    ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -241,7 +241,7 @@ export default function PostDetailPage() {
                         <span>分类：</span>
                         <Link 
                           href={`/posts/articles?category=${encodeURIComponent(article.category)}`}
-                          className="text-purple-600 hover:text-purple-700"
+                          className="text-blue-600 hover:text-blue-700"
                         >
                           {article.category}
                         </Link>
@@ -274,13 +274,13 @@ export default function PostDetailPage() {
                               </div>
                               <p className="text-gray-700 mb-3 leading-relaxed">{comment.content}</p>
                               <div className="flex items-center gap-4">
-                                <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-purple-600 transition-colors">
+                                <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 transition-colors">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                   </svg>
                                   <span>点赞</span>
                                 </button>
-                                <button className="text-sm text-gray-500 hover:text-purple-600 transition-colors">
+                                <button className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
                                   回复
                                 </button>
                               </div>
@@ -319,7 +319,7 @@ export default function PostDetailPage() {
             <p className="text-sm text-gray-600 mb-4">
               热爱编程和技术分享的开发者，专注于现代Web开发技术栈。
             </p>
-            <button className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+            <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
               关注作者
             </button>
           </div>
@@ -328,25 +328,25 @@ export default function PostDetailPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-semibold text-gray-900 mb-4">文章目录</h3>
             <div className="space-y-2 text-sm">
-              <a href="#" className="block text-purple-600 hover:text-purple-700 py-1">
+              <a href="#" className="block text-blue-600 hover:text-blue-700 py-1">
                 App Router的主要特性
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1 ml-4">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1 ml-4">
                 基于文件系统的路由
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1 ml-4">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1 ml-4">
                 布局系统（Layouts）
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1">
                 服务端组件 vs 客户端组件
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1">
                 数据获取
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1">
                 性能优化
               </a>
-              <a href="#" className="block text-gray-600 hover:text-purple-600 py-1">
+              <a href="#" className="block text-gray-600 hover:text-blue-600 py-1">
                 迁移策略
               </a>
             </div>
@@ -363,7 +363,7 @@ export default function PostDetailPage() {
                     href={`/posts/${related.slug}`}
                     className="block group"
                   >
-                    <h4 className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors mb-1 line-clamp-2">
+                    <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                       {related.title}
                     </h4>
                     <p className="text-sm text-gray-600 line-clamp-2 mb-2">{related.excerpt}</p>

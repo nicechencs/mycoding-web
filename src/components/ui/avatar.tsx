@@ -13,10 +13,10 @@ const avatarSizes = {
 // 纯色主题配置
 const avatarThemes = {
   primary: 'bg-blue-500',
-  secondary: 'bg-purple-500',
-  tertiary: 'bg-indigo-500',
+  secondary: 'bg-blue-500',
+  tertiary: 'bg-blue-500',
   warm: 'bg-red-500',
-  cool: 'bg-cyan-500'
+  cool: 'bg-blue-500'
 } as const
 
 interface AvatarProps {

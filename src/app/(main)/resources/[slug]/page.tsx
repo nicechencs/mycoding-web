@@ -32,7 +32,7 @@ export default function ResourceDetailPage() {
   if (loading) {
     return (
       <div className="container py-16 text-center">
-        <div className="animate-spin w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
         <p className="text-gray-600">正在加载资源详情...</p>
       </div>
     )
@@ -198,7 +198,7 @@ export default function ResourceDetailPage() {
             <div className="p-6">
               {/* 详细介绍 */}
               {activeTab === 'description' && (
-                <div className="prose prose-gray max-w-none">
+                <div>
                   {resource.detailedDescription ? (
                     <Markdown>{resource.detailedDescription}</Markdown>
                   ) : (
