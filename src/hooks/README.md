@@ -79,24 +79,36 @@ interface UseResourceDetailReturn {
 }
 ```
 
-### 工具函数
+### 配套工具函数
 
-Hook 还提供了额外的工具函数：
+资源相关的工具函数已迁移到独立模块中：
 
 ```tsx
-import { useResourceDetailUtils } from '@/hooks/use-resource-detail'
+import { ResourceUtils } from '@/lib/utils/resource-utils'
+// 或导入特定函数
+import { isFeatured, formatCount, calculatePopularityScore } from '@/lib/utils/resource-utils'
 
-function Component() {
-  const { 
-    isFeaturedResource, 
-    getPrimaryTags, 
-    calculatePopularityScore,
-    formatCount 
-  } = useResourceDetailUtils()
+function Component({ resource }: { resource: Resource }) {
+  // 使用工具函数
+  const isResourceFeatured = ResourceUtils.isFeatured(resource)
+  const primaryTags = ResourceUtils.getPrimaryTags(resource, 3)
+  const popularityScore = ResourceUtils.calculatePopularityScore(resource)
+  const formattedCount = ResourceUtils.formatCount(resource.viewCount)
   
-  // 使用工具函数...
+  // 或直接使用导入的函数
+  const featured = isFeatured(resource)
+  const count = formatCount(resource.viewCount)
 }
 ```
+
+可用的工具函数：
+- `isFeatured(resource)` - 检查是否为精选资源
+- `getPrimaryTags(resource, limit)` - 获取主要标签
+- `calculatePopularityScore(resource)` - 计算受欢迎度评分
+- `formatCount(count)` - 格式化数字显示
+- `calculateQualityScore(resource)` - 计算质量评分
+- `isTrending(resource)` - 检查是否为热门资源
+- `getStatusLabels(resource)` - 获取状态标签
 
 ## 其他 Hooks
 

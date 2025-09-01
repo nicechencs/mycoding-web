@@ -60,29 +60,39 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
   /**
    * 获取资源详情数据
    * 使用 useCallback 优化性能，避免不必要的重新创建
+   * 内置内存泄漏防护机制
    */
-  const fetchResourceDetail = useCallback(async () => {
+  const fetchResourceDetail = useCallback(async (abortController?: AbortController) => {
     if (!slug) {
       setError('缺少资源标识符')
       setLoading(false)
       return
     }
 
+    const controller = abortController || new AbortController()
+
     try {
-      setLoading(true)
-      setError(null)
+      if (!controller.signal.aborted) {
+        setLoading(true)
+        setError(null)
+      }
 
       // 获取主要资源信息
       const resourceData = getResourceBySlug(slug)
       
       if (!resourceData) {
-        setResource(null)
-        setComments([])
-        setRelatedResources([])
-        setRatingDistribution(null)
-        setError('资源未找到')
+        if (!controller.signal.aborted) {
+          setResource(null)
+          setComments([])
+          setRelatedResources([])
+          setRatingDistribution(null)
+          setError('资源未找到')
+        }
         return
       }
+
+      // 检查是否已取消，避免在组件卸载后更新状态
+      if (controller.signal.aborted) return
 
       // 设置资源数据
       setResource(resourceData)
@@ -93,11 +103,17 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
         Promise.resolve(getRelatedResources(resourceData.id, 3))
       ])
 
+      // 再次检查是否已取消
+      if (controller.signal.aborted) return
+
       // 处理评论数据
       if (commentsData.status === 'fulfilled') {
         setComments(commentsData.value)
       } else {
-        console.warn('获取评论失败:', commentsData.reason)
+        // 只在开发环境输出警告
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('获取评论失败:', commentsData.reason)
+        }
         setComments([])
       }
 
@@ -105,7 +121,10 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
       if (relatedData.status === 'fulfilled') {
         setRelatedResources(relatedData.value)
       } else {
-        console.warn('获取相关资源失败:', relatedData.reason)
+        // 只在开发环境输出警告
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('获取相关资源失败:', relatedData.reason)
+        }
         setRelatedResources([])
       }
 
@@ -120,17 +139,26 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
       setRatingDistribution(distribution)
 
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '获取资源详情时出错'
-      console.error('获取资源详情失败:', err)
-      setError(errorMessage)
-      
-      // 重置状态
-      setResource(null)
-      setComments([])
-      setRelatedResources([])
-      setRatingDistribution(null)
+      // 只在未取消的情况下设置错误状态
+      if (!controller.signal.aborted) {
+        const errorMessage = err instanceof Error ? err.message : '获取资源详情时出错'
+        // 只在开发环境输出错误日志
+        if (process.env.NODE_ENV === 'development') {
+          console.error('获取资源详情失败:', err)
+        }
+        setError(errorMessage)
+        
+        // 重置状态
+        setResource(null)
+        setComments([])
+        setRelatedResources([])
+        setRatingDistribution(null)
+      }
     } finally {
-      setLoading(false)
+      // 只在未取消的情况下设置加载完成
+      if (!controller.signal.aborted) {
+        setLoading(false)
+      }
     }
   }, [slug])
 
@@ -142,9 +170,16 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
     fetchResourceDetail()
   }, [fetchResourceDetail])
 
-  // 当 slug 变化时重新获取数据
+  // 当 slug 变化时重新获取数据，包含内存泄漏防护
   useEffect(() => {
-    fetchResourceDetail()
+    const abortController = new AbortController()
+    
+    fetchResourceDetail(abortController)
+    
+    // 清理函数：组件卸载或依赖变化时取消正在进行的操作
+    return () => {
+      abortController.abort()
+    }
   }, [fetchResourceDetail])
 
   return {
@@ -163,55 +198,3 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
   }
 }
 
-/**
- * 资源详情页面可能用到的额外工具函数
- */
-export const useResourceDetailUtils = () => {
-  /**
-   * 检查资源是否为精选资源
-   */
-  const isFeaturedResource = useCallback((resource: Resource | null): boolean => {
-    return resource?.featured ?? false
-  }, [])
-
-  /**
-   * 获取资源的主要标签（前3个）
-   */
-  const getPrimaryTags = useCallback((resource: Resource | null): string[] => {
-    return resource?.tags.slice(0, 3) ?? []
-  }, [])
-
-  /**
-   * 计算资源的受欢迎程度评分（基于浏览量、点赞和评论）
-   */
-  const calculatePopularityScore = useCallback((resource: Resource | null): number => {
-    if (!resource) return 0
-    
-    // 权重: 浏览量(0.4) + 点赞数(0.4) + 评论数(0.2)
-    const viewScore = Math.min(resource.viewCount / 1000, 100) * 0.4
-    const likeScore = Math.min(resource.likeCount / 100, 100) * 0.4
-    const commentScore = Math.min(resource.commentCount / 50, 100) * 0.2
-    
-    return Math.round(viewScore + likeScore + commentScore)
-  }, [])
-
-  /**
-   * 格式化资源统计数字
-   */
-  const formatCount = useCallback((count: number): string => {
-    if (count >= 1000000) {
-      return `${(count / 1000000).toFixed(1)}M`
-    }
-    if (count >= 1000) {
-      return `${(count / 1000).toFixed(1)}K`
-    }
-    return count.toString()
-  }, [])
-
-  return {
-    isFeaturedResource,
-    getPrimaryTags,
-    calculatePopularityScore,
-    formatCount
-  }
-}

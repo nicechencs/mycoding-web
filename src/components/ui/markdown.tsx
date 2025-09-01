@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
@@ -12,52 +12,51 @@ interface MarkdownProps {
   className?: string
 }
 
-export function Markdown({ children, className }: MarkdownProps) {
-  return (
-    <div className={cn('prose prose-gray max-w-none', className)}>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeSanitize]}
-        components={{
-          h1: ({ children }) => (
+// 性能优化：将插件数组提取为常量，避免每次渲染重新创建
+const REMARK_PLUGINS = [remarkGfm]
+const REHYPE_PLUGINS = [rehypeHighlight, rehypeSanitize]
+
+// 性能优化：将组件配置提取为常量，避免每次渲染重新创建
+const MARKDOWN_COMPONENTS = {
+          h1: ({ children }: { children: React.ReactNode }) => (
             <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4 first:mt-0">
               {children}
             </h1>
           ),
-          h2: ({ children }) => (
+          h2: ({ children }: { children: React.ReactNode }) => (
             <h2 className="text-2xl font-semibold text-gray-900 mt-6 mb-3 border-b border-gray-200 pb-2">
               {children}
             </h2>
           ),
-          h3: ({ children }) => (
+          h3: ({ children }: { children: React.ReactNode }) => (
             <h3 className="text-xl font-semibold text-gray-900 mt-5 mb-2">
               {children}
             </h3>
           ),
-          h4: ({ children }) => (
+          h4: ({ children }: { children: React.ReactNode }) => (
             <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">
               {children}
             </h4>
           ),
-          p: ({ children }) => (
+          p: ({ children }: { children: React.ReactNode }) => (
             <p className="text-gray-700 leading-relaxed mb-4">
               {children}
             </p>
           ),
-          ul: ({ children }) => (
+          ul: ({ children }: { children: React.ReactNode }) => (
             <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700">
               {children}
             </ul>
           ),
-          ol: ({ children }) => (
+          ol: ({ children }: { children: React.ReactNode }) => (
             <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700">
               {children}
             </ol>
           ),
-          li: ({ children }) => (
+          li: ({ children }: { children: React.ReactNode }) => (
             <li className="text-gray-700">{children}</li>
           ),
-          blockquote: ({ children }) => (
+          blockquote: ({ children }: { children: React.ReactNode }) => (
             <blockquote className="border-l-4 border-purple-200 pl-4 my-4 italic text-gray-600 bg-gray-50 py-2">
               {children}
             </blockquote>
@@ -83,18 +82,18 @@ export function Markdown({ children, className }: MarkdownProps) {
               </code>
             )
           },
-          pre: ({ children }) => (
+          pre: ({ children }: { children: React.ReactNode }) => (
             <div className="mb-4">
               {children}
             </div>
           ),
-          strong: ({ children }) => (
+          strong: ({ children }: { children: React.ReactNode }) => (
             <strong className="font-semibold text-gray-900">{children}</strong>
           ),
-          em: ({ children }) => (
+          em: ({ children }: { children: React.ReactNode }) => (
             <em className="italic text-gray-700">{children}</em>
           ),
-          a: ({ children, href, ...props }) => {
+          a: ({ children, href, ...props }: { children: React.ReactNode; href?: string; [key: string]: any }) => {
             // 安全的href验证
             const isValidHref = href && (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('/') || href.startsWith('#'))
             
@@ -110,37 +109,45 @@ export function Markdown({ children, className }: MarkdownProps) {
               </a>
             )
           },
-          table: ({ children }) => (
+          table: ({ children }: { children: React.ReactNode }) => (
             <div className="overflow-x-auto mb-4">
               <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
                 {children}
               </table>
             </div>
           ),
-          thead: ({ children }) => (
+          thead: ({ children }: { children: React.ReactNode }) => (
             <thead className="bg-gray-50">
               {children}
             </thead>
           ),
-          tbody: ({ children }) => (
+          tbody: ({ children }: { children: React.ReactNode }) => (
             <tbody className="divide-y divide-gray-200">
               {children}
             </tbody>
           ),
-          tr: ({ children }) => (
+          tr: ({ children }: { children: React.ReactNode }) => (
             <tr>{children}</tr>
           ),
-          th: ({ children }) => (
+          th: ({ children }: { children: React.ReactNode }) => (
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">
               {children}
             </th>
           ),
-          td: ({ children }) => (
+          td: ({ children }: { children: React.ReactNode }) => (
             <td className="px-4 py-3 text-sm text-gray-700">
               {children}
             </td>
           ),
-        }}
+}
+
+export function Markdown({ children, className }: MarkdownProps) {
+  return (
+    <div className={cn('prose prose-gray max-w-none', className)}>
+      <ReactMarkdown
+        remarkPlugins={REMARK_PLUGINS}
+        rehypePlugins={REHYPE_PLUGINS}
+        components={MARKDOWN_COMPONENTS}
       >
         {children}
       </ReactMarkdown>

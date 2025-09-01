@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Resource } from '@/types/resource'
 import { Avatar } from '@/components/ui/avatar'
@@ -10,10 +11,10 @@ interface ResourceCardProps {
   resource: Resource
 }
 
-export function ResourceCard({ resource }: ResourceCardProps) {
+export const ResourceCard = React.memo(({ resource }: ResourceCardProps) => {
   const router = useRouter()
 
-  const handleCardClick = (e: React.MouseEvent) => {
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
     // 阻止点击特定元素时触发卡片跳转
     const target = e.target as HTMLElement
     if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
@@ -21,7 +22,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     }
     // 跳转到资源详情页
     router.push(`/resources/${resource.slug}`)
-  }
+  }, [router, resource.slug])
 
   return (
     <div 
@@ -114,4 +115,18 @@ export function ResourceCard({ resource }: ResourceCardProps) {
       </div>
     </div>
   )
-}
+}, (prevProps, nextProps) => {
+  // 自定义比较函数：只在关键属性变化时重新渲染
+  const prev = prevProps.resource
+  const next = nextProps.resource
+  
+  return (
+    prev.id === next.id &&
+    prev.title === next.title &&
+    prev.rating === next.rating &&
+    prev.viewCount === next.viewCount &&
+    prev.commentCount === next.commentCount &&
+    prev.featured === next.featured &&
+    prev.slug === next.slug
+  )
+})

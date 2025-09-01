@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Article } from '@/types'
@@ -10,17 +11,17 @@ interface ArticleCardProps {
   article: Article
 }
 
-export function ArticleCard({ article }: ArticleCardProps) {
+export const ArticleCard = React.memo(({ article }: ArticleCardProps) => {
   const router = useRouter()
 
-  const handleCardClick = (e: React.MouseEvent) => {
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
     // 阻止点击特定元素时触发卡片跳转
     const target = e.target as HTMLElement
     if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
       return
     }
     router.push(`/posts/${article.slug}`)
-  }
+  }, [router, article.slug])
 
   return (
     <div 
@@ -116,4 +117,19 @@ export function ArticleCard({ article }: ArticleCardProps) {
       </div>
     </div>
   )
-}
+}, (prevProps, nextProps) => {
+  // 自定义比较函数：只在关键属性变化时重新渲染
+  const prev = prevProps.article
+  const next = nextProps.article
+  
+  return (
+    prev.id === next.id &&
+    prev.title === next.title &&
+    prev.viewCount === next.viewCount &&
+    prev.likeCount === next.likeCount &&
+    prev.commentCount === next.commentCount &&
+    prev.featured === next.featured &&
+    prev.slug === next.slug &&
+    prev.updatedAt.getTime() === next.updatedAt.getTime()
+  )
+})
