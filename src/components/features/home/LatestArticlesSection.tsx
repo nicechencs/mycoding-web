@@ -22,7 +22,7 @@ export default function LatestArticlesSection() {
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">最新Posts</h2>
+            <h2 className="text-3xl font-bold text-gray-900">精选Posts</h2>
             <p className="text-gray-600 mt-2">最新的文章、推荐和笔记分享</p>
           </div>
           <Link
@@ -33,8 +33,8 @@ export default function LatestArticlesSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {featuredArticles.slice(0, 4).map((article) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredArticles.slice(0, 3).map((article) => (
             <div
               key={article.id}
               className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"

@@ -1,16 +1,31 @@
 'use client'
 
 import { useState } from 'react'
-import { mockResources, mockResourceCategories } from '@/lib/mock/resources'
+import { mockResources } from '@/lib/mock/resources'
 import { ResourceCard } from '@/components/features/resources/resource-card'
-import { ResourceFilter } from '@/components/features/resources/resource-filter'
+import { ContentFilter } from '@/components/ui/content-filter'
+import { taxonomyManager } from '@/lib/taxonomy'
 
 export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
+  // 映射资源分类到新的taxonomy系统
+  const mapResourceCategory = (category: string): string => {
+    const categoryMap: Record<string, string> = {
+      '前端开发': 'frontend',
+      '后端开发': 'backend',
+      '数据库': 'database',
+      '移动开发': 'mobile',
+      '人工智能': 'ai',
+      '云计算': 'cloud'
+    }
+    return categoryMap[category] || category
+  }
+
   const filteredResources = mockResources.filter(resource => {
-    const matchesCategory = selectedCategory === 'all' || resource.category === selectedCategory
+    const resourceCategoryId = mapResourceCategory(resource.category)
+    const matchesCategory = selectedCategory === 'all' || resourceCategoryId === selectedCategory
     const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          resource.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -29,19 +44,28 @@ export default function ResourcesPage() {
       </div>
 
       {/* Filter and Search */}
-      <ResourceFilter
+      <ContentFilter
+        module="resources"
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        categories={mockResourceCategories}
+        placeholder="搜索资源标题、描述或标签..."
+        actions={
+          <button className="btn-primary px-4 py-2 text-sm">
+            推荐资源
+          </button>
+        }
       />
 
       {/* Results */}
       <div className="mb-6">
         <p className="text-gray-600">
           共找到 {filteredResources.length} 个资源
-          {selectedCategory !== 'all' && ` (${selectedCategory})`}
+          {selectedCategory !== 'all' && (() => {
+            const category = taxonomyManager.getCategory('resources', selectedCategory)
+            return category ? ` (${category.name})` : ''
+          })()}
           {searchQuery && ` 关于 "${searchQuery}"`}
         </p>
       </div>

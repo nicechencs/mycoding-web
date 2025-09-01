@@ -5,10 +5,14 @@ import { getLatestVibes } from '@/lib/mock/vibes'
 import { VibeCard } from '@/components/features/vibes/vibe-card'
 import { VibeComposer } from '@/components/features/vibes/vibe-composer'
 import { Avatar, FloatingAvatar } from '@/components/ui/avatar'
+import { QuickFilterBar } from '@/components/ui/content-filter'
+import { useTags } from '@/lib/taxonomy'
 
 export default function VibesPage() {
   const [vibes, setVibes] = useState(getLatestVibes())
   const [showComposer, setShowComposer] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const { trendingTags } = useTags('vibes')
 
   const handleNewVibe = (content: string, tags: string[]) => {
     const newVibe = {
@@ -72,24 +76,28 @@ export default function VibesPage() {
         </div>
       )}
 
-      {/* Quick Actions */}
-      <div className="bg-blue-50 rounded-lg p-6 mb-8">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              今天有什么新的编程收获？
-            </h2>
-            <p className="text-gray-600 text-sm">
-              分享代码片段、学习笔记、项目进展或技术思考
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-            <span className="px-3 py-1 bg-white text-gray-700 text-sm rounded-full border">💡 想法</span>
-            <span className="px-3 py-1 bg-white text-gray-700 text-sm rounded-full border">📚 学习</span>
-            <span className="px-3 py-1 bg-white text-gray-700 text-sm rounded-full border">🚀 项目</span>
-            <span className="px-3 py-1 bg-white text-gray-700 text-sm rounded-full border">🐛 调试</span>
-          </div>
+      {/* Category Filter */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">
+            浏览动态分类
+          </h2>
+          {trendingTags.length > 0 && (
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <span>🔥 热门标签:</span>
+              {trendingTags.slice(0, 3).map(tag => (
+                <span key={tag.id} className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+                  #{tag.name}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
+        <QuickFilterBar
+          module="vibes"
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
       </div>
 
       {/* Filter Tabs */}
