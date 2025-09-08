@@ -36,7 +36,7 @@ export function ContentFilter({
   showQuickFilters = true,
   className,
   placeholder = '搜索内容...',
-  actions
+  actions,
 }: ContentFilterProps) {
   const { categories, getCategoryColors } = useCategories(module)
 
@@ -46,7 +46,10 @@ export function ContentFilter({
         {/* 搜索框 */}
         {showSearch && (
           <div className="flex-1">
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="search"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               搜索内容
             </label>
             <div className="flex gap-2">
@@ -56,8 +59,8 @@ export function ContentFilter({
                   id="search"
                   placeholder={placeholder}
                   value={searchQuery}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  onKeyDown={(e) => {
+                  onChange={e => onSearchChange(e.target.value)}
+                  onKeyDown={e => {
                     if (e.key === 'Enter' && onSearch) {
                       onSearch()
                     }
@@ -65,8 +68,18 @@ export function ContentFilter({
                   className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -75,8 +88,18 @@ export function ContentFilter({
                   onClick={onSearch}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
                 >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                   搜索
                 </button>
@@ -88,16 +111,19 @@ export function ContentFilter({
         {/* 分类筛选 */}
         {showCategoryDropdown && (
           <div className="lg:w-64">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               内容分类
             </label>
             <select
               id="category"
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
+              onChange={e => onCategoryChange(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
             >
-              {categories.map((category) => (
+              {categories.map(category => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -129,10 +155,10 @@ export function ContentFilter({
       {showQuickFilters && (
         <div className="mt-6 pt-6 border-t border-gray-200">
           <div className="flex flex-wrap gap-2">
-            {categories.map((category) => {
+            {categories.map(category => {
               const colors = getCategoryColors(category.id)
               const isSelected = selectedCategory === category.id
-              
+
               return (
                 <button
                   key={category.id}
@@ -144,7 +170,9 @@ export function ContentFilter({
                       : cn(colors.bg, colors.text, colors.hover)
                   )}
                 >
-                  {category.icon && <span className="mr-1">{category.icon}</span>}
+                  {category.icon && (
+                    <span className="mr-1">{category.icon}</span>
+                  )}
                   {category.name}
                   {category.count !== undefined && (
                     <span className="ml-1 opacity-75">({category.count})</span>
@@ -173,16 +201,16 @@ export function QuickFilterBar({
   module,
   selectedCategory,
   onCategoryChange,
-  className
+  className,
 }: QuickFilterBarProps) {
   const { categories, getCategoryColors } = useCategories(module)
 
   return (
     <div className={cn('flex flex-wrap gap-2', className)}>
-      {categories.map((category) => {
+      {categories.map(category => {
         const colors = getCategoryColors(category.id)
         const isSelected = selectedCategory === category.id
-        
+
         return (
           <button
             key={category.id}
@@ -197,10 +225,12 @@ export function QuickFilterBar({
             {category.icon && <span className="mr-1.5">{category.icon}</span>}
             {category.name}
             {category.count !== undefined && (
-              <span className={cn(
-                'ml-2 px-2 py-0.5 text-xs rounded-full',
-                isSelected ? 'bg-blue-500' : 'bg-white bg-opacity-50'
-              )}>
+              <span
+                className={cn(
+                  'ml-2 px-2 py-0.5 text-xs rounded-full',
+                  isSelected ? 'bg-blue-500' : 'bg-white bg-opacity-50'
+                )}
+              >
                 {category.count}
               </span>
             )}

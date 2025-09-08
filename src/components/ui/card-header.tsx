@@ -23,7 +23,7 @@ const formatTime = (date: Date | string) => {
   if (typeof date === 'string') {
     return date
   }
-  
+
   const now = new Date()
   const targetDate = new Date(date)
   const diff = now.getTime() - targetDate.getTime()
@@ -41,8 +41,8 @@ const formatTime = (date: Date | string) => {
 // Avatar尺寸映射
 const avatarSizeMap = {
   sm: 'sm' as const,
-  md: 'md' as const, 
-  lg: 'lg' as const
+  md: 'md' as const,
+  lg: 'lg' as const,
 }
 
 export function CardHeader({
@@ -54,24 +54,24 @@ export function CardHeader({
   layout = 'horizontal',
   className,
   rightContent,
-  onAuthorClick
+  onAuthorClick,
 }: CardHeaderProps) {
   if (layout === 'stacked') {
     // 垂直布局 - 用于VibeCard的样式
     return (
       <div className={cn('flex items-start space-x-3', className)}>
-        <Avatar 
-          size={avatarSizeMap[size]} 
+        <Avatar
+          size={avatarSizeMap[size]}
           theme="primary"
           onClick={onAuthorClick}
           className={onAuthorClick ? 'cursor-pointer' : undefined}
         >
           {author.name.charAt(0)}
         </Avatar>
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
-            <span 
+            <span
               className={cn(
                 'font-medium text-gray-900',
                 onAuthorClick && 'cursor-pointer hover:text-blue-600'
@@ -86,55 +86,58 @@ export function CardHeader({
               </span>
             )}
           </div>
-          
+
           {category && (
-            <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}>
+            <span
+              className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}
+            >
               {category}
             </span>
           )}
         </div>
-        
+
         {rightContent && (
-          <div className="flex items-center space-x-2">
-            {rightContent}
-          </div>
+          <div className="flex items-center space-x-2">{rightContent}</div>
         )}
       </div>
     )
   }
-  
+
   // 水平布局 - 用于ArticleCard和ResourceCard
   return (
     <div className={cn('flex items-center space-x-3', className)}>
-      <Avatar 
-        size={avatarSizeMap[size]} 
+      <Avatar
+        size={avatarSizeMap[size]}
         theme="secondary"
         onClick={onAuthorClick}
         className={onAuthorClick ? 'cursor-pointer' : undefined}
       >
         {author.name.charAt(0)}
       </Avatar>
-      
+
       <div className="flex-1 min-w-0">
         <div className="font-medium text-gray-900">{author.name}</div>
         {timestamp && (
-          <div className="text-sm text-gray-500">
-            {formatTime(timestamp)}
-          </div>
+          <div className="text-sm text-gray-500">{formatTime(timestamp)}</div>
         )}
       </div>
-      
+
       <div className="flex items-center space-x-2">
         {category && (
-          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}>
+          <span
+            className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(category)}`}
+          >
             {category}
           </span>
         )}
-        
+
         {featured && (
-          <div className="w-2 h-2 bg-red-500 rounded-full" title="精选内容"></div>
+          <div
+            className="w-2 h-2 bg-red-500 rounded-full"
+            title="精选内容"
+          ></div>
         )}
-        
+
         {rightContent}
       </div>
     </div>
@@ -150,15 +153,23 @@ interface SimpleCardHeaderProps {
   rightContent?: React.ReactNode
 }
 
-export function SimpleCardHeader({ category, featured, rating, className, rightContent }: SimpleCardHeaderProps) {
+export function SimpleCardHeader({
+  category,
+  featured,
+  rating,
+  className,
+  rightContent,
+}: SimpleCardHeaderProps) {
   return (
     <div className={cn('flex items-start justify-between', className)}>
       {category && (
-        <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryClasses(category)}`}>
+        <span
+          className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryClasses(category)}`}
+        >
           {category}
         </span>
       )}
-      
+
       <div className="flex items-center space-x-2">
         {rating && (
           <div className="flex items-center text-yellow-500">
@@ -168,11 +179,14 @@ export function SimpleCardHeader({ category, featured, rating, className, rightC
             <span className="text-sm font-medium ml-1">{rating}</span>
           </div>
         )}
-        
+
         {featured && (
-          <div className="w-2 h-2 bg-red-500 rounded-full" title="精选内容"></div>
+          <div
+            className="w-2 h-2 bg-red-500 rounded-full"
+            title="精选内容"
+          ></div>
         )}
-        
+
         {rightContent}
       </div>
     </div>

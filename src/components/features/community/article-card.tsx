@@ -11,125 +11,158 @@ interface ArticleCardProps {
   article: Article
 }
 
-export const ArticleCard = React.memo(({ article }: ArticleCardProps) => {
-  const router = useRouter()
+export const ArticleCard = React.memo(
+  ({ article }: ArticleCardProps) => {
+    const router = useRouter()
 
-  const handleCardClick = useCallback((e: React.MouseEvent) => {
-    // 阻止点击特定元素时触发卡片跳转
-    const target = e.target as HTMLElement
-    if (target.closest('a') || target.closest('button') || target.closest('[data-no-click]')) {
-      return
-    }
-    router.push(`/posts/${article.slug}`)
-  }, [router, article.slug])
+    const handleCardClick = useCallback(
+      (e: React.MouseEvent) => {
+        // 阻止点击特定元素时触发卡片跳转
+        const target = e.target as HTMLElement
+        if (
+          target.closest('a') ||
+          target.closest('button') ||
+          target.closest('[data-no-click]')
+        ) {
+          return
+        }
+        router.push(`/posts/${article.slug}`)
+      },
+      [router, article.slug]
+    )
 
-  return (
-    <div 
-      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
-      onClick={handleCardClick}
-    >
-      {/* 精选书签 */}
-      {article.featured && (
-        <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
-          精
-        </div>
-      )}
-      {/* Header */}
-      <div className="flex items-center space-x-3 mb-4">
-        <Avatar size="md" theme="secondary">
-          {article.author.name.charAt(0)}
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="font-medium text-gray-900">{article.author.name}</div>
-          <div className="text-sm text-gray-500">
-            {article.createdAt.toLocaleDateString('zh-CN')}
+    return (
+      <div
+        className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
+        onClick={handleCardClick}
+      >
+        {/* 精选书签 */}
+        {article.featured && (
+          <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
+            精
+          </div>
+        )}
+        {/* Header */}
+        <div className="flex items-center space-x-3 mb-4">
+          <Avatar size="md" theme="secondary">
+            {article.author.name.charAt(0)}
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-gray-900">
+              {article.author.name}
+            </div>
+            <div className="text-sm text-gray-500">
+              {article.createdAt.toLocaleDateString('zh-CN')}
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span
+              className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(article.category)}`}
+            >
+              {article.category}
+            </span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getCategoryClasses(article.category)}`}>
-            {article.category}
-          </span>
+
+        {/* Content */}
+        <div className="mb-4">
+          <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg group-hover:text-blue-600 transition-colors">
+            {article.title}
+          </h3>
+          <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
+            {article.excerpt}
+          </p>
         </div>
-      </div>
-      
-      {/* Content */}
-      <div className="mb-4">
-        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg group-hover:text-blue-600 transition-colors">
-          {article.title}
-        </h3>
-        <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-          {article.excerpt}
-        </p>
-      </div>
-      
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {article.tags.slice(0, 3).map((tag) => (
-          <span
-            key={tag}
-            className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors cursor-pointer"
-            data-no-click
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {article.tags.slice(0, 3).map(tag => (
+            <span
+              key={tag}
+              className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors cursor-pointer"
+              data-no-click
+            >
+              #{tag}
+            </span>
+          ))}
+          {article.tags.length > 3 && (
+            <span className="inline-block px-2 py-1 text-xs text-gray-500">
+              +{article.tags.length - 3} 更多
+            </span>
+          )}
+        </div>
+
+        {/* Stats and Actions */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <span
+              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
+              data-no-click
+            >
+              <span>👀</span>
+              <span>{article.viewCount}</span>
+            </span>
+            <span
+              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
+              data-no-click
+            >
+              <span>❤️</span>
+              <span>{article.likeCount}</span>
+            </span>
+            <span
+              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
+              data-no-click
+            >
+              <span>💬</span>
+              <span>{article.commentCount}</span>
+            </span>
+          </div>
+
+          <Link
+            href={`/posts/${article.slug}`}
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm hover:bg-blue-50 px-2 py-1 rounded transition-colors"
           >
-            #{tag}
-          </span>
-        ))}
-        {article.tags.length > 3 && (
-          <span className="inline-block px-2 py-1 text-xs text-gray-500">
-            +{article.tags.length - 3} 更多
-          </span>
-        )}
-      </div>
-      
-      {/* Stats and Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-        <div className="flex items-center space-x-4 text-xs text-gray-500">
-          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
-            <span>👀</span>
-            <span>{article.viewCount}</span>
-          </span>
-          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
-            <span>❤️</span>
-            <span>{article.likeCount}</span>
-          </span>
-          <span className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer" data-no-click>
-            <span>💬</span>
-            <span>{article.commentCount}</span>
-          </span>
+            阅读全文
+            <svg
+              className="w-3 h-3 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
         </div>
-        
-        <Link
-          href={`/posts/${article.slug}`}
-          className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm hover:bg-blue-50 px-2 py-1 rounded transition-colors"
-        >
-          阅读全文
-          <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
+
+        {/* Time info */}
+        <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
+          <span>发布于 {article.createdAt.toLocaleDateString('zh-CN')}</span>
+          {article.updatedAt.getTime() !== article.createdAt.getTime() && (
+            <span>更新于 {article.updatedAt.toLocaleDateString('zh-CN')}</span>
+          )}
+        </div>
       </div>
-      
-      {/* Time info */}
-      <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
-        <span>发布于 {article.createdAt.toLocaleDateString('zh-CN')}</span>
-        {article.updatedAt.getTime() !== article.createdAt.getTime() && (
-          <span>更新于 {article.updatedAt.toLocaleDateString('zh-CN')}</span>
-        )}
-      </div>
-    </div>
-  )
-}, (prevProps, nextProps) => {
-  // 自定义比较函数：只在关键属性变化时重新渲染
-  const prev = prevProps.article
-  const next = nextProps.article
-  
-  return (
-    prev.id === next.id &&
-    prev.title === next.title &&
-    prev.viewCount === next.viewCount &&
-    prev.likeCount === next.likeCount &&
-    prev.commentCount === next.commentCount &&
-    prev.featured === next.featured &&
-    prev.slug === next.slug &&
-    prev.updatedAt.getTime() === next.updatedAt.getTime()
-  )
-})
+    )
+  },
+  (prevProps, nextProps) => {
+    // 自定义比较函数：只在关键属性变化时重新渲染
+    const prev = prevProps.article
+    const next = nextProps.article
+
+    return (
+      prev.id === next.id &&
+      prev.title === next.title &&
+      prev.viewCount === next.viewCount &&
+      prev.likeCount === next.likeCount &&
+      prev.commentCount === next.commentCount &&
+      prev.featured === next.featured &&
+      prev.slug === next.slug &&
+      prev.updatedAt.getTime() === next.updatedAt.getTime()
+    )
+  }
+)

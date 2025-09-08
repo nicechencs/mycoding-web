@@ -3,11 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { notFound } from 'next/navigation'
-import { 
-  getVibeById, 
-  getVibeComments, 
-  getRelatedVibes 
-} from '@/lib/mock/vibes'
+import { getVibeById, getVibeComments, getRelatedVibes } from '@/lib/mock/vibes'
 import { getCurrentUser } from '@/lib/mock/users'
 import { Vibe, VibeComment, User } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
@@ -54,12 +50,12 @@ export default function VibeDetailPage({ params }: Props) {
       vibeId: params.id,
       content: newComment.trim(),
       author: currentUser,
-      createdAt: new Date()
+      createdAt: new Date(),
     }
 
     setComments([...comments, comment])
     setNewComment('')
-    
+
     // 更新评论计数
     if (vibe) {
       setVibe({ ...vibe, commentCount: vibe.commentCount + 1 })
@@ -71,7 +67,7 @@ export default function VibeDetailPage({ params }: Props) {
       navigator.share({
         title: `${vibe?.author.name}的Vibe动态`,
         text: vibe?.content,
-        url: window.location.href
+        url: window.location.href,
       })
     } else {
       navigator.clipboard.writeText(window.location.href)
@@ -112,8 +108,18 @@ export default function VibeDetailPage({ params }: Props) {
             onClick={() => router.back()}
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
             <span>返回</span>
           </button>
@@ -131,17 +137,23 @@ export default function VibeDetailPage({ params }: Props) {
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
-                    <h2 className="font-semibold text-gray-900 text-lg">{vibe.author.name}</h2>
+                    <h2 className="font-semibold text-gray-900 text-lg">
+                      {vibe.author.name}
+                    </h2>
                   </div>
                   <p className="text-sm text-gray-500">
                     发布于 {formatRelativeTime(vibe.createdAt)}
                   </p>
                 </div>
-                
+
                 {/* 更多操作 */}
                 <div className="relative">
                   <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                     </svg>
                   </button>
@@ -158,18 +170,24 @@ export default function VibeDetailPage({ params }: Props) {
               {/* 图片 */}
               {vibe.images && vibe.images.length > 0 && (
                 <div className="mb-6">
-                  <div className={`grid gap-3 ${
-                    vibe.images.length === 1 ? 'grid-cols-1' :
-                    vibe.images.length === 2 ? 'grid-cols-2' :
-                    'grid-cols-2 md:grid-cols-3'
-                  }`}>
+                  <div
+                    className={`grid gap-3 ${
+                      vibe.images.length === 1
+                        ? 'grid-cols-1'
+                        : vibe.images.length === 2
+                          ? 'grid-cols-2'
+                          : 'grid-cols-2 md:grid-cols-3'
+                    }`}
+                  >
                     {vibe.images.map((image, index) => (
                       <div
                         key={index}
                         className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer"
                       >
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-500 text-sm">图片 {index + 1}</span>
+                          <span className="text-gray-500 text-sm">
+                            图片 {index + 1}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -180,7 +198,7 @@ export default function VibeDetailPage({ params }: Props) {
               {/* 标签 */}
               {vibe.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {vibe.tags.map((tag) => (
+                  {vibe.tags.map(tag => (
                     <span
                       key={tag}
                       className="inline-block px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors cursor-pointer"
@@ -196,47 +214,77 @@ export default function VibeDetailPage({ params }: Props) {
                 <button
                   onClick={handleLike}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    isLiked 
-                      ? 'bg-red-50 text-red-600 hover:bg-red-100' 
+                    isLiked
+                      ? 'bg-red-50 text-red-600 hover:bg-red-100'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-red-500'
                   }`}
                 >
-                  <svg 
-                    className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} 
-                    fill={isLiked ? 'currentColor' : 'none'} 
-                    stroke="currentColor" 
+                  <svg
+                    className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`}
+                    fill={isLiked ? 'currentColor' : 'none'}
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                     />
                   </svg>
                   <span>{likeCount}</span>
                 </button>
 
                 <button className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
                   </svg>
                   <span>{vibe.commentCount}</span>
                 </button>
 
-                <button 
+                <button
                   onClick={handleShare}
                   className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                    />
                   </svg>
                   <span>{vibe.shareCount}</span>
                 </button>
 
                 <button className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors ml-auto">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                    />
                   </svg>
                 </button>
               </div>
@@ -257,7 +305,7 @@ export default function VibeDetailPage({ params }: Props) {
                   <div className="flex-1">
                     <textarea
                       value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
+                      onChange={e => setNewComment(e.target.value)}
                       placeholder="写下你的评论..."
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
                       rows={3}
@@ -278,8 +326,11 @@ export default function VibeDetailPage({ params }: Props) {
               {/* 评论列表 */}
               <div className="space-y-4">
                 {comments.length > 0 ? (
-                  comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-3 p-4 bg-gray-50 rounded-lg">
+                  comments.map(comment => (
+                    <div
+                      key={comment.id}
+                      className="flex space-x-3 p-4 bg-gray-50 rounded-lg"
+                    >
                       <Avatar size="sm" theme="secondary">
                         {comment.author.name.charAt(0)}
                       </Avatar>
@@ -324,12 +375,12 @@ export default function VibeDetailPage({ params }: Props) {
                 <Avatar size="xl" theme="primary" className="mx-auto mb-3">
                   {vibe.author.name.charAt(0)}
                 </Avatar>
-                <h3 className="font-semibold text-gray-900">{vibe.author.name}</h3>
+                <h3 className="font-semibold text-gray-900">
+                  {vibe.author.name}
+                </h3>
                 <p className="text-sm text-gray-500">{vibe.author.email}</p>
               </div>
-              <button className="w-full btn-primary">
-                关注
-              </button>
+              <button className="w-full btn-primary">关注</button>
             </div>
 
             {/* 相关动态 */}
@@ -337,8 +388,8 @@ export default function VibeDetailPage({ params }: Props) {
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">相关动态</h3>
                 <div className="space-y-4">
-                  {relatedVibes.map((relatedVibe) => (
-                    <div 
+                  {relatedVibes.map(relatedVibe => (
+                    <div
                       key={relatedVibe.id}
                       onClick={() => router.push(`/vibes/${relatedVibe.id}`)}
                       className="cursor-pointer group"

@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils'
 // Avatar尺寸配置
 const avatarSizes = {
   xs: 'w-6 h-6 text-xs',
-  sm: 'w-8 h-8 text-sm', 
+  sm: 'w-8 h-8 text-sm',
   md: 'w-10 h-10 text-sm',
   lg: 'w-12 h-12 text-base',
-  xl: 'w-14 h-14 text-lg'
+  xl: 'w-14 h-14 text-lg',
 } as const
 
 // 纯色主题配置
@@ -16,7 +16,7 @@ const avatarThemes = {
   secondary: 'bg-blue-500',
   tertiary: 'bg-blue-500',
   warm: 'bg-red-500',
-  cool: 'bg-blue-500'
+  cool: 'bg-blue-500',
 } as const
 
 interface AvatarProps {
@@ -28,16 +28,16 @@ interface AvatarProps {
   title?: string
 }
 
-export function Avatar({ 
-  children, 
-  size = 'md', 
+export function Avatar({
+  children,
+  size = 'md',
   theme = 'primary',
   className,
   onClick,
-  title
+  title,
 }: AvatarProps) {
   return (
-    <div 
+    <div
       className={cn(
         'rounded-full flex items-center justify-center text-white font-medium flex-shrink-0',
         avatarSizes[size],
@@ -58,9 +58,13 @@ interface AvatarButtonProps extends AvatarProps {
   onClick?: () => void
 }
 
-export function AvatarButton({ onClick, className, ...props }: AvatarButtonProps) {
+export function AvatarButton({
+  onClick,
+  className,
+  ...props
+}: AvatarButtonProps) {
   return (
-    <Avatar 
+    <Avatar
       {...props}
       className={cn(
         onClick && 'cursor-pointer hover:shadow-lg transition-shadow',
@@ -72,12 +76,11 @@ export function AvatarButton({ onClick, className, ...props }: AvatarButtonProps
 }
 
 // 用于浮动按钮的特殊变体
-interface FloatingAvatarProps extends Omit<AvatarProps, 'size'> {
-}
+interface FloatingAvatarProps extends Omit<AvatarProps, 'size'> {}
 
 export function FloatingAvatar({ className, ...props }: FloatingAvatarProps) {
   return (
-    <Avatar 
+    <Avatar
       {...props}
       size="xl"
       className={cn(

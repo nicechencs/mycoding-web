@@ -52,7 +52,7 @@ export default function PostsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredArticles.map((article) => (
+          {featuredArticles.map(article => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
@@ -75,7 +75,7 @@ export default function PostsPage() {
           </div>
 
           <div className="space-y-4">
-            {latestArticles.slice(0, 8).map((article) => (
+            {latestArticles.slice(0, 8).map(article => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
@@ -89,7 +89,7 @@ export default function PostsPage() {
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             分享你的知识和经验，帮助更多开发者成长。写文章、发推荐、记录成长。
           </p>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
             <div>
               <div className="text-3xl font-bold">1,234</div>
@@ -108,7 +108,7 @@ export default function PostsPage() {
               <div className="text-blue-200 text-sm">博客内容</div>
             </div>
           </div>
-          
+
           <div className="flex gap-4 justify-center">
             <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
               写文章

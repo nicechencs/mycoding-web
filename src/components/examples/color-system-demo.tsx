@@ -10,8 +10,15 @@ import { getCategoryClasses, getCategoryIcon } from '@/lib/utils/category'
  * 用于展示统一配色系统的效果
  */
 export const ColorSystemDemo = () => {
-  const categories = ['前端开发', '后端开发', '移动开发', 'AI & 机器学习', '数据库', '云计算']
-  
+  const categories = [
+    '前端开发',
+    '后端开发',
+    '移动开发',
+    'AI & 机器学习',
+    '数据库',
+    '云计算',
+  ]
+
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
@@ -35,7 +42,7 @@ export const ColorSystemDemo = () => {
         <section className="bg-white p-6 rounded-lg border border-gray-200 mb-8">
           <h2 className="text-xl font-semibold mb-4">统一分类标签（蓝色系）</h2>
           <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
+            {categories.map(category => (
               <span
                 key={category}
                 className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${getCategoryClasses(category)}`}
@@ -60,16 +67,22 @@ export const ColorSystemDemo = () => {
                 鼠标悬停查看蓝色系交互效果
               </p>
             </div>
-            
+
             {/* 链接样式 */}
             <div className="p-4 border border-gray-200 rounded-lg">
               <h3 className="font-medium text-gray-900 mb-2">链接样式</h3>
               <div className="space-y-2">
-                <a href="#" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+                <a
+                  href="#"
+                  className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                >
                   主要链接
                 </a>
                 <br />
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                >
                   普通链接
                 </a>
               </div>
@@ -114,7 +127,7 @@ export const ColorSystemDemo = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* 中性色 */}
             <div>
               <h3 className="font-medium mb-2">中性色</h3>
@@ -129,7 +142,7 @@ export const ColorSystemDemo = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* 状态色 */}
             <div>
               <h3 className="font-medium mb-2">状态色</h3>

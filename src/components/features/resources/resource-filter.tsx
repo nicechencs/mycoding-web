@@ -20,7 +20,10 @@ export function ResourceFilter({
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Search Input */}
         <div className="flex-1">
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="search"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             搜索资源
           </label>
           <div className="relative">
@@ -29,12 +32,22 @@ export function ResourceFilter({
               id="search"
               placeholder="搜索资源标题、描述或标签..."
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={e => onSearchChange(e.target.value)}
               className="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
             </div>
           </div>
@@ -42,17 +55,20 @@ export function ResourceFilter({
 
         {/* Category Filter */}
         <div className="lg:w-64">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="category"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             筛选分类
           </label>
           <select
             id="category"
             value={selectedCategory}
-            onChange={(e) => onCategoryChange(e.target.value)}
+            onChange={e => onCategoryChange(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
           >
             <option value="all">全部分类</option>
-            {categories.map((category) => (
+            {categories.map(category => (
               <option key={category.id} value={category.name}>
                 {category.icon} {category.name} ({category.count})
               </option>
@@ -89,7 +105,7 @@ export function ResourceFilter({
           >
             全部
           </button>
-          {categories.map((category) => (
+          {categories.map(category => (
             <button
               key={category.id}
               onClick={() => onCategoryChange(category.name)}

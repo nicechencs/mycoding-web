@@ -29,7 +29,7 @@ export function slugify(str: string): string {
     .replace(/[^a-z0-9 -]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .trim('-')
+    .trim()
 }
 
 export function truncate(str: string, length: number): string {

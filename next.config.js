@@ -27,10 +27,10 @@ const nextConfig = {
   },
   // Enable strict mode for better development experience
   reactStrictMode: true,
-  
+
   // Optimize bundle size
   swcMinify: true,
-  
+
   // Custom headers for security
   async headers() {
     return [

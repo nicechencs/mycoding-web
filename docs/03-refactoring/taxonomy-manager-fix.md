@@ -6,6 +6,7 @@
 ## 🚨 问题描述
 
 /resources 和 /vibes 页面无法访问，报错信息：
+
 - `TypeError: taxonomyManager.getDefaultCategory is not a function`
 - `TypeError: taxonomyManager.getTrendingTags is not a function`
 
@@ -14,12 +15,14 @@
 TaxonomyManager类实现不完整，缺少以下关键方法：
 
 ### useCategories.ts需要的方法
+
 1. `getDefaultCategory()` - 获取默认分类
-2. `getCategoryByName()` - 根据名称查找分类  
+2. `getCategoryByName()` - 根据名称查找分类
 3. `formatCategoryName()` - 格式化分类名称
 4. `getCategoryStats()` - 获取分类统计信息
 
 ### useTags.ts需要的方法
+
 1. `getTrendingTags()` - 获取热门标签
 2. `getMaxTags()` - 获取标签数量限制
 3. `allowsCustomTags()` - 检查是否允许自定义标签
@@ -84,28 +87,29 @@ allowsCustomTags(module: ModuleType): boolean {
 validateTags(module: ModuleType, tags: string[]): boolean {
   const maxTags = this.getMaxTags(module)
   const allowsCustom = this.allowsCustomTags(module)
-  
+
   if (tags.length > maxTags) {
     return false
   }
-  
+
   if (!allowsCustom) {
     const validTags = this.getTags(module).map(t => t.name)
     return tags.every(tag => validTags.includes(tag))
   }
-  
+
   return true
 }
 ```
 
 ## 📊 验证结果
 
-| 页面 | 修复前 | 修复后 | 状态码 |
-|------|--------|--------|--------|
-| /resources | ❌ TypeError | ✅ 正常访问 | 200 |
-| /vibes | ❌ TypeError | ✅ 正常访问 | 200 |
+| 页面       | 修复前       | 修复后      | 状态码 |
+| ---------- | ------------ | ----------- | ------ |
+| /resources | ❌ TypeError | ✅ 正常访问 | 200    |
+| /vibes     | ❌ TypeError | ✅ 正常访问 | 200    |
 
 ### 开发服务器输出
+
 ```
 ✓ Compiled /resources in 1226ms (1508 modules)
 GET /resources 200 in 1485ms

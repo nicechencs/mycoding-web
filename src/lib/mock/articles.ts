@@ -5,14 +5,16 @@ import { mockUsers } from './users'
 export const mockArticleComments: Comment[] = [
   {
     id: '1',
-    content: '这篇关于Next.js 14的文章写得太好了！App Router确实是一个重大更新，对开发体验有很大提升。',
+    content:
+      '这篇关于Next.js 14的文章写得太好了！App Router确实是一个重大更新，对开发体验有很大提升。',
     author: mockUsers[1],
     createdAt: new Date('2024-08-21'),
     updatedAt: new Date('2024-08-21'),
   },
   {
     id: '2',
-    content: '感谢作者的详细解析，特别是关于布局和加载状态的部分，对我的项目很有帮助。',
+    content:
+      '感谢作者的详细解析，特别是关于布局和加载状态的部分，对我的项目很有帮助。',
     author: mockUsers[2],
     createdAt: new Date('2024-08-22'),
     updatedAt: new Date('2024-08-22'),
@@ -26,14 +28,16 @@ export const mockArticleComments: Comment[] = [
   },
   {
     id: '4',
-    content: 'React组件库的构建确实是一个复杂的话题，这篇文章提供了很好的思路。',
+    content:
+      'React组件库的构建确实是一个复杂的话题，这篇文章提供了很好的思路。',
     author: mockUsers[4],
     createdAt: new Date('2024-08-19'),
     updatedAt: new Date('2024-08-19'),
   },
   {
     id: '5',
-    content: 'Storybook的集成部分写得特别棒，我按照文章的步骤成功搭建了自己的组件库。',
+    content:
+      'Storybook的集成部分写得特别棒，我按照文章的步骤成功搭建了自己的组件库。',
     author: mockUsers[0],
     createdAt: new Date('2024-08-20'),
     updatedAt: new Date('2024-08-20'),
@@ -241,7 +245,8 @@ App Router带来了多项性能改进：
 Next.js 14的App Router代表了React全栈开发的未来方向。通过Server Components、改进的路由系统和更好的开发体验，它为构建现代Web应用提供了强大的工具。
 
 虽然学习曲线存在，但投资学习App Router将为你的项目带来长期的收益。建议在新项目中采用App Router，并逐步将现有项目迁移过来。`,
-    excerpt: 'Next.js 14的App Router引入了基于文件系统的路由、布局、加载状态等新特性，让我们一起深入了解这些变化。',
+    excerpt:
+      'Next.js 14的App Router引入了基于文件系统的路由、布局、加载状态等新特性，让我们一起深入了解这些变化。',
     slug: 'nextjs-14-app-router-deep-dive',
     author: mockUsers[0],
     category: '前端开发',
@@ -256,8 +261,10 @@ Next.js 14的App Router代表了React全栈开发的未来方向。通过Server 
   {
     id: '2',
     title: '构建现代化的React组件库',
-    content: '# 构建现代化的React组件库\n\n在这篇文章中，我们将学习如何从零开始构建一个现代化的React组件库...',
-    excerpt: '学习如何使用TypeScript、Storybook和现代化工具链构建可复用的React组件库。',
+    content:
+      '# 构建现代化的React组件库\n\n在这篇文章中，我们将学习如何从零开始构建一个现代化的React组件库...',
+    excerpt:
+      '学习如何使用TypeScript、Storybook和现代化工具链构建可复用的React组件库。',
     slug: 'building-modern-react-component-library',
     author: mockUsers[1],
     category: '前端开发',
@@ -272,7 +279,8 @@ Next.js 14的App Router代表了React全栈开发的未来方向。通过Server 
   {
     id: '3',
     title: 'Node.js 微服务架构最佳实践',
-    content: '# Node.js 微服务架构最佳实践\n\n微服务架构已经成为现代应用开发的主流选择...',
+    content:
+      '# Node.js 微服务架构最佳实践\n\n微服务架构已经成为现代应用开发的主流选择...',
     excerpt: '探讨Node.js微服务架构的设计原则、服务拆分策略和运维最佳实践。',
     slug: 'nodejs-microservices-best-practices',
     author: mockUsers[2],
@@ -287,8 +295,10 @@ Next.js 14的App Router代表了React全栈开发的未来方向。通过Server 
   {
     id: '4',
     title: 'Tailwind CSS 高级技巧与实战',
-    content: '# Tailwind CSS 高级技巧与实战\n\nTailwind CSS不仅仅是一个工具类优先的CSS框架...',
-    excerpt: '深入探讨Tailwind CSS的高级特性，包括自定义配置、组件提取和性能优化。',
+    content:
+      '# Tailwind CSS 高级技巧与实战\n\nTailwind CSS不仅仅是一个工具类优先的CSS框架...',
+    excerpt:
+      '深入探讨Tailwind CSS的高级特性，包括自定义配置、组件提取和性能优化。',
     slug: 'tailwind-css-advanced-tips-and-tricks',
     author: mockUsers[3],
     category: '前端开发',
@@ -302,8 +312,10 @@ Next.js 14的App Router代表了React全栈开发的未来方向。通过Server 
   {
     id: '5',
     title: 'PostgreSQL 查询优化实战指南',
-    content: '# PostgreSQL 查询优化实战指南\n\n数据库查询性能优化是后端开发中的重要技能...',
-    excerpt: '通过实际案例学习PostgreSQL查询优化技巧，包括索引设计和执行计划分析。',
+    content:
+      '# PostgreSQL 查询优化实战指南\n\n数据库查询性能优化是后端开发中的重要技能...',
+    excerpt:
+      '通过实际案例学习PostgreSQL查询优化技巧，包括索引设计和执行计划分析。',
     slug: 'postgresql-query-optimization-guide',
     author: mockUsers[4],
     category: '数据库',
@@ -319,7 +331,8 @@ Next.js 14的App Router代表了React全栈开发的未来方向。通过Server 
     id: '6',
     title: 'React Native 性能优化策略',
     content: '# React Native 性能优化策略\n\n移动应用的性能直接影响用户体验...',
-    excerpt: 'React Native应用的性能优化技巧，包括渲染优化、内存管理和包体积优化。',
+    excerpt:
+      'React Native应用的性能优化技巧，包括渲染优化、内存管理和包体积优化。',
     slug: 'react-native-performance-optimization',
     author: mockUsers[0],
     category: '移动开发',
@@ -357,22 +370,26 @@ export const getArticleComments = (articleId: string): Comment[] => {
     '1': ['1', '2', '3'], // Next.js文章的评论
     '2': ['4', '5'], // React组件库文章的评论
   }
-  
+
   const commentIds = commentMapping[articleId] || []
   return mockArticleComments.filter(comment => commentIds.includes(comment.id))
 }
 
 // 获取相关文章
-export const getRelatedArticles = (articleSlug: string, limit: number = 3): Article[] => {
+export const getRelatedArticles = (
+  articleSlug: string,
+  limit: number = 3
+): Article[] => {
   const currentArticle = getArticleBySlug(articleSlug)
   if (!currentArticle) return []
-  
+
   // 基于相同标签或分类推荐相关文章
   return mockArticles
-    .filter(article => 
-      article.slug !== articleSlug && 
-      (article.category === currentArticle.category || 
-       article.tags.some(tag => currentArticle.tags.includes(tag)))
+    .filter(
+      article =>
+        article.slug !== articleSlug &&
+        (article.category === currentArticle.category ||
+          article.tags.some(tag => currentArticle.tags.includes(tag)))
     )
     .sort((a, b) => b.viewCount - a.viewCount)
     .slice(0, limit)

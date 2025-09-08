@@ -19,103 +19,103 @@ export interface CategoryConfig {
 
 class CategoryManager {
   private static instance: CategoryManager
-  
+
   // 统一的分类颜色映射 - 全部使用蓝色系保持一致性
   private readonly colorMap: Record<string, CategoryColors> = {
-    '全部': { 
-      bg: 'bg-blue-50', 
+    全部: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '前端开发': { 
-      bg: 'bg-blue-50', 
+    前端开发: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '后端开发': { 
-      bg: 'bg-blue-50', 
+    后端开发: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '移动开发': { 
-      bg: 'bg-blue-50', 
+    移动开发: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    'AI & 机器学习': { 
-      bg: 'bg-blue-50', 
+    'AI & 机器学习': {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '数据库': { 
-      bg: 'bg-blue-50', 
+    数据库: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '云计算': { 
-      bg: 'bg-blue-50', 
+    云计算: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    'DevOps': { 
-      bg: 'bg-blue-50', 
+    DevOps: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '网络安全': { 
-      bg: 'bg-blue-50', 
+    网络安全: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '区块链': { 
-      bg: 'bg-blue-50', 
+    区块链: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '游戏开发': { 
-      bg: 'bg-blue-50', 
+    游戏开发: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    '其他': { 
-      bg: 'bg-blue-50', 
+    其他: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
+      hover: 'hover:bg-blue-100',
     },
-    'default': { 
-      bg: 'bg-blue-50', 
+    default: {
+      bg: 'bg-blue-50',
       text: 'text-blue-700',
       border: 'border-blue-200',
-      hover: 'hover:bg-blue-100'
-    }
+      hover: 'hover:bg-blue-100',
+    },
   }
 
   // 分类图标映射
   private readonly iconMap: Record<string, string> = {
-    '全部': '📚',
-    '前端开发': '🎨',
-    '后端开发': '⚙️',
-    '移动开发': '📱',
+    全部: '📚',
+    前端开发: '🎨',
+    后端开发: '⚙️',
+    移动开发: '📱',
     'AI & 机器学习': '🤖',
-    '数据库': '💾',
-    '云计算': '☁️',
-    'DevOps': '🔧',
-    '网络安全': '🔐',
-    '区块链': '⛓️',
-    '游戏开发': '🎮',
-    '其他': '📦'
+    数据库: '💾',
+    云计算: '☁️',
+    DevOps: '🔧',
+    网络安全: '🔐',
+    区块链: '⛓️',
+    游戏开发: '🎮',
+    其他: '📦',
   }
 
   /**
@@ -158,7 +158,7 @@ class CategoryManager {
     return {
       name: category,
       colors,
-      icon
+      icon,
     }
   }
 
@@ -172,9 +172,12 @@ class CategoryManager {
   /**
    * 获取分类样式类名（用于className属性）
    */
-  getCategoryClasses(category: string, type: 'full' | 'text' | 'bg' = 'full'): string {
+  getCategoryClasses(
+    category: string,
+    type: 'full' | 'text' | 'bg' = 'full'
+  ): string {
     const colors = this.getCategoryColor(category)
-    
+
     switch (type) {
       case 'text':
         return colors.text
@@ -191,7 +194,11 @@ class CategoryManager {
 export const categoryManager = CategoryManager.getInstance()
 
 // 导出便捷函数
-export const getCategoryColor = (category: string) => categoryManager.getCategoryColor(category)
-export const getCategoryIcon = (category: string) => categoryManager.getCategoryIcon(category)
-export const getCategoryClasses = (category: string, type?: 'full' | 'text' | 'bg') => 
-  categoryManager.getCategoryClasses(category, type)
+export const getCategoryColor = (category: string) =>
+  categoryManager.getCategoryColor(category)
+export const getCategoryIcon = (category: string) =>
+  categoryManager.getCategoryIcon(category)
+export const getCategoryClasses = (
+  category: string,
+  type?: 'full' | 'text' | 'bg'
+) => categoryManager.getCategoryClasses(category, type)

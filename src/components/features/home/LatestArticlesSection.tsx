@@ -34,31 +34,33 @@ export default function LatestArticlesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredArticles.slice(0, 3).map((article) => (
+          {featuredArticles.slice(0, 3).map(article => (
             <div
               key={article.id}
               className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-              onClick={(e) => handleCardClick(article.slug, e)}
+              onClick={e => handleCardClick(article.slug, e)}
             >
               <div className="flex items-center space-x-3 mb-3">
                 <Avatar size="sm" theme="secondary">
                   {article.author.name.charAt(0)}
                 </Avatar>
                 <div>
-                  <div className="font-medium text-gray-900">{article.author.name}</div>
+                  <div className="font-medium text-gray-900">
+                    {article.author.name}
+                  </div>
                   <div className="text-xs text-gray-500">
                     {article.createdAt.toLocaleDateString('zh-CN')}
                   </div>
                 </div>
               </div>
-              
+
               <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                 {article.title}
               </h3>
               <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                 {article.excerpt}
               </p>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                   <span>👀 {article.viewCount}</span>

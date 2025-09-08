@@ -3,12 +3,14 @@
 ## 📋 前置要求
 
 ### 系统环境
+
 - Node.js 18+ LTS
 - pnpm 8.0+
 - MySQL 8.0
 - Redis (生产环境必需，开发环境可选)
 
 ### 开发工具
+
 - VS Code (推荐)
 - Prisma VS Code Extension
 - Thunder Client 或 Postman (API测试)
@@ -16,12 +18,14 @@
 ## 🚀 项目初始化
 
 ### 1. 克隆仓库
+
 ```bash
 git clone https://github.com/yourusername/mycoding.git
 cd mycoding
 ```
 
 ### 2. 安装依赖
+
 ```bash
 # 使用pnpm workspace安装所有依赖
 pnpm install
@@ -30,11 +34,12 @@ pnpm install
 ### 3. 环境配置
 
 #### 创建环境变量文件
+
 ```bash
 # API服务配置
 cp apps/api/.env.example apps/api/.env
 
-# 用户前端配置  
+# 用户前端配置
 cp apps/web/.env.example apps/web/.env
 
 # 管理后台配置
@@ -44,6 +49,7 @@ cp apps/admin/.env.example apps/admin/.env
 #### 核心环境变量配置
 
 **apps/api/.env**
+
 ```env
 # 数据库连接
 DATABASE_URL="mysql://root:password@localhost:3306/mycoding?schema=public"
@@ -61,6 +67,7 @@ NODE_ENV=development
 ```
 
 **apps/web/.env.local**
+
 ```env
 # NextAuth配置
 NEXTAUTH_URL=http://localhost:3000
@@ -77,6 +84,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3004/api
 ```
 
 **apps/admin/.env.local**
+
 ```env
 # API地址
 NEXT_PUBLIC_API_URL=http://localhost:3004/api
@@ -122,6 +130,7 @@ pnpm dev:admin # 管理后台 (http://localhost:3001)
 ## 🏗️ 项目结构说明
 
 ### Monorepo架构
+
 ```
 mycoding/
 ├── apps/                    # 应用程序
@@ -158,32 +167,38 @@ pnpm prisma format
 ### API开发
 
 #### 创建新模块
+
 ```typescript
 // apps/api/src/modules/example/example.routes.ts
 import { FastifyPluginAsync } from 'fastify'
 
-const exampleRoutes: FastifyPluginAsync = async (fastify) => {
+const exampleRoutes: FastifyPluginAsync = async fastify => {
   // 路由定义
-  fastify.get('/examples', {
-    schema: {
-      response: {
-        200: {
-          type: 'array',
-          items: { $ref: 'ExampleSchema#' }
-        }
-      }
+  fastify.get(
+    '/examples',
+    {
+      schema: {
+        response: {
+          200: {
+            type: 'array',
+            items: { $ref: 'ExampleSchema#' },
+          },
+        },
+      },
+      preHandler: [fastify.authenticate], // JWT认证
     },
-    preHandler: [fastify.authenticate] // JWT认证
-  }, async (request, reply) => {
-    const examples = await fastify.prisma.example.findMany()
-    return examples
-  })
+    async (request, reply) => {
+      const examples = await fastify.prisma.example.findMany()
+      return examples
+    }
+  )
 }
 
 export default exampleRoutes
 ```
 
 #### Prisma数据模型
+
 ```prisma
 // apps/api/prisma/schema.prisma
 model Example {
@@ -199,13 +214,14 @@ model Example {
 ### 前端开发
 
 #### 用户端页面 (Next.js App Router)
+
 ```tsx
 // apps/web/src/app/examples/page.tsx
 import { getExamples } from '@/lib/api'
 
 export default async function ExamplesPage() {
   const examples = await getExamples()
-  
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Examples</h1>
@@ -216,6 +232,7 @@ export default async function ExamplesPage() {
 ```
 
 #### 管理端表格 (TanStack Table)
+
 ```tsx
 // apps/admin/src/components/examples-table.tsx
 import { useTable } from '@tanstack/react-table'
@@ -224,9 +241,9 @@ import { useQuery } from '@tanstack/react-query'
 export function ExamplesTable() {
   const { data: examples } = useQuery({
     queryKey: ['examples'],
-    queryFn: fetchExamples
+    queryFn: fetchExamples,
   })
-  
+
   // 表格配置和渲染
 }
 ```
@@ -250,6 +267,7 @@ pnpm test:e2e
 ## 📦 构建部署
 
 ### 构建项目
+
 ```bash
 # 构建所有应用
 pnpm build
@@ -261,6 +279,7 @@ pnpm build:admin
 ```
 
 ### Docker部署
+
 ```bash
 # 构建Docker镜像
 docker-compose build
@@ -296,6 +315,7 @@ pnpm update -r
 ### 常见问题
 
 #### 1. Prisma连接失败
+
 ```bash
 # 检查数据库连接
 pnpm prisma db pull
@@ -305,6 +325,7 @@ echo $DATABASE_URL
 ```
 
 #### 2. 端口占用
+
 ```bash
 # 查找占用端口的进程
 lsof -i :3000  # Mac/Linux
@@ -315,6 +336,7 @@ netstat -ano | findstr :3000  # Windows
 ```
 
 #### 3. 依赖安装失败
+
 ```bash
 # 清理缓存
 pnpm store prune

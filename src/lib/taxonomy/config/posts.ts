@@ -16,8 +16,8 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-gray-100',
         text: 'text-gray-700',
         border: 'border-gray-300',
-        hover: 'hover:bg-gray-200'
-      }
+        hover: 'hover:bg-gray-200',
+      },
     },
     {
       id: 'tech-article',
@@ -28,9 +28,9 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-100',
         text: 'text-blue-700',
         border: 'border-blue-300',
-        hover: 'hover:bg-blue-200'
+        hover: 'hover:bg-blue-200',
       },
-      count: 45
+      count: 45,
     },
     {
       id: 'project',
@@ -41,9 +41,9 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 23
+      count: 23,
     },
     {
       id: 'study-notes',
@@ -54,9 +54,9 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 38
+      count: 38,
     },
     {
       id: 'experience',
@@ -67,9 +67,9 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 29
+      count: 29,
     },
     {
       id: 'tools',
@@ -80,9 +80,9 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 17
+      count: 17,
     },
     {
       id: 'career',
@@ -93,11 +93,11 @@ export const postsCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 12
-    }
-  ]
+      count: 12,
+    },
+  ],
 }
 
 /**
@@ -119,7 +119,7 @@ export const postsTagConfig: TagConfig = {
     { id: 'javascript', name: 'JavaScript', count: 48 },
     { id: 'css', name: 'CSS', count: 35 },
     { id: 'tailwind', name: 'Tailwind CSS', count: 28 },
-    
+
     // 后端相关
     { id: 'backend', name: '后端开发', count: 38 },
     { id: 'nodejs', name: 'Node.js', count: 35 },
@@ -128,21 +128,21 @@ export const postsTagConfig: TagConfig = {
     { id: 'java', name: 'Java', count: 25 },
     { id: 'rust', name: 'Rust', count: 18, trending: true },
     { id: 'csharp', name: 'C#', count: 15 },
-    
+
     // 数据库
     { id: 'database', name: '数据库', count: 28 },
     { id: 'postgresql', name: 'PostgreSQL', count: 18 },
     { id: 'mysql', name: 'MySQL', count: 20 },
     { id: 'mongodb', name: 'MongoDB', count: 16 },
     { id: 'redis', name: 'Redis', count: 14 },
-    
+
     // 工具和框架
     { id: 'docker', name: 'Docker', count: 22 },
     { id: 'kubernetes', name: 'Kubernetes', count: 18 },
     { id: 'git', name: 'Git', count: 30 },
     { id: 'webpack', name: 'Webpack', count: 12 },
     { id: 'vite', name: 'Vite', count: 15, trending: true },
-    
+
     // 概念和方法
     { id: 'architecture', name: '架构设计', count: 25 },
     { id: 'design-patterns', name: '设计模式', count: 20 },
@@ -151,6 +151,6 @@ export const postsTagConfig: TagConfig = {
     { id: 'security', name: '安全', count: 15 },
     { id: 'devops', name: 'DevOps', count: 20 },
     { id: 'algorithm', name: '算法', count: 16 },
-    { id: 'data-structure', name: '数据结构', count: 14 }
-  ]
+    { id: 'data-structure', name: '数据结构', count: 14 },
+  ],
 }

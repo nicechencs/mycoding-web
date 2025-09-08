@@ -36,78 +36,90 @@ export function useTags(module: ModuleType) {
     return taxonomyManager.allowsCustomTags(module)
   }, [module])
 
-  const addTag = useCallback((tagName: string) => {
-    if (selectedTags.length >= maxTags) {
-      console.warn(`Maximum ${maxTags} tags allowed`)
-      return false
-    }
-    
-    if (selectedTags.includes(tagName)) {
-      console.warn(`Tag "${tagName}" already selected`)
-      return false
-    }
-
-    if (!allowsCustom) {
-      const validTags = allTags.map(t => t.name)
-      if (!validTags.includes(tagName)) {
-        console.warn(`Custom tags not allowed. "${tagName}" is not valid`)
+  const addTag = useCallback(
+    (tagName: string) => {
+      if (selectedTags.length >= maxTags) {
+        console.warn(`Maximum ${maxTags} tags allowed`)
         return false
       }
-    }
 
-    setSelectedTags(prev => [...prev, tagName])
-    return true
-  }, [selectedTags, maxTags, allowsCustom, allTags])
+      if (selectedTags.includes(tagName)) {
+        console.warn(`Tag "${tagName}" already selected`)
+        return false
+      }
+
+      if (!allowsCustom) {
+        const validTags = allTags.map(t => t.name)
+        if (!validTags.includes(tagName)) {
+          console.warn(`Custom tags not allowed. "${tagName}" is not valid`)
+          return false
+        }
+      }
+
+      setSelectedTags(prev => [...prev, tagName])
+      return true
+    },
+    [selectedTags, maxTags, allowsCustom, allTags]
+  )
 
   const removeTag = useCallback((tagName: string) => {
     setSelectedTags(prev => prev.filter(t => t !== tagName))
   }, [])
 
-  const toggleTag = useCallback((tagName: string) => {
-    if (selectedTags.includes(tagName)) {
-      removeTag(tagName)
-    } else {
-      addTag(tagName)
-    }
-  }, [selectedTags, addTag, removeTag])
+  const toggleTag = useCallback(
+    (tagName: string) => {
+      if (selectedTags.includes(tagName)) {
+        removeTag(tagName)
+      } else {
+        addTag(tagName)
+      }
+    },
+    [selectedTags, addTag, removeTag]
+  )
 
   const clearTags = useCallback(() => {
     setSelectedTags([])
   }, [])
 
-  const validateTags = useCallback((tags: string[]): boolean => {
-    return taxonomyManager.validateTags(module, tags)
-  }, [module])
+  const validateTags = useCallback(
+    (tags: string[]): boolean => {
+      return taxonomyManager.validateTags(module, tags)
+    },
+    [module]
+  )
 
-  const getTagByName = useCallback((tagName: string): Tag | undefined => {
-    return allTags.find(tag => tag.name === tagName)
-  }, [allTags])
+  const getTagByName = useCallback(
+    (tagName: string): Tag | undefined => {
+      return allTags.find(tag => tag.name === tagName)
+    },
+    [allTags]
+  )
 
   return {
     // State
     selectedTags,
     searchQuery,
-    
+
     // Setters
     setSelectedTags,
     setSearchQuery,
-    
+
     // Data
     allTags,
     popularTags,
     trendingTags,
     filteredTags,
-    
+
     // Config
     maxTags,
     allowsCustom,
-    
+
     // Actions
     addTag,
     removeTag,
     toggleTag,
     clearTags,
     validateTags,
-    getTagByName
+    getTagByName,
   }
 }

@@ -16,8 +16,8 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-gray-100',
         text: 'text-gray-700',
         border: 'border-gray-300',
-        hover: 'hover:bg-gray-200'
-      }
+        hover: 'hover:bg-gray-200',
+      },
     },
     {
       id: 'frontend',
@@ -28,9 +28,9 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-100',
         text: 'text-blue-700',
         border: 'border-blue-300',
-        hover: 'hover:bg-blue-200'
+        hover: 'hover:bg-blue-200',
       },
-      count: 25
+      count: 25,
     },
     {
       id: 'backend',
@@ -41,9 +41,9 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 18
+      count: 18,
     },
     {
       id: 'database',
@@ -54,9 +54,9 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 12
+      count: 12,
     },
     {
       id: 'mobile',
@@ -67,9 +67,9 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 15
+      count: 15,
     },
     {
       id: 'ai',
@@ -80,9 +80,9 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-red-100',
         text: 'text-red-700',
         border: 'border-red-300',
-        hover: 'hover:bg-red-200'
+        hover: 'hover:bg-red-200',
       },
-      count: 20
+      count: 20,
     },
     {
       id: 'cloud',
@@ -93,11 +93,11 @@ export const resourcesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 10
-    }
-  ]
+      count: 10,
+    },
+  ],
 }
 
 /**
@@ -127,6 +127,6 @@ export const resourcesTagConfig: TagConfig = {
     { id: 'vite', name: 'Vite', count: 12, trending: true },
     { id: 'vue', name: 'Vue.js', count: 15 },
     { id: 'flutter', name: 'Flutter', count: 13 },
-    { id: 'react-native', name: 'React Native', count: 11 }
-  ]
+    { id: 'react-native', name: 'React Native', count: 11 },
+  ],
 }

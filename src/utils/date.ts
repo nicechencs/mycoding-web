@@ -10,7 +10,9 @@
 export function formatRelativeTime(date: Date | string | number): string {
   const now = new Date()
   const targetDate = new Date(date)
-  const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000)
+  const diffInSeconds = Math.floor(
+    (now.getTime() - targetDate.getTime()) / 1000
+  )
 
   if (diffInSeconds < 60) {
     return '刚刚'
@@ -116,26 +118,26 @@ export function formatLocalTime(
 export function getFriendlyTime(date: Date | string | number): string {
   const targetDate = new Date(date)
   const now = new Date()
-  
+
   // 判断是否是今天
   if (isSameDay(targetDate, now)) {
     return formatLocalTime(targetDate)
   }
-  
+
   // 判断是否是昨天
   const yesterday = new Date(now)
   yesterday.setDate(yesterday.getDate() - 1)
   if (isSameDay(targetDate, yesterday)) {
     return `昨天 ${formatLocalTime(targetDate)}`
   }
-  
+
   // 判断是否是今年
   if (targetDate.getFullYear() === now.getFullYear()) {
     const month = targetDate.getMonth() + 1
     const day = targetDate.getDate()
     return `${month}月${day}日`
   }
-  
+
   // 其他情况显示完整日期
   return formatLocalDate(targetDate)
 }

@@ -17,8 +17,8 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-gray-100',
         text: 'text-gray-700',
         border: 'border-gray-300',
-        hover: 'hover:bg-gray-200'
-      }
+        hover: 'hover:bg-gray-200',
+      },
     },
     {
       id: 'coding',
@@ -29,9 +29,9 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 85
+      count: 85,
     },
     {
       id: 'learning',
@@ -42,9 +42,9 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-100',
         text: 'text-blue-700',
         border: 'border-blue-300',
-        hover: 'hover:bg-blue-200'
+        hover: 'hover:bg-blue-200',
       },
-      count: 62
+      count: 62,
     },
     {
       id: 'project',
@@ -55,9 +55,9 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 43
+      count: 43,
     },
     {
       id: 'debug',
@@ -68,9 +68,9 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-red-100',
         text: 'text-red-700',
         border: 'border-red-300',
-        hover: 'hover:bg-red-200'
+        hover: 'hover:bg-red-200',
       },
-      count: 31
+      count: 31,
     },
     {
       id: 'tips',
@@ -81,9 +81,9 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 58
+      count: 58,
     },
     {
       id: 'discussion',
@@ -94,11 +94,11 @@ export const vibesCategoryConfig: CategoryConfig = {
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
-        hover: 'hover:bg-blue-100'
+        hover: 'hover:bg-blue-100',
       },
-      count: 27
-    }
-  ]
+      count: 27,
+    },
+  ],
 }
 
 /**
@@ -107,8 +107,8 @@ export const vibesCategoryConfig: CategoryConfig = {
  */
 export const vibesTagConfig: TagConfig = {
   module: 'vibes',
-  maxTags: 5,  // Vibes限制标签数量，保持简洁
-  allowCustom: true,  // 允许用户自定义标签
+  maxTags: 5, // Vibes限制标签数量，保持简洁
+  allowCustom: true, // 允许用户自定义标签
   tags: [
     // 技术栈标签
     { id: 'react', name: 'React', count: 120, trending: true },
@@ -120,7 +120,7 @@ export const vibesTagConfig: TagConfig = {
     { id: 'vue', name: 'Vue.js', count: 45 },
     { id: 'golang', name: 'Go', count: 38 },
     { id: 'rust', name: 'Rust', count: 32, trending: true },
-    
+
     // 主题标签
     { id: 'frontend', name: '前端开发', count: 145 },
     { id: 'backend', name: '后端开发', count: 98 },
@@ -128,7 +128,7 @@ export const vibesTagConfig: TagConfig = {
     { id: 'mobile', name: '移动开发', count: 43 },
     { id: 'database', name: '数据库', count: 52 },
     { id: 'devops', name: 'DevOps', count: 38 },
-    
+
     // 活动标签
     { id: 'learning', name: '学习笔记', count: 89 },
     { id: 'project', name: '项目分享', count: 76 },
@@ -137,19 +137,19 @@ export const vibesTagConfig: TagConfig = {
     { id: 'tips', name: '技巧分享', count: 72 },
     { id: 'review', name: '代码审查', count: 31 },
     { id: 'refactor', name: '重构', count: 28 },
-    
+
     // 工具标签
     { id: 'vscode', name: 'VS Code', count: 45 },
     { id: 'git', name: 'Git', count: 52 },
     { id: 'docker', name: 'Docker', count: 35 },
     { id: 'webpack', name: 'Webpack', count: 22 },
     { id: 'vite', name: 'Vite', count: 28, trending: true },
-    
+
     // 情绪/状态标签
     { id: 'excited', name: '兴奋', count: 42 },
     { id: 'stuck', name: '卡住了', count: 35 },
     { id: 'solved', name: '已解决', count: 58 },
     { id: 'eureka', name: '灵感', count: 31 },
-    { id: 'help', name: '求助', count: 26 }
-  ]
+    { id: 'help', name: '求助', count: 26 },
+  ],
 }

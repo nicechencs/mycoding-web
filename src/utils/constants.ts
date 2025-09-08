@@ -16,14 +16,14 @@ export const API_ENDPOINTS = {
     LOGOUT: '/api/auth/logout',
     REFRESH: '/api/auth/refresh',
   },
-  
+
   // 用户相关
   USERS: {
     PROFILE: '/api/users/profile',
     LIST: '/api/users',
     DETAIL: '/api/users/:id',
   },
-  
+
   // 资源相关
   RESOURCES: {
     LIST: '/api/resources',
@@ -31,34 +31,34 @@ export const API_ENDPOINTS = {
     FAVORITE: '/api/resources/:id/favorite',
     COMMENTS: '/api/resources/:id/comments',
   },
-  
+
   // 文章相关
   ARTICLES: {
     LIST: '/api/articles',
     DETAIL: '/api/articles/:id',
     COMMENTS: '/api/articles/:id/comments',
   },
-  
+
   // 动态相关
   VIBES: {
     LIST: '/api/vibes',
     DETAIL: '/api/vibes/:id',
     COMMENTS: '/api/vibes/:id/comments',
   },
-  
+
   // 通知相关
   NOTIFICATIONS: {
     LIST: '/api/notifications',
     UNREAD_COUNT: '/api/notifications/unread-count',
   },
-  
+
   // 上传相关
   UPLOAD: {
     IMAGE: '/api/upload/image',
     FILE: '/api/upload/file',
     AVATAR: '/api/upload/avatar',
   },
-  
+
   // 搜索
   SEARCH: {
     GLOBAL: '/api/search',

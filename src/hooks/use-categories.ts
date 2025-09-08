@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
-import { getCategoryColor as getCategoryColorFromManager, CategoryColors } from '@/lib/utils/category'
+import {
+  getCategoryColor as getCategoryColorFromManager,
+  CategoryColors,
+} from '@/lib/utils/category'
 
 export interface Category {
   id: string
@@ -24,9 +27,7 @@ interface UseCategoriesReturn {
  * @param categories 分类列表
  * @returns 分类相关的工具方法和数据
  */
-export function useCategories(
-  categories: Category[]
-): UseCategoriesReturn {
+export function useCategories(categories: Category[]): UseCategoriesReturn {
   const getCategoryColor = useMemo(() => {
     return (categoryName: string) => {
       return getCategoryColorFromManager(categoryName)
@@ -51,7 +52,7 @@ export function useCategories(
   const categoryOptions = useMemo(() => {
     return categories.map(cat => ({
       value: cat.id,
-      label: cat.name
+      label: cat.name,
     }))
   }, [categories])
 
@@ -61,7 +62,7 @@ export function useCategories(
     getCategoryBadgeClass,
     getCategoryById,
     getCategoryByName,
-    categoryOptions
+    categoryOptions,
   }
 }
 
@@ -75,7 +76,7 @@ export const resourceCategories: Category[] = [
   { id: 'mobile', name: '移动开发' },
   { id: 'database', name: '数据库' },
   { id: 'devops', name: 'DevOps' },
-  { id: 'ai-ml', name: 'AI/ML' }
+  { id: 'ai-ml', name: 'AI/ML' },
 ]
 
 /**
@@ -87,19 +88,23 @@ export const articleCategories: Category[] = [
   { id: 'project-recommend', name: '项目推荐' },
   { id: 'study-notes', name: '学习笔记' },
   { id: 'experience', name: '经验分享' },
-  { id: 'tools', name: '工具资源' }
+  { id: 'tools', name: '工具资源' },
 ]
 
 /**
  * 获取默认的资源分类Hook
  */
-export function useResourceCategories(customColors?: Record<string, { bg: string; text: string }>) {
-  return useCategories(resourceCategories, customColors)
+export function useResourceCategories(
+  customColors?: Record<string, { bg: string; text: string }>
+) {
+  return useCategories(resourceCategories)
 }
 
 /**
  * 获取默认的文章分类Hook
  */
-export function useArticleCategories(customColors?: Record<string, { bg: string; text: string }>) {
-  return useCategories(articleCategories, customColors)
+export function useArticleCategories(
+  customColors?: Record<string, { bg: string; text: string }>
+) {
+  return useCategories(articleCategories)
 }

@@ -36,7 +36,7 @@ export function useLike(
     isLiked,
     handleLike,
     setLikeCount,
-    setIsLiked
+    setIsLiked,
   }
 }
 
@@ -54,7 +54,10 @@ export function useLikeWithApi(
   initialLiked: boolean = false,
   options?: UseLikeWithApiOptions
 ) {
-  const { likeCount, isLiked, setLikeCount, setIsLiked } = useLike(initialCount, initialLiked)
+  const { likeCount, isLiked, setLikeCount, setIsLiked } = useLike(
+    initialCount,
+    initialLiked
+  )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -99,6 +102,6 @@ export function useLikeWithApi(
     isLiked,
     handleLike,
     loading,
-    error
+    error,
   }
 }

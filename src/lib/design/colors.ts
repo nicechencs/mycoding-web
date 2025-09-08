@@ -18,7 +18,7 @@ export const colors = {
     800: '#1e40af',
     900: '#1e3a8a',
   },
-  
+
   // 辅助色 - 灰色系
   secondary: {
     50: '#f9fafb',
@@ -28,15 +28,15 @@ export const colors = {
     600: '#4b5563',
     700: '#374151',
   },
-  
+
   // 状态色系 - 语义化颜色
   status: {
     success: '#10b981', // green-500
     warning: '#f59e0b', // yellow-500
-    error: '#ef4444',   // red-500
-    info: '#3b82f6',    // blue-500
+    error: '#ef4444', // red-500
+    info: '#3b82f6', // blue-500
   },
-  
+
   // 中性色系
   neutral: {
     white: '#ffffff',
@@ -51,8 +51,8 @@ export const colors = {
       700: '#374151',
       800: '#1f2937',
       900: '#111827',
-    }
-  }
+    },
+  },
 } as const
 
 /**
@@ -60,9 +60,11 @@ export const colors = {
  */
 export const getColor = {
   primary: (shade: keyof typeof colors.primary = 600) => colors.primary[shade],
-  secondary: (shade: keyof typeof colors.secondary = 600) => colors.secondary[shade],
+  secondary: (shade: keyof typeof colors.secondary = 600) =>
+    colors.secondary[shade],
   status: (type: keyof typeof colors.status) => colors.status[type],
-  neutral: (shade: keyof typeof colors.neutral.gray) => colors.neutral.gray[shade],
+  neutral: (shade: keyof typeof colors.neutral.gray) =>
+    colors.neutral.gray[shade],
   white: () => colors.neutral.white,
 }
 
@@ -95,7 +97,7 @@ export const colorClasses = {
     textLight: 'text-gray-500',
     border: 'border-gray-200',
     ring: 'ring-gray-500',
-  }
+  },
 } as const
 
 /**
@@ -112,8 +114,10 @@ export const semanticColors = {
     warning: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     error: 'bg-red-50 text-red-700 border-red-200',
     info: 'bg-blue-50 text-blue-700 border-blue-200',
-  }
+  },
 } as const
 
 export type ColorTheme = keyof typeof colorClasses
-export type SemanticColorType = keyof typeof semanticColors.interactive | keyof typeof semanticColors.feedback
+export type SemanticColorType =
+  | keyof typeof semanticColors.interactive
+  | keyof typeof semanticColors.feedback

@@ -43,6 +43,6 @@ export function useCategories(module: ModuleType) {
     getCategoryByName,
     getCategoryColors,
     formatCategory,
-    stats
+    stats,
   }
 }

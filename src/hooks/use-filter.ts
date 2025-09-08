@@ -31,7 +31,7 @@ export function useFilter<T extends Record<string, any>>(
     searchFields = [],
     categoryField,
     initialCategory = 'all',
-    initialSearch = ''
+    initialSearch = '',
   } = config
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory)
@@ -42,7 +42,9 @@ export function useFilter<T extends Record<string, any>>(
 
     // 分类筛选
     if (categoryField && selectedCategory !== 'all') {
-      filtered = filtered.filter(item => item[categoryField] === selectedCategory)
+      filtered = filtered.filter(
+        item => item[categoryField] === selectedCategory
+      )
     }
 
     // 搜索筛选
@@ -55,8 +57,9 @@ export function useFilter<T extends Record<string, any>>(
             return value.toLowerCase().includes(query)
           }
           if (Array.isArray(value)) {
-            return value.some(v => 
-              typeof v === 'string' && v.toLowerCase().includes(query)
+            return value.some(
+              (v: any) =>
+                typeof v === 'string' && v.toLowerCase().includes(query)
             )
           }
           return false
@@ -72,7 +75,8 @@ export function useFilter<T extends Record<string, any>>(
     setSearchQuery(initialSearch)
   }, [initialCategory, initialSearch])
 
-  const hasActiveFilters = selectedCategory !== initialCategory || searchQuery !== initialSearch
+  const hasActiveFilters =
+    selectedCategory !== initialCategory || searchQuery !== initialSearch
 
   return {
     filteredItems,
@@ -81,7 +85,7 @@ export function useFilter<T extends Record<string, any>>(
     setSelectedCategory,
     setSearchQuery,
     resetFilters,
-    hasActiveFilters
+    hasActiveFilters,
   }
 }
 
@@ -98,7 +102,7 @@ export function useFilterWithPagination<T extends Record<string, any>>(
   config: UseFilterWithPaginationConfig<T> = {}
 ) {
   const { itemsPerPage = 10, initialPage = 1, ...filterConfig } = config
-  
+
   const filterResult = useFilter(items, filterConfig)
   const [currentPage, setCurrentPage] = useState(initialPage)
 
@@ -111,15 +115,21 @@ export function useFilterWithPagination<T extends Record<string, any>>(
   const totalPages = Math.ceil(filterResult.filteredItems.length / itemsPerPage)
 
   // 当筛选条件改变时，重置到第一页
-  const setSelectedCategory = useCallback((category: string) => {
-    filterResult.setSelectedCategory(category)
-    setCurrentPage(1)
-  }, [filterResult])
+  const setSelectedCategory = useCallback(
+    (category: string) => {
+      filterResult.setSelectedCategory(category)
+      setCurrentPage(1)
+    },
+    [filterResult]
+  )
 
-  const setSearchQuery = useCallback((query: string) => {
-    filterResult.setSearchQuery(query)
-    setCurrentPage(1)
-  }, [filterResult])
+  const setSearchQuery = useCallback(
+    (query: string) => {
+      filterResult.setSearchQuery(query)
+      setCurrentPage(1)
+    },
+    [filterResult]
+  )
 
   return {
     ...filterResult,
@@ -132,6 +142,6 @@ export function useFilterWithPagination<T extends Record<string, any>>(
     hasNextPage: currentPage < totalPages,
     hasPreviousPage: currentPage > 1,
     goToNextPage: () => setCurrentPage(prev => Math.min(prev + 1, totalPages)),
-    goToPreviousPage: () => setCurrentPage(prev => Math.max(prev - 1, 1))
+    goToPreviousPage: () => setCurrentPage(prev => Math.max(prev - 1, 1)),
   }
 }

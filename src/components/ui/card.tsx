@@ -12,25 +12,26 @@ interface BaseCardProps {
 
 const cardVariants = {
   default: 'bg-white rounded-lg shadow-sm',
-  hover: 'bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 group',
-  elevated: 'bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow'
+  hover:
+    'bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 group',
+  elevated: 'bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow',
 }
 
 const cardPadding = {
   sm: 'p-4',
-  md: 'p-6', 
-  lg: 'p-8'
+  md: 'p-6',
+  lg: 'p-8',
 }
 
-export function BaseCard({ 
-  children, 
-  className, 
-  variant = 'default', 
+export function BaseCard({
+  children,
+  className,
+  variant = 'default',
   padding = 'md',
-  onClick 
+  onClick,
 }: BaseCardProps) {
   return (
-    <div 
+    <div
       className={cn(
         cardVariants[variant],
         cardPadding[padding],
@@ -53,47 +54,27 @@ interface CardProps extends BaseCardProps {
   footer?: React.ReactNode
 }
 
-export function Card({ 
-  header, 
-  content, 
-  tags, 
-  stats, 
-  footer, 
+export function Card({
+  header,
+  content,
+  tags,
+  stats,
+  footer,
   children,
-  ...props 
+  ...props
 }: CardProps) {
   return (
     <BaseCard {...props}>
-      {header && (
-        <div className="mb-4">
-          {header}
-        </div>
-      )}
-      
-      {content && (
-        <div className="mb-4">
-          {content}
-        </div>
-      )}
-      
-      {tags && (
-        <div className="mb-4">
-          {tags}
-        </div>
-      )}
-      
-      {stats && (
-        <div className="pt-4 border-t border-gray-100">
-          {stats}
-        </div>
-      )}
-      
-      {footer && (
-        <div className="mt-3 text-xs text-gray-400">
-          {footer}
-        </div>
-      )}
-      
+      {header && <div className="mb-4">{header}</div>}
+
+      {content && <div className="mb-4">{content}</div>}
+
+      {tags && <div className="mb-4">{tags}</div>}
+
+      {stats && <div className="pt-4 border-t border-gray-100">{stats}</div>}
+
+      {footer && <div className="mt-3 text-xs text-gray-400">{footer}</div>}
+
       {children}
     </BaseCard>
   )
@@ -108,10 +89,7 @@ interface CardSectionProps {
 
 export function CardSection({ children, className, border }: CardSectionProps) {
   return (
-    <div className={cn(
-      border && 'pt-4 border-t border-gray-100',
-      className
-    )}>
+    <div className={cn(border && 'pt-4 border-t border-gray-100', className)}>
       {children}
     </div>
   )

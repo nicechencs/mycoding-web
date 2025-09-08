@@ -15,18 +15,18 @@ const tagColors = {
   default: {
     default: 'bg-gray-100 text-gray-600 hover:bg-gray-200',
     outline: 'border border-gray-300 text-gray-600 hover:bg-gray-50',
-    filled: 'bg-gray-600 text-white hover:bg-gray-700'
+    filled: 'bg-gray-600 text-white hover:bg-gray-700',
   },
   blue: {
     default: 'bg-blue-50 text-blue-700 hover:bg-blue-100',
-    outline: 'border border-blue-200 text-blue-600 hover:bg-blue-50', 
-    filled: 'bg-blue-600 text-white hover:bg-blue-700'
+    outline: 'border border-blue-200 text-blue-600 hover:bg-blue-50',
+    filled: 'bg-blue-600 text-white hover:bg-blue-700',
   },
   red: {
     default: 'bg-red-100 text-red-700 hover:bg-red-200',
     outline: 'border border-red-300 text-red-600 hover:bg-red-50',
-    filled: 'bg-red-600 text-white hover:bg-red-700'
-  }
+    filled: 'bg-red-600 text-white hover:bg-red-700',
+  },
 }
 
 // 单个标签组件
@@ -35,22 +35,22 @@ interface TagProps extends Tag {
   className?: string
 }
 
-export function Tag({ 
-  label, 
-  color = 'default', 
+export function Tag({
+  label,
+  color = 'default',
   variant = 'default',
   size = 'sm',
   onClick,
-  className 
+  className,
 }: TagProps) {
   const sizeClasses = {
     xs: 'px-2 py-0.5 text-xs',
-    sm: 'px-2 py-1 text-xs', 
-    md: 'px-3 py-1 text-sm'
+    sm: 'px-2 py-1 text-xs',
+    md: 'px-3 py-1 text-sm',
   }
-  
+
   const isClickable = !!onClick
-  
+
   return (
     <span
       className={cn(
@@ -79,23 +79,23 @@ interface CardTagsProps {
   showMoreText?: string
 }
 
-export function CardTags({ 
-  tags, 
-  maxVisible = 3, 
+export function CardTags({
+  tags,
+  maxVisible = 3,
   size = 'sm',
   color = 'default',
   variant = 'default',
   onTagClick,
   className,
-  showMoreText = '更多'
+  showMoreText = '更多',
 }: CardTagsProps) {
   if (!tags || tags.length === 0) {
     return null
   }
-  
+
   const visibleTags = tags.slice(0, maxVisible)
   const remainingCount = tags.length - maxVisible
-  
+
   const renderTag = (tag: string | Tag, index: number) => {
     if (typeof tag === 'string') {
       return (
@@ -114,22 +114,27 @@ export function CardTags({
           key={`${tag.label}-${index}`}
           {...tag}
           size={size}
-          onClick={tag.onClick || (onTagClick ? () => onTagClick(tag.label) : undefined)}
+          onClick={
+            tag.onClick ||
+            (onTagClick ? () => onTagClick(tag.label) : undefined)
+          }
         />
       )
     }
   }
-  
+
   return (
     <div className={cn('flex flex-wrap gap-2', className)}>
       {visibleTags.map(renderTag)}
-      
+
       {remainingCount > 0 && (
-        <span className={cn(
-          'inline-block px-2 py-1 text-xs text-gray-500',
-          size === 'xs' && 'px-2 py-0.5',
-          size === 'md' && 'px-3 py-1 text-sm'
-        )}>
+        <span
+          className={cn(
+            'inline-block px-2 py-1 text-xs text-gray-500',
+            size === 'xs' && 'px-2 py-0.5',
+            size === 'md' && 'px-3 py-1 text-sm'
+          )}
+        >
           +{remainingCount} {showMoreText}
         </span>
       )}
@@ -140,14 +145,14 @@ export function CardTags({
 // 预设的标签组合
 
 // 资源标签 - 蓝色主题
-export function ResourceTags({ 
-  tags, 
-  maxVisible, 
-  onTagClick, 
-  className 
+export function ResourceTags({
+  tags,
+  maxVisible,
+  onTagClick,
+  className,
 }: Omit<CardTagsProps, 'color' | 'variant'>) {
   return (
-    <CardTags 
+    <CardTags
       tags={tags}
       maxVisible={maxVisible}
       color="blue"
@@ -159,14 +164,14 @@ export function ResourceTags({
 }
 
 // 文章标签 - 蓝色主题，带点击效果
-export function ArticleTags({ 
-  tags, 
-  maxVisible, 
-  onTagClick, 
-  className 
+export function ArticleTags({
+  tags,
+  maxVisible,
+  onTagClick,
+  className,
 }: Omit<CardTagsProps, 'color' | 'variant'>) {
   return (
-    <CardTags 
+    <CardTags
       tags={tags}
       maxVisible={maxVisible}
       color="blue"
@@ -178,14 +183,14 @@ export function ArticleTags({
 }
 
 // Vibe标签 - 蓝色主题
-export function VibeTags({ 
-  tags, 
-  maxVisible, 
-  onTagClick, 
-  className 
+export function VibeTags({
+  tags,
+  maxVisible,
+  onTagClick,
+  className,
 }: Omit<CardTagsProps, 'color' | 'variant'>) {
   return (
-    <CardTags 
+    <CardTags
       tags={tags}
       maxVisible={maxVisible}
       color="blue"
@@ -204,16 +209,21 @@ interface CategoryBadgeProps {
   onClick?: () => void
 }
 
-export function CategoryBadge({ category, size = 'sm', className, onClick }: CategoryBadgeProps) {
+export function CategoryBadge({
+  category,
+  size = 'sm',
+  className,
+  onClick,
+}: CategoryBadgeProps) {
   const sizeClasses = {
     xs: 'px-2 py-0.5 text-xs',
     sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1.5 text-sm'
+    md: 'px-3 py-1.5 text-sm',
   }
-  
+
   const colors = getCategoryColor(category)
   const isClickable = !!onClick
-  
+
   return (
     <span
       className={cn(

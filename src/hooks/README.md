@@ -12,14 +12,14 @@
 import { useResourceDetail } from '@/hooks/use-resource-detail'
 
 function ResourceDetailPage({ slug }: { slug: string }) {
-  const { 
-    resource, 
-    comments, 
-    relatedResources, 
+  const {
+    resource,
+    comments,
+    relatedResources,
     ratingDistribution,
-    loading, 
-    error, 
-    refresh 
+    loading,
+    error,
+    refresh,
   } = useResourceDetail(slug)
 
   if (loading) return <div>Loading...</div>
@@ -31,7 +31,7 @@ function ResourceDetailPage({ slug }: { slug: string }) {
       <h1>{resource.title}</h1>
       <p>{resource.description}</p>
       <button onClick={refresh}>刷新数据</button>
-      
+
       {/* 评论列表 */}
       <div>
         {comments.map(comment => (
@@ -69,11 +69,11 @@ interface UseResourceDetailReturn {
   comments: ResourceComment[]
   relatedResources: Resource[]
   ratingDistribution: ResourceRatingDistribution | null
-  
+
   // 状态
   loading: boolean
   error: string | null
-  
+
   // 操作
   refresh: () => void
 }
@@ -86,7 +86,11 @@ interface UseResourceDetailReturn {
 ```tsx
 import { ResourceUtils } from '@/lib/utils/resource-utils'
 // 或导入特定函数
-import { isFeatured, formatCount, calculatePopularityScore } from '@/lib/utils/resource-utils'
+import {
+  isFeatured,
+  formatCount,
+  calculatePopularityScore,
+} from '@/lib/utils/resource-utils'
 
 function Component({ resource }: { resource: Resource }) {
   // 使用工具函数
@@ -94,7 +98,7 @@ function Component({ resource }: { resource: Resource }) {
   const primaryTags = ResourceUtils.getPrimaryTags(resource, 3)
   const popularityScore = ResourceUtils.calculatePopularityScore(resource)
   const formattedCount = ResourceUtils.formatCount(resource.viewCount)
-  
+
   // 或直接使用导入的函数
   const featured = isFeatured(resource)
   const count = formatCount(resource.viewCount)
@@ -102,6 +106,7 @@ function Component({ resource }: { resource: Resource }) {
 ```
 
 可用的工具函数：
+
 - `isFeatured(resource)` - 检查是否为精选资源
 - `getPrimaryTags(resource, limit)` - 获取主要标签
 - `calculatePopularityScore(resource)` - 计算受欢迎度评分
@@ -113,6 +118,6 @@ function Component({ resource }: { resource: Resource }) {
 ## 其他 Hooks
 
 - `useLocalStorage` - 本地存储管理
-- `useFilter` - 过滤功能管理  
+- `useFilter` - 过滤功能管理
 - `useCategories` - 分类数据管理
 - `useLike` - 点赞功能管理

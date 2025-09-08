@@ -16,3 +16,3122 @@
  ✓ Compiled /vibes in 259ms (1512 modules)
  GET /vibes 200 in 353ms
  GET /resources 200 in 124ms
+ ✓ Compiled in 248ms (763 modules)
+ ✓ Compiled in 218ms (763 modules)
+ ✓ Compiled in 168ms (763 modules)
+ ✓ Compiled in 138ms (763 modules)
+ ✓ Compiled in 156ms (763 modules)
+ ✓ Compiled in 169ms (763 modules)
+ ✓ Compiled in 203ms (763 modules)
+ ✓ Compiled in 455ms (1502 modules)
+ ✓ Compiled in 139ms (763 modules)
+ ✓ Compiled in 94ms (1502 modules)
+ ✓ Compiled in 150ms (763 modules)
+ ✓ Compiled in 252ms (1502 modules)
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+./src/hooks/use-auth.ts
+./src/components/layout/header.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError 
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\11.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\11.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack failed from D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development.pack.gz: Error: incorrect header check
+ ✓ Compiled in 200ms (1513 modules)
+ ✓ Compiled in 159ms (768 modules)
+ ✓ Compiled in 146ms (768 modules)
+ ✓ Compiled in 174ms (768 modules)
+ ✓ Compiled in 144ms (768 modules)
+ ✓ Compiled in 133ms (768 modules)
+ ✓ Compiled in 177ms (768 modules)
+ ✓ Compiled in 168ms (768 modules)
+ ✓ Compiled in 881ms (1527 modules)
+ ✓ Compiled in 337ms (1527 modules)
+ ✓ Compiled in 278ms (768 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\1.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\1.pack.gz'
+ ✓ Compiled in 261ms (768 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 920ms (1527 modules)
+ ✓ Compiled in 459ms (1527 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+ ⨯ ./src/lib/auth/auth-service.ts
+Error: 
+  [31mx[0m the name `AuthError` is defined multiple times
+     ,-[[36;1;4mD:\web\MyCoding\mycoding-web\src\lib\auth\auth-service.ts[0m:4:1]
+ [2m  4[0m |   AuthUser, 
+ [2m  5[0m |   AuthToken, 
+ [2m  6[0m |   ForgotPasswordData,
+ [2m  7[0m |   AuthError
+     : [31;1m  ^^^^|^^^^[0m
+     :       [31;1m`-- [31;1mprevious definition of `AuthError` here[0m[0m
+ [2m  8[0m | } from './auth-types'
+ [2m  9[0m | import { TokenManager } from './token-manager'
+ [2m 10[0m | 
+ [2m 11[0m | // Mock user database (模拟用户数据库)
+ [2m 12[0m | const MOCK_USERS: (AuthUser & { password: string })[] = [
+ [2m 13[0m |   {
+ [2m 14[0m |     id: '1',
+ [2m 15[0m |     name: '管理员',
+ [2m 16[0m |     email: 'admin@mycoding.com',
+ [2m 17[0m |     password: 'admin123', // 实际项目中应该是哈希值
+ [2m 18[0m |     role: 'admin',
+ [2m 19[0m |     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
+ [2m 20[0m |     createdAt: new Date('2024-01-01'),
+ [2m 21[0m |     updatedAt: new Date('2024-01-01')
+ [2m 22[0m |   },
+ [2m 23[0m |   {
+ [2m 24[0m |     id: '2', 
+ [2m 25[0m |     name: '测试用户',
+ [2m 26[0m |     email: 'user@test.com',
+ [2m 27[0m |     password: 'test123',
+ [2m 28[0m |     role: 'user',
+ [2m 29[0m |     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100',
+ [2m 30[0m |     createdAt: new Date('2024-01-15'),
+ [2m 31[0m |     updatedAt: new Date('2024-01-15')
+ [2m 32[0m |   }
+ [2m 33[0m | ]
+ [2m 34[0m | 
+ [2m 35[0m | // 模拟网络延迟
+ [2m 36[0m | const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+ [2m 37[0m | 
+ [2m 38[0m | // JWT Token 生成器（简化版）
+ [2m 39[0m | function generateTokens(user: AuthUser): AuthToken {
+ [2m 40[0m |   const payload = {
+ [2m 41[0m |     userId: user.id,
+ [2m 42[0m |     email: user.email,
+ [2m 43[0m |     role: user.role,
+ [2m 44[0m |     iat: Math.floor(Date.now() / 1000),
+ [2m 45[0m |     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24小时后过期
+ [2m 46[0m |   }
+ [2m 47[0m | 
+ [2m 48[0m |   // 在实际项目中应该使用真正的JWT库
+ [2m 49[0m |   const accessToken = `mock.${btoa(JSON.stringify(payload))}.signature`
+ [2m 50[0m |   const refreshToken = `refresh.${btoa(JSON.stringify({ ...payload, type: 'refresh' }))}.signature`
+ [2m 51[0m | 
+ [2m 52[0m |   return {
+ [2m 53[0m |     accessToken,
+ [2m 54[0m |     refreshToken,
+ [2m 55[0m |     expiresIn: 24 * 60 * 60 // 24小时（秒）
+ [2m 56[0m |   }
+ [2m 57[0m | }
+ [2m 58[0m | 
+ [2m 59[0m | // 解析Token（简化版）
+ [2m 60[0m | function parseToken(token: string): any {
+ [2m 61[0m |   try {
+ [2m 62[0m |     const parts = token.split('.')
+ [2m 63[0m |     if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+ [2m 64[0m |       throw new Error('Invalid token format')
+ [2m 65[0m |     }
+ [2m 66[0m |     return JSON.parse(atob(parts[1]))
+ [2m 67[0m |   } catch {
+ [2m 68[0m |     return null
+ [2m 69[0m |   }
+ [2m 70[0m | }
+ [2m 71[0m | 
+ [2m 72[0m | export class AuthService {
+ [2m 73[0m |   // 登录
+ [2m 74[0m |   static async login(credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 75[0m |     await delay(800) // 模拟网络延迟
+ [2m 76[0m | 
+ [2m 77[0m |     const user = MOCK_USERS.find(u => 
+ [2m 78[0m |       u.email.toLowerCase() === credentials.email.toLowerCase() &&
+ [2m 79[0m |       u.password === credentials.password
+ [2m 80[0m |     )
+ [2m 81[0m | 
+ [2m 82[0m |     if (!user) {
+ [2m 83[0m |       throw new AuthError('INVALID_CREDENTIALS', '邮箱或密码错误')
+ [2m 84[0m |     }
+ [2m 85[0m | 
+ [2m 86[0m |     const { password, ...userWithoutPassword } = user
+ [2m 87[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m 88[0m | 
+ [2m 89[0m |     return {
+ [2m 90[0m |       user: userWithoutPassword,
+ [2m 91[0m |       tokens
+ [2m 92[0m |     }
+ [2m 93[0m |   }
+ [2m 94[0m | 
+ [2m 95[0m |   // 注册
+ [2m 96[0m |   static async register(data: RegisterData): Promise<{ user: AuthUser; tokens: AuthToken }> {
+ [2m 97[0m |     await delay(1000) // 模拟网络延迟
+ [2m 98[0m | 
+ [2m 99[0m |     // 验证密码确认
+ [2m100[0m |     if (data.password !== data.confirmPassword) {
+ [2m101[0m |       throw new AuthError('PASSWORD_MISMATCH', '密码和确认密码不匹配')
+ [2m102[0m |     }
+ [2m103[0m | 
+ [2m104[0m |     // 检查邮箱是否已存在
+ [2m105[0m |     const existingUser = MOCK_USERS.find(u => 
+ [2m106[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m107[0m |     )
+ [2m108[0m | 
+ [2m109[0m |     if (existingUser) {
+ [2m110[0m |       throw new AuthError('EMAIL_EXISTS', '该邮箱已被注册')
+ [2m111[0m |     }
+ [2m112[0m | 
+ [2m113[0m |     // 创建新用户
+ [2m114[0m |     const newUser: AuthUser & { password: string } = {
+ [2m115[0m |       id: (MOCK_USERS.length + 1).toString(),
+ [2m116[0m |       name: data.name,
+ [2m117[0m |       email: data.email,
+ [2m118[0m |       password: data.password,
+ [2m119[0m |       role: 'user',
+ [2m120[0m |       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`,
+ [2m121[0m |       createdAt: new Date(),
+ [2m122[0m |       updatedAt: new Date()
+ [2m123[0m |     }
+ [2m124[0m | 
+ [2m125[0m |     // 添加到模拟数据库
+ [2m126[0m |     MOCK_USERS.push(newUser)
+ [2m127[0m | 
+ [2m128[0m |     const { password, ...userWithoutPassword } = newUser
+ [2m129[0m |     const tokens = generateTokens(userWithoutPassword)
+ [2m130[0m | 
+ [2m131[0m |     return {
+ [2m132[0m |       user: userWithoutPassword,
+ [2m133[0m |       tokens
+ [2m134[0m |     }
+ [2m135[0m |   }
+ [2m136[0m | 
+ [2m137[0m |   // 获取当前用户信息
+ [2m138[0m |   static async getCurrentUser(): Promise<AuthUser> {
+ [2m139[0m |     await delay(500)
+ [2m140[0m | 
+ [2m141[0m |     const token = TokenManager.getAccessToken()
+ [2m142[0m |     if (!token) {
+ [2m143[0m |       throw new AuthError('NO_TOKEN', '未找到访问令牌')
+ [2m144[0m |     }
+ [2m145[0m | 
+ [2m146[0m |     const payload = parseToken(token)
+ [2m147[0m |     if (!payload) {
+ [2m148[0m |       throw new AuthError('INVALID_TOKEN', '无效的访问令牌')
+ [2m149[0m |     }
+ [2m150[0m | 
+ [2m151[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m152[0m |     if (!user) {
+ [2m153[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m154[0m |     }
+ [2m155[0m | 
+ [2m156[0m |     const { password, ...userWithoutPassword } = user
+ [2m157[0m |     return userWithoutPassword
+ [2m158[0m |   }
+ [2m159[0m | 
+ [2m160[0m |   // 刷新Token
+ [2m161[0m |   static async refreshToken(): Promise<AuthToken> {
+ [2m162[0m |     await delay(300)
+ [2m163[0m | 
+ [2m164[0m |     const refreshToken = TokenManager.getRefreshToken()
+ [2m165[0m |     if (!refreshToken) {
+ [2m166[0m |       throw new AuthError('NO_REFRESH_TOKEN', '未找到刷新令牌')
+ [2m167[0m |     }
+ [2m168[0m | 
+ [2m169[0m |     const payload = parseToken(refreshToken)
+ [2m170[0m |     if (!payload || payload.type !== 'refresh') {
+ [2m171[0m |       throw new AuthError('INVALID_REFRESH_TOKEN', '无效的刷新令牌')
+ [2m172[0m |     }
+ [2m173[0m | 
+ [2m174[0m |     const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m175[0m |     if (!user) {
+ [2m176[0m |       throw new AuthError('USER_NOT_FOUND', '用户不存在')
+ [2m177[0m |     }
+ [2m178[0m | 
+ [2m179[0m |     const { password, ...userWithoutPassword } = user
+ [2m180[0m |     return generateTokens(userWithoutPassword)
+ [2m181[0m |   }
+ [2m182[0m | 
+ [2m183[0m |   // 注销
+ [2m184[0m |   static async logout(): Promise<void> {
+ [2m185[0m |     await delay(200)
+ [2m186[0m |     TokenManager.clearTokens()
+ [2m187[0m |   }
+ [2m188[0m | 
+ [2m189[0m |   // 忘记密码
+ [2m190[0m |   static async forgotPassword(data: ForgotPasswordData): Promise<void> {
+ [2m191[0m |     await delay(800)
+ [2m192[0m | 
+ [2m193[0m |     const user = MOCK_USERS.find(u => 
+ [2m194[0m |       u.email.toLowerCase() === data.email.toLowerCase()
+ [2m195[0m |     )
+ [2m196[0m | 
+ [2m197[0m |     if (!user) {
+ [2m198[0m |       throw new AuthError('USER_NOT_FOUND', '该邮箱未注册')
+ [2m199[0m |     }
+ [2m200[0m | 
+ [2m201[0m |     // 在实际项目中，这里会发送重置密码邮件
+ [2m202[0m |     console.log(`重置密码邮件已发送至: ${data.email}`)
+ [2m203[0m |   }
+ [2m204[0m | 
+ [2m205[0m |   // 验证Token有效性
+ [2m206[0m |   static async validateToken(token: string): Promise<boolean> {
+ [2m207[0m |     try {
+ [2m208[0m |       const payload = parseToken(token)
+ [2m209[0m |       if (!payload) return false
+ [2m210[0m | 
+ [2m211[0m |       // 检查是否过期
+ [2m212[0m |       const now = Math.floor(Date.now() / 1000)
+ [2m213[0m |       if (payload.exp < now) return false
+ [2m214[0m | 
+ [2m215[0m |       // 检查用户是否存在
+ [2m216[0m |       const user = MOCK_USERS.find(u => u.id === payload.userId)
+ [2m217[0m |       return !!user
+ [2m218[0m |     } catch {
+ [2m219[0m |       return false
+ [2m220[0m |     }
+ [2m221[0m |   }
+ [2m222[0m | }
+ [2m223[0m | 
+ [2m224[0m | // 自定义错误类
+ [2m225[0m | export class AuthError extends Error {
+     : [33;1m             ^^^^|^^^^[0m
+     :                  [33;1m`-- [33;1m`AuthError` redefined here[0m[0m
+ [2m226[0m |   constructor(
+ [2m227[0m |     public code: string,
+ [2m227[0m |     message: string
+     `----
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+ ⚠ ./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+
+./src/lib/auth/auth-service.ts
+Attempted import error: 'AuthError' is not exported from './auth-types' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/lib/auth/auth-service.ts
+./src/components/auth/AuthProvider.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+ ⚠ ./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+
+./src/components/auth/AuthProvider.tsx
+Attempted import error: 'AuthError' is not exported from '@/lib/auth/auth-service' (imported as 'AuthError').
+
+Import trace for requested module:
+./src/components/auth/AuthProvider.tsx
+ ✓ Compiled in 263ms (1515 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\server-development\2.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\server-development\2.pack.gz'
+ ✓ Compiled in 792ms (769 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 730ms (769 modules)
+ ✓ Compiled in 177ms (769 modules)
+ ✓ Compiled in 209ms (769 modules)
+ ✓ Compiled in 183ms (769 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz_' -> 'D:\web\MyCoding\mycoding-web\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 190ms (769 modules)
+ ✓ Compiled in 165ms (769 modules)
+ ✓ Compiled in 170ms (769 modules)
+ ✓ Compiled in 186ms (769 modules)
+ ✓ Compiled in 161ms (769 modules)
+ ✓ Compiled in 182ms (769 modules)
+ ✓ Compiled in 214ms (769 modules)
+ ✓ Compiled in 187ms (769 modules)
+ ✓ Compiled in 174ms (769 modules)
+ ✓ Compiled in 153ms (769 modules)
+ ✓ Compiled in 158ms (769 modules)
+ ✓ Compiled in 184ms (769 modules)
+ ✓ Compiled in 197ms (769 modules)
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:3000
+  - Experiments (use with caution):
+    · typedRoutes
+
+ ✓ Starting...
+ ✓ Ready in 2.9s

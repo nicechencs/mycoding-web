@@ -1,4 +1,11 @@
-import { Resource, ResourceCategory, ResourceComment, ResourceRating, User, ResourceRatingDistribution } from '@/types'
+import {
+  Resource,
+  ResourceCategory,
+  ResourceComment,
+  ResourceRating,
+  User,
+  ResourceRatingDistribution,
+} from '@/types'
 
 export const mockResourceCategories: ResourceCategory[] = [
   {
@@ -78,7 +85,8 @@ export const mockResources: Resource[] = [
     id: '1',
     title: 'Next.js 14 官方文档',
     slug: 'nextjs-14-docs',
-    description: 'Next.js 14的完整官方文档，包含App Router、Server Components等新特性的详细说明。这是学习现代React开发的必备资源，涵盖了从基础概念到高级特性的全面内容。',
+    description:
+      'Next.js 14的完整官方文档，包含App Router、Server Components等新特性的详细说明。这是学习现代React开发的必备资源，涵盖了从基础概念到高级特性的全面内容。',
     detailedDescription: `
       Next.js 14 是一个强大的 React 框架，提供了出色的开发体验和生产优化。这份官方文档涵盖了框架的所有方面，是学习和掌握 Next.js 的最权威资源。
       
@@ -124,18 +132,19 @@ export const mockResources: Resource[] = [
     screenshots: [
       'https://nextjs.org/static/images/learn/foundations/next-app.png',
       'https://nextjs.org/static/images/learn/data-fetching/static-site-generation.png',
-      'https://nextjs.org/static/images/learn/seo/how-googlebot-works.png'
+      'https://nextjs.org/static/images/learn/seo/how-googlebot-works.png',
     ],
     viewCount: 15600,
     likeCount: 890,
     commentCount: 156,
-    downloadCount: 0
+    downloadCount: 0,
   },
   {
     id: '2',
     title: 'React 18 新特性详解',
     slug: 'react-18-features',
-    description: 'React 18引入的并发特性、Suspense、自动批处理等新功能的深入解析。全面解释了React 18的核心改进和性能优化策略。',
+    description:
+      'React 18引入的并发特性、Suspense、自动批处理等新功能的深入解析。全面解释了React 18的核心改进和性能优化策略。',
     detailedDescription: `
       React 18 是 React 的重大版本更新，引入了许多期待已久的特性和改进。这个版本专注于改善用户体验和开发者体验，特别是在处理大型应用时的性能问题。
       
@@ -186,18 +195,19 @@ export const mockResources: Resource[] = [
     featured: true,
     screenshots: [
       'https://react.dev/images/docs/diagrams/use_client_module_dependency.png',
-      'https://react.dev/images/docs/diagrams/use_client_render_tree.png'
+      'https://react.dev/images/docs/diagrams/use_client_render_tree.png',
     ],
     viewCount: 12400,
     likeCount: 720,
     commentCount: 89,
-    downloadCount: 0
+    downloadCount: 0,
   },
   {
     id: '3',
     title: 'TypeScript 5.0 新功能',
     slug: 'typescript-5-features',
-    description: 'TypeScript 5.0版本的**新增功能**、性能改进和重大变更。包含**装饰器**、const assertion、模板字面量类型等重要特性。支持`ES2022装饰器`提案。',
+    description:
+      'TypeScript 5.0版本的**新增功能**、性能改进和重大变更。包含**装饰器**、const assertion、模板字面量类型等重要特性。支持`ES2022装饰器`提案。',
     detailedDescription: `
       TypeScript 5.0 是一个重要的版本更新，带来了许多令人兴奋的新特性和改进。这个版本专注于提升开发者体验和代码质量。
 
@@ -285,13 +295,14 @@ export const mockResources: Resource[] = [
     likeCount: 456,
     commentCount: 67,
     downloadCount: 0,
-    featured: false
+    featured: false,
   },
   {
     id: '4',
     title: 'Tailwind CSS 实用指南',
     slug: 'tailwind-css-guide',
-    description: '从基础到高级的Tailwind CSS实用教程，涵盖响应式设计和自定义配置。全面讲解实用工具类的使用方法和最佳实践。',
+    description:
+      '从基础到高级的Tailwind CSS实用教程，涵盖响应式设计和自定义配置。全面讲解实用工具类的使用方法和最佳实践。',
     url: 'https://tailwindcss.com/docs',
     category: '前端开发',
     tags: ['Tailwind CSS', 'CSS', '响应式设计'],
@@ -308,13 +319,14 @@ export const mockResources: Resource[] = [
     likeCount: 389,
     commentCount: 45,
     downloadCount: 0,
-    featured: false
+    featured: false,
   },
   {
     id: '5',
     title: 'Node.js 性能优化指南',
     slug: 'nodejs-performance-guide',
-    description: 'Node.js应用的性能监控、内存管理和并发优化最佳实践。详细介绍了性能分析工具和优化技巧。',
+    description:
+      'Node.js应用的性能监控、内存管理和并发优化最佳实践。详细介绍了性能分析工具和优化技巧。',
     url: 'https://nodejs.org/en/docs/guides/simple-profiling',
     category: '后端开发',
     tags: ['Node.js', '性能优化', '监控'],
@@ -331,13 +343,14 @@ export const mockResources: Resource[] = [
     likeCount: 298,
     commentCount: 34,
     downloadCount: 0,
-    featured: false
+    featured: false,
   },
   {
     id: '6',
     title: 'PostgreSQL 高级特性',
     slug: 'postgresql-advanced',
-    description: 'PostgreSQL数据库的高级特性：索引优化、分区表、窗口函数等。包含JSON支持、全文搜索和高级查询优化。',
+    description:
+      'PostgreSQL数据库的高级特性：索引优化、分区表、窗口函数等。包含JSON支持、全文搜索和高级查询优化。',
     url: 'https://www.postgresql.org/docs/current/',
     category: '数据库',
     tags: ['PostgreSQL', '数据库', '索引优化'],
@@ -354,13 +367,14 @@ export const mockResources: Resource[] = [
     likeCount: 267,
     commentCount: 28,
     downloadCount: 0,
-    featured: false
+    featured: false,
   },
   {
     id: '7',
     title: 'React Native 开发实战',
     slug: 'react-native-guide',
-    description: 'React Native跨平台移动应用开发的完整指南和最佳实践。包括组件开发、导航系统和原生模块集成。',
+    description:
+      'React Native跨平台移动应用开发的完整指南和最佳实践。包括组件开发、导航系统和原生模块集成。',
     url: 'https://reactnative.dev/docs/getting-started',
     category: '移动开发',
     tags: ['React Native', '移动开发', '跨平台'],
@@ -377,13 +391,14 @@ export const mockResources: Resource[] = [
     likeCount: 234,
     commentCount: 22,
     downloadCount: 0,
-    featured: false
+    featured: false,
   },
   {
     id: '8',
     title: 'Python机器学习入门',
     slug: 'python-ml-intro',
-    description: '使用Python进行机器学习的基础教程，包含scikit-learn和pandas。从数据预处理到模型训练和评估的全流程指导。',
+    description:
+      '使用Python进行机器学习的基础教程，包含scikit-learn和pandas。从数据预处理到模型训练和评估的全流程指导。',
     url: 'https://scikit-learn.org/stable/tutorial/index.html',
     category: '人工智能',
     tags: ['Python', '机器学习', 'scikit-learn'],
@@ -400,7 +415,7 @@ export const mockResources: Resource[] = [
     viewCount: 9800,
     likeCount: 567,
     commentCount: 78,
-    downloadCount: 0
+    downloadCount: 0,
   },
 ]
 
@@ -428,7 +443,8 @@ export const mockResourceComments: ResourceComment[] = [
     userId: mockUsers[0].id,
     userName: mockUsers[0].name,
     userAvatar: mockUsers[0].avatar,
-    content: 'Next.js 14 的 App Router 确实是一个革命性的改进，让组件级别的数据获取变得更加直观。文档写得很详细，特别是对于新手来说非常友好。',
+    content:
+      'Next.js 14 的 App Router 确实是一个革命性的改进，让组件级别的数据获取变得更加直观。文档写得很详细，特别是对于新手来说非常友好。',
     rating: 5,
     likeCount: 24,
     createdAt: new Date('2024-08-20'),
@@ -441,7 +457,8 @@ export const mockResourceComments: ResourceComment[] = [
     userId: mockUsers[1].id,
     userName: mockUsers[1].name,
     userAvatar: mockUsers[1].avatar,
-    content: '同意楼上的观点！另外 Server Components 的概念也很棒，能显著提升性能。不过学习曲线还是有点陡峭的。',
+    content:
+      '同意楼上的观点！另外 Server Components 的概念也很棒，能显著提升性能。不过学习曲线还是有点陡峭的。',
     rating: 4,
     likeCount: 12,
     createdAt: new Date('2024-08-22'),
@@ -454,7 +471,8 @@ export const mockResourceComments: ResourceComment[] = [
     userId: mockUsers[2].id,
     userName: mockUsers[2].name,
     userAvatar: mockUsers[2].avatar,
-    content: '有没有人知道 App Router 和传统的 Pages Router 在性能上的具体差异？',
+    content:
+      '有没有人知道 App Router 和传统的 Pages Router 在性能上的具体差异？',
     parentId: '1',
     likeCount: 8,
     createdAt: new Date('2024-08-23'),
@@ -467,7 +485,8 @@ export const mockResourceComments: ResourceComment[] = [
     userId: mockUsers[1].id,
     userName: mockUsers[1].name,
     userAvatar: mockUsers[1].avatar,
-    content: 'React 18 的并发特性真的很强大，特别是对于大型应用的性能优化效果明显。Suspense 的改进也让数据加载变得更加优雅。',
+    content:
+      'React 18 的并发特性真的很强大，特别是对于大型应用的性能优化效果明显。Suspense 的改进也让数据加载变得更加优雅。',
     rating: 5,
     likeCount: 18,
     createdAt: new Date('2024-08-21'),
@@ -480,7 +499,8 @@ export const mockResourceComments: ResourceComment[] = [
     userId: mockUsers[0].id,
     userName: mockUsers[0].name,
     userAvatar: mockUsers[0].avatar,
-    content: 'TypeScript 5.0 的装饰器支持终于稳定了，这对于使用类组件和依赖注入的项目来说是个好消息。',
+    content:
+      'TypeScript 5.0 的装饰器支持终于稳定了，这对于使用类组件和依赖注入的项目来说是个好消息。',
     rating: 5,
     likeCount: 15,
     createdAt: new Date('2024-08-19'),
@@ -491,23 +511,61 @@ export const mockResourceComments: ResourceComment[] = [
 
 // Mock ratings
 export const mockResourceRatings: ResourceRating[] = [
-  { id: '1', resourceId: '1', userId: '1', rating: 5, createdAt: new Date('2024-08-20') },
-  { id: '2', resourceId: '1', userId: '2', rating: 5, createdAt: new Date('2024-08-21') },
-  { id: '3', resourceId: '1', userId: '3', rating: 4, createdAt: new Date('2024-08-22') },
-  { id: '4', resourceId: '2', userId: '1', rating: 5, createdAt: new Date('2024-08-20') },
-  { id: '5', resourceId: '2', userId: '3', rating: 4, createdAt: new Date('2024-08-21') },
-  { id: '6', resourceId: '3', userId: '2', rating: 5, createdAt: new Date('2024-08-19') },
+  {
+    id: '1',
+    resourceId: '1',
+    userId: '1',
+    rating: 5,
+    createdAt: new Date('2024-08-20'),
+  },
+  {
+    id: '2',
+    resourceId: '1',
+    userId: '2',
+    rating: 5,
+    createdAt: new Date('2024-08-21'),
+  },
+  {
+    id: '3',
+    resourceId: '1',
+    userId: '3',
+    rating: 4,
+    createdAt: new Date('2024-08-22'),
+  },
+  {
+    id: '4',
+    resourceId: '2',
+    userId: '1',
+    rating: 5,
+    createdAt: new Date('2024-08-20'),
+  },
+  {
+    id: '5',
+    resourceId: '2',
+    userId: '3',
+    rating: 4,
+    createdAt: new Date('2024-08-21'),
+  },
+  {
+    id: '6',
+    resourceId: '3',
+    userId: '2',
+    rating: 5,
+    createdAt: new Date('2024-08-19'),
+  },
 ]
 
 // Helper functions
 export const getResourceComments = (resourceId: string): ResourceComment[] => {
-  const comments = mockResourceComments.filter(comment => 
-    comment.resourceId === resourceId && !comment.parentId
+  const comments = mockResourceComments.filter(
+    comment => comment.resourceId === resourceId && !comment.parentId
   )
-  
+
   return comments.map(comment => ({
     ...comment,
-    replies: mockResourceComments.filter(reply => reply.parentId === comment.id)
+    replies: mockResourceComments.filter(
+      reply => reply.parentId === comment.id
+    ),
   }))
 }
 
@@ -515,26 +573,32 @@ export const getResourceRatings = (resourceId: string): ResourceRating[] => {
   return mockResourceRatings.filter(rating => rating.resourceId === resourceId)
 }
 
-export const getResourceRatingDistribution = (resourceId: string): ResourceRatingDistribution => {
+export const getResourceRatingDistribution = (
+  resourceId: string
+): ResourceRatingDistribution => {
   const ratings = getResourceRatings(resourceId)
   const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
-  
+
   ratings.forEach(rating => {
     distribution[rating.rating as keyof ResourceRatingDistribution]++
   })
-  
+
   return distribution
 }
 
-export const getRelatedResources = (resourceId: string, limit: number = 4): Resource[] => {
+export const getRelatedResources = (
+  resourceId: string,
+  limit: number = 4
+): Resource[] => {
   const currentResource = getResourceById(resourceId)
   if (!currentResource) return []
-  
+
   return mockResources
-    .filter(resource => 
-      resource.id !== resourceId && 
-      (resource.category === currentResource.category || 
-       resource.tags.some(tag => currentResource.tags.includes(tag)))
+    .filter(
+      resource =>
+        resource.id !== resourceId &&
+        (resource.category === currentResource.category ||
+          resource.tags.some(tag => currentResource.tags.includes(tag)))
     )
     .sort((a, b) => b.rating - a.rating)
     .slice(0, limit)

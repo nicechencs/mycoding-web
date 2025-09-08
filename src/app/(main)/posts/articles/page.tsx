@@ -14,23 +14,27 @@ export default function ArticlesPage() {
   // 映射文章分类到新的taxonomy系统
   const mapArticleCategory = (category: string): string => {
     const categoryMap: Record<string, string> = {
-      '前端开发': 'tech-article',
-      '技术文章': 'tech-article',
-      '项目推荐': 'project',
-      '学习笔记': 'study-notes',
-      '经验分享': 'experience',
-      '工具资源': 'tools'
+      前端开发: 'tech-article',
+      技术文章: 'tech-article',
+      项目推荐: 'project',
+      学习笔记: 'study-notes',
+      经验分享: 'experience',
+      工具资源: 'tools',
     }
     return categoryMap[category] || category
   }
 
   const filteredArticles = mockArticles.filter(article => {
     const articleCategoryId = mapArticleCategory(article.category)
-    const matchesCategory = selectedCategory === 'all' || articleCategoryId === selectedCategory
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    
+    const matchesCategory =
+      selectedCategory === 'all' || articleCategoryId === selectedCategory
+    const matchesSearch =
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags.some(tag =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+
     return matchesCategory && matchesSearch
   })
 
@@ -54,12 +58,8 @@ export default function ArticlesPage() {
         placeholder="搜索文章标题、内容或标签..."
         actions={
           <>
-            <button className="btn-primary px-4 py-2 text-sm">
-              写文章
-            </button>
-            <button className="btn-secondary px-4 py-2 text-sm">
-              发推荐
-            </button>
+            <button className="btn-primary px-4 py-2 text-sm">写文章</button>
+            <button className="btn-secondary px-4 py-2 text-sm">发推荐</button>
           </>
         }
       />
@@ -68,10 +68,14 @@ export default function ArticlesPage() {
       <div className="mb-6">
         <p className="text-gray-600">
           共找到 {filteredArticles.length} 篇内容
-          {selectedCategory !== 'all' && (() => {
-            const category = taxonomyManager.getCategory('posts', selectedCategory)
-            return category ? ` (${category.name})` : ''
-          })()}
+          {selectedCategory !== 'all' &&
+            (() => {
+              const category = taxonomyManager.getCategory(
+                'posts',
+                selectedCategory
+              )
+              return category ? ` (${category.name})` : ''
+            })()}
           {searchQuery && ` 关于 "${searchQuery}"`}
         </p>
       </div>
@@ -79,24 +83,20 @@ export default function ArticlesPage() {
       {/* Articles Grid */}
       {filteredArticles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredArticles.map((article) => (
+          {filteredArticles.map(article => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
       ) : (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">📝</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">没有找到相关内容</h3>
-          <p className="text-gray-600 mb-6">
-            尝试调整搜索条件或选择其他分类
-          </p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            没有找到相关内容
+          </h3>
+          <p className="text-gray-600 mb-6">尝试调整搜索条件或选择其他分类</p>
           <div className="flex gap-3 justify-center">
-            <button className="btn-primary">
-              写文章
-            </button>
-            <button className="btn-secondary">
-              发推荐
-            </button>
+            <button className="btn-primary">写文章</button>
+            <button className="btn-secondary">发推荐</button>
           </div>
         </div>
       )}

@@ -6,7 +6,8 @@ export const mockResources: Resource[] = [
     id: '1',
     slug: 'react-developer-tools',
     title: 'React Developer Tools',
-    description: '用于调试React应用的浏览器扩展，提供组件树查看、状态检查等功能',
+    description:
+      '用于调试React应用的浏览器扩展，提供组件树查看、状态检查等功能',
     detailedDescription: `React Developer Tools 是 Facebook 官方推出的浏览器扩展工具，专门用于调试 React 应用程序。
 
 主要功能：
@@ -38,16 +39,19 @@ export const mockResources: Resource[] = [
       4: 456,
       3: 150,
       2: 30,
-      1: 20
+      1: 20,
     },
     viewCount: 45000,
     likeCount: 3200,
     commentCount: 89,
     downloadCount: 15000,
     featured: true,
-    screenshots: ['/screenshots/react-devtools-1.png', '/screenshots/react-devtools-2.png'],
+    screenshots: [
+      '/screenshots/react-devtools-1.png',
+      '/screenshots/react-devtools-2.png',
+    ],
     createdAt: new Date('2023-01-15'),
-    updatedAt: new Date('2024-12-01')
+    updatedAt: new Date('2024-12-01'),
   },
   {
     id: '2',
@@ -87,7 +91,7 @@ export const mockResources: Resource[] = [
       4: 300,
       3: 100,
       2: 20,
-      1: 14
+      1: 14,
     },
     viewCount: 28000,
     likeCount: 2100,
@@ -96,7 +100,7 @@ export const mockResources: Resource[] = [
     featured: true,
     screenshots: ['/screenshots/vscode-snippets-1.png'],
     createdAt: new Date('2023-03-20'),
-    updatedAt: new Date('2024-11-28')
+    updatedAt: new Date('2024-11-28'),
   },
   {
     id: '3',
@@ -138,7 +142,7 @@ export const mockResources: Resource[] = [
       4: 700,
       3: 200,
       2: 40,
-      1: 16
+      1: 16,
     },
     viewCount: 67000,
     likeCount: 4500,
@@ -147,8 +151,8 @@ export const mockResources: Resource[] = [
     featured: true,
     screenshots: ['/screenshots/postman-1.png', '/screenshots/postman-2.png'],
     createdAt: new Date('2023-02-10'),
-    updatedAt: new Date('2024-12-05')
-  }
+    updatedAt: new Date('2024-12-05'),
+  },
 ]
 
 export const mockComments: ResourceComment[] = [
@@ -158,7 +162,8 @@ export const mockComments: ResourceComment[] = [
     userId: 'u1',
     userName: '张三',
     userAvatar: '/avatars/user1.png',
-    content: '非常好用的调试工具，帮我解决了很多React组件的问题。特别是Profiler功能，对性能优化帮助很大！',
+    content:
+      '非常好用的调试工具，帮我解决了很多React组件的问题。特别是Profiler功能，对性能优化帮助很大！',
     rating: 5,
     likeCount: 15,
     isLiked: false,
@@ -175,9 +180,9 @@ export const mockComments: ResourceComment[] = [
         isLiked: false,
         parentId: 'c1',
         createdAt: new Date('2024-12-02'),
-        updatedAt: new Date('2024-12-02')
-      }
-    ]
+        updatedAt: new Date('2024-12-02'),
+      },
+    ],
   },
   {
     id: 'c2',
@@ -189,7 +194,7 @@ export const mockComments: ResourceComment[] = [
     likeCount: 8,
     isLiked: true,
     createdAt: new Date('2024-11-28'),
-    updatedAt: new Date('2024-11-28')
+    updatedAt: new Date('2024-11-28'),
   },
   {
     id: 'c3',
@@ -201,8 +206,8 @@ export const mockComments: ResourceComment[] = [
     likeCount: 12,
     isLiked: false,
     createdAt: new Date('2024-11-25'),
-    updatedAt: new Date('2024-11-25')
-  }
+    updatedAt: new Date('2024-11-25'),
+  },
 ]
 
 export const mockRatings: ResourceRating[] = [
@@ -214,7 +219,7 @@ export const mockRatings: ResourceRating[] = [
     rating: 5,
     review: '功能强大，是React开发必备工具',
     helpful: 23,
-    createdAt: new Date('2024-12-01')
+    createdAt: new Date('2024-12-01'),
   },
   {
     id: 'r2',
@@ -224,8 +229,8 @@ export const mockRatings: ResourceRating[] = [
     rating: 4,
     review: '很好用，但在大项目中性能需要优化',
     helpful: 15,
-    createdAt: new Date('2024-11-28')
-  }
+    createdAt: new Date('2024-11-28'),
+  },
 ]
 
 // 数据获取函数（模拟API）
@@ -235,30 +240,42 @@ export async function getResourceById(id: string): Promise<Resource | null> {
   return mockResources.find(r => r.id === id) || null
 }
 
-export async function getResourceBySlug(slug: string): Promise<Resource | null> {
+export async function getResourceBySlug(
+  slug: string
+): Promise<Resource | null> {
   await new Promise(resolve => setTimeout(resolve, 300))
   return mockResources.find(r => r.slug === slug) || null
 }
 
-export async function getResourceComments(resourceId: string): Promise<ResourceComment[]> {
+export async function getResourceComments(
+  resourceId: string
+): Promise<ResourceComment[]> {
   await new Promise(resolve => setTimeout(resolve, 300))
   return mockComments.filter(c => c.resourceId === resourceId)
 }
 
-export async function getResourceRatings(resourceId: string): Promise<ResourceRating[]> {
+export async function getResourceRatings(
+  resourceId: string
+): Promise<ResourceRating[]> {
   await new Promise(resolve => setTimeout(resolve, 300))
   return mockRatings.filter(r => r.resourceId === resourceId)
 }
 
-export async function getRelatedResources(resourceId: string, limit: number = 3): Promise<Resource[]> {
+export async function getRelatedResources(
+  resourceId: string,
+  limit: number = 3
+): Promise<Resource[]> {
   await new Promise(resolve => setTimeout(resolve, 300))
   const currentResource = mockResources.find(r => r.id === resourceId)
   if (!currentResource) return []
-  
+
   // 根据类别和标签查找相关资源
   return mockResources
-    .filter(r => r.id !== resourceId && 
-      (r.category === currentResource.category || 
-       r.tags.some(tag => currentResource.tags.includes(tag))))
+    .filter(
+      r =>
+        r.id !== resourceId &&
+        (r.category === currentResource.category ||
+          r.tags.some(tag => currentResource.tags.includes(tag)))
+    )
     .slice(0, limit)
 }
