@@ -1,0 +1,18 @@
+
+> mycoding-web@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:3000
+  - Experiments (use with caution):
+    · typedRoutes
+
+ ✓ Starting...
+ ✓ Ready in 2.5s
+ ○ Compiling /resources ...
+ ✓ Compiled /resources in 2.3s (1508 modules)
+ GET /resources 200 in 2560ms
+ ✓ Compiled in 260ms (755 modules)
+ ✓ Compiled /vibes in 259ms (1512 modules)
+ GET /vibes 200 in 353ms
+ GET /resources 200 in 124ms

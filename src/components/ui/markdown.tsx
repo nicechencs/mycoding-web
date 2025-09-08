@@ -61,7 +61,12 @@ const MARKDOWN_COMPONENTS = {
               {children}
             </blockquote>
           ),
-          code: ({ inline, children, className, ...props }: any) => {
+          code: ({ inline, children, className, ...props }: {
+            inline?: boolean;
+            children: React.ReactNode;
+            className?: string;
+            [key: string]: unknown;
+          }) => {
             const match = /language-(\w+)/.exec(className || '')
             
             if (!inline && match) {
@@ -93,7 +98,11 @@ const MARKDOWN_COMPONENTS = {
           em: ({ children }: { children: React.ReactNode }) => (
             <em className="italic text-gray-700">{children}</em>
           ),
-          a: ({ children, href, ...props }: { children?: React.ReactNode; href?: string; [key: string]: any }) => {
+          a: ({ children, href, ...props }: { 
+            children?: React.ReactNode; 
+            href?: string; 
+            [key: string]: unknown; 
+          }) => {
             // 安全的href验证
             const isValidHref = href && (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('/') || href.startsWith('#'))
             

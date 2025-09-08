@@ -13,7 +13,7 @@ export function useLocalStorage<T>(
         setStoredValue(JSON.parse(item))
       }
     } catch (error) {
-      console.log(error)
+      // localStorage可能不可用或解析失败，使用初始值
     }
   }, [key])
 
@@ -22,7 +22,7 @@ export function useLocalStorage<T>(
       setStoredValue(value)
       window.localStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
-      console.log(error)
+      // localStorage保存失败，静默处理
     }
   }
 

@@ -1,0 +1,162 @@
+{
+  "apiVersion": "1.0.0",
+  "baseUrl": "/api",
+  "generatedAt": "2025-09-08",
+  "endpoints": {
+    "auth": {
+      "login": "POST /api/auth/login",
+      "register": "POST /api/auth/register",
+      "logout": "POST /api/auth/logout",
+      "refreshToken": "POST /api/auth/refresh-token",
+      "profile": "GET /api/auth/profile"
+    },
+    "users": {
+      "getProfile": "GET /api/users/profile",
+      "updateProfile": "PUT /api/users/profile",
+      "uploadAvatar": "POST /api/users/avatar",
+      "getUserById": "GET /api/users/{id}",
+      "getUserResources": "GET /api/users/{id}/resources",
+      "getUserArticles": "GET /api/users/{id}/articles",
+      "getUserVibes": "GET /api/users/{id}/vibes",
+      "getFollowers": "GET /api/users/{id}/followers",
+      "getFollowing": "GET /api/users/{id}/following",
+      "followUser": "POST /api/users/{id}/follow",
+      "unfollowUser": "DELETE /api/users/{id}/follow",
+      "getFollowStatus": "GET /api/users/{id}/follow-status"
+    },
+    "resources": {
+      "list": "GET /api/resources",
+      "featured": "GET /api/resources/featured",
+      "categories": "GET /api/resources/categories",
+      "getById": "GET /api/resources/{id}",
+      "getBySlug": "GET /api/resources/slug/{slug}",
+      "create": "POST /api/resources",
+      "update": "PUT /api/resources/{id}",
+      "delete": "DELETE /api/resources/{id}",
+      "getRelated": "GET /api/resources/{id}/related",
+      "getRatings": "GET /api/resources/{id}/ratings",
+      "addRating": "POST /api/resources/{id}/ratings",
+      "getRatingDistribution": "GET /api/resources/{id}/rating-distribution",
+      "updateRating": "PUT /api/resources/ratings/{ratingId}",
+      "deleteRating": "DELETE /api/resources/ratings/{ratingId}",
+      "getComments": "GET /api/resources/{id}/comments",
+      "addComment": "POST /api/resources/{id}/comments",
+      "updateComment": "PUT /api/resources/comments/{id}",
+      "deleteComment": "DELETE /api/resources/comments/{id}",
+      "replyComment": "POST /api/resources/comments/{id}/replies",
+      "likeComment": "POST /api/resources/comments/{id}/like",
+      "unlikeComment": "DELETE /api/resources/comments/{id}/like",
+      "favorite": "POST /api/resources/{id}/favorite",
+      "unfavorite": "DELETE /api/resources/{id}/favorite",
+      "recordView": "POST /api/resources/{id}/view",
+      "getStats": "GET /api/resources/{id}/stats",
+      "batchOperation": "POST /api/resources/batch",
+      "batchDelete": "DELETE /api/resources/batch",
+      "batchUpdateCategory": "PUT /api/resources/batch/category",
+      "batchUpdateTags": "PUT /api/resources/batch/tags"
+    },
+    "articles": {
+      "list": "GET /api/articles",
+      "featured": "GET /api/articles/featured",
+      "getById": "GET /api/articles/{id}",
+      "getBySlug": "GET /api/articles/slug/{slug}",
+      "create": "POST /api/articles",
+      "update": "PUT /api/articles/{id}",
+      "delete": "DELETE /api/articles/{id}",
+      "getRelated": "GET /api/articles/{id}/related",
+      "getComments": "GET /api/articles/{id}/comments",
+      "addComment": "POST /api/articles/{id}/comments",
+      "updateComment": "PUT /api/articles/comments/{id}",
+      "deleteComment": "DELETE /api/articles/comments/{id}",
+      "like": "POST /api/articles/{id}/like",
+      "unlike": "DELETE /api/articles/{id}/like",
+      "recordView": "POST /api/articles/{id}/view",
+      "getDrafts": "GET /api/articles/drafts",
+      "getDraftById": "GET /api/articles/drafts/{id}",
+      "saveDraft": "POST /api/articles/drafts",
+      "updateDraft": "PUT /api/articles/drafts/{id}",
+      "deleteDraft": "DELETE /api/articles/drafts/{id}",
+      "publishDraft": "POST /api/articles/drafts/{id}/publish"
+    },
+    "vibes": {
+      "list": "GET /api/vibes",
+      "getById": "GET /api/vibes/{id}",
+      "create": "POST /api/vibes",
+      "update": "PUT /api/vibes/{id}",
+      "delete": "DELETE /api/vibes/{id}",
+      "getUserVibes": "GET /api/vibes/user/{userId}",
+      "getRelated": "GET /api/vibes/{id}/related",
+      "getComments": "GET /api/vibes/{id}/comments",
+      "addComment": "POST /api/vibes/{id}/comments",
+      "updateComment": "PUT /api/vibes/comments/{id}",
+      "deleteComment": "DELETE /api/vibes/comments/{id}",
+      "like": "POST /api/vibes/{id}/like",
+      "unlike": "DELETE /api/vibes/{id}/like",
+      "share": "POST /api/vibes/{id}/share"
+    },
+    "upload": {
+      "image": "POST /api/upload/image",
+      "images": "POST /api/upload/images",
+      "avatar": "POST /api/upload/avatar",
+      "delete": "DELETE /api/upload/{fileId}"
+    },
+    "categories": {
+      "list": "GET /api/categories",
+      "getByType": "GET /api/categories/{type}",
+      "create": "POST /api/categories",
+      "update": "PUT /api/categories/{id}",
+      "delete": "DELETE /api/categories/{id}"
+    },
+    "tags": {
+      "list": "GET /api/tags",
+      "popular": "GET /api/tags/popular",
+      "create": "POST /api/tags"
+    },
+    "search": {
+      "global": "GET /api/search",
+      "resources": "GET /api/search/resources",
+      "articles": "GET /api/search/articles",
+      "suggestions": "GET /api/search/suggestions"
+    },
+    "stats": {
+      "overview": "GET /api/stats/overview",
+      "resources": "GET /api/stats/resources",
+      "articles": "GET /api/stats/articles",
+      "users": "GET /api/stats/users"
+    },
+    "notifications": {
+      "list": "GET /api/notifications",
+      "getUnreadCount": "GET /api/notifications/unread-count",
+      "markAsRead": "PUT /api/notifications/{id}/read",
+      "markAllAsRead": "PUT /api/notifications/read-all",
+      "delete": "DELETE /api/notifications/{id}",
+      "updateSettings": "POST /api/notifications/settings"
+    }
+  },
+  "totalEndpoints": 107,
+  "implementationPriority": {
+    "phase1": [
+      "auth.*",
+      "resources.list",
+      "resources.getById",
+      "resources.create",
+      "resources.update",
+      "resources.delete",
+      "upload.image",
+      "categories.list"
+    ],
+    "phase2": [
+      "resources.ratings",
+      "resources.comments",
+      "resources.favorite",
+      "articles.*",
+      "search.global",
+      "users.*"
+    ],
+    "phase3": [
+      "vibes.*",
+      "stats.*",
+      "tags.*"
+    ]
+  }
+}

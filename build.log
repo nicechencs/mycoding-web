@@ -1,0 +1,24 @@
+
+> mycoding-web@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.5
+  - Experiments (use with caution):
+    · typedRoutes
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+ ⨯ ESLint: Failed to load config "@typescript-eslint/recommended" to extend from. Referenced from: D:\web\MyCoding\mycoding-web\.eslintrc.json
+Failed to compile.
+
+./src/components/examples/card-examples.tsx:25:7
+Type error: Type '{ id: string; title: string; description: string; url: string; category: string; tags: string[]; rating: number; author: string; createdAt: Date; updatedAt: Date; featured: true; }' is missing the following properties from type 'Resource': authorId, ratingCount, viewCount, likeCount, and 2 more.
+
+[0m [90m 23 |[39m[0m
+[0m [90m 24 |[39m [90m// 示例数据[39m[0m
+[0m[31m[1m>[22m[39m[90m 25 |[39m [36mconst[39m sampleResource[33m:[39m [33mResource[39m [33m=[39m {[0m
+[0m [90m    |[39m       [31m[1m^[22m[39m[0m
+[0m [90m 26 |[39m   id[33m:[39m [32m'1'[39m[33m,[39m[0m
+[0m [90m 27 |[39m   title[33m:[39m [32m'React完整学习指南'[39m[33m,[39m[0m
+[0m [90m 28 |[39m   description[33m:[39m [32m'从基础入门到高级应用，全面学习React框架的各个知识点和最佳实践。'[39m[33m,[39m[0m

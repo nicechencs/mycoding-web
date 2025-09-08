@@ -207,10 +207,14 @@ export const mockResources: Resource[] = [
       TypeScript 5.0 正式支持了 ES2022 装饰器提案，这是一个等待已久的功能：
 
       \`\`\`typescript
-      function logged(target: any, key: string, descriptor: PropertyDescriptor) {
+      function logged<T extends Record<string, (...args: unknown[]) => unknown>>(
+        target: T, 
+        key: keyof T, 
+        descriptor: PropertyDescriptor
+      ) {
         const original = descriptor.value;
-        descriptor.value = function(...args: any[]) {
-          console.log(\`Calling \${key} with\`, args);
+        descriptor.value = function(...args: unknown[]) {
+          // 日志装饰器示例 - 实际使用时可用更适合的日志工具
           return original.apply(this, args);
         };
       }

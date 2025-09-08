@@ -30,10 +30,16 @@ const sampleResource: Resource = {
   category: '前端开发',
   tags: ['React', 'JavaScript', 'Frontend', 'Framework'],
   rating: 4.8,
+  ratingCount: 256,
+  viewCount: 5400,
+  likeCount: 1200,
+  commentCount: 34,
   author: '张三',
+  authorId: 'u_1',
   createdAt: new Date('2024-01-15'),
   updatedAt: new Date('2024-02-01'),
-  featured: true
+  featured: true,
+  slug: 'react-complete-guide'
 }
 
 const sampleArticle: Article = {
@@ -248,8 +254,8 @@ export function NewVibeCard({ vibe }: { vibe: Vibe }) {
         isLiked={isLiked}
         onLike={handleLike}
         onComment={() => setShowComments(!showComments)}
-        onShare={() => console.log('分享')}
-        onBookmark={() => console.log('收藏')}
+        onShare={() => {/* TODO: 实现分享功能 */}}
+        onBookmark={() => {/* TODO: 实现收藏功能 */}}
         className="pt-4 border-t border-gray-100"
       />
       

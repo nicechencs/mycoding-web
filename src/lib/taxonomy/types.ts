@@ -58,8 +58,16 @@ export interface FilterState {
 export interface ITaxonomyManager {
   getCategories(module: ModuleType): Category[]
   getCategory(module: ModuleType, categoryId: string): Category | undefined
+  getDefaultCategory(module: ModuleType): Category | undefined
+  getCategoryByName(module: ModuleType, categoryName: string): Category | undefined
   getCategoryColors(module: ModuleType, categoryId: string): CategoryColors
+  formatCategoryName(category: Category): string
+  getCategoryStats(module: ModuleType): Record<string, number>
   getTags(module: ModuleType): Tag[]
   getPopularTags(module: ModuleType, limit?: number): Tag[]
+  getTrendingTags(module: ModuleType, limit?: number): Tag[]
   searchTags(module: ModuleType, query: string): Tag[]
+  getMaxTags(module: ModuleType): number
+  allowsCustomTags(module: ModuleType): boolean
+  validateTags(module: ModuleType, tags: string[]): boolean
 }

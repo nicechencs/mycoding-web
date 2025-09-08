@@ -32,8 +32,8 @@ export function ResourceComments({ comments, onAddComment }: ResourceCommentsPro
   }
 
   const handleLike = (commentId: string) => {
-    // 处理点赞逻辑
-    console.log('Like comment:', commentId)
+    // TODO: 实现点赞功能
+    // 可以在这里发送API请求更新点赞状态
   }
 
   const CommentItem = ({ comment, isReply = false }: { comment: ResourceComment; isReply?: boolean }) => (

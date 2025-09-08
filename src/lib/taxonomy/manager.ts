@@ -1,130 +1,51 @@
-import { 
-  Category, 
-  CategoryColors, 
-  Tag, 
-  ModuleType, 
-  ITaxonomyManager,
-  CategoryConfig,
-  TagConfig 
-} from './types'
+import type { Category, Tag, ModuleType, ITaxonomyManager, CategoryColors } from './types'
 import { resourcesCategoryConfig, resourcesTagConfig } from './config/resources'
 import { postsCategoryConfig, postsTagConfig } from './config/posts'
 import { vibesCategoryConfig, vibesTagConfig } from './config/vibes'
 
-/**
- * 统一的分类和标签管理器
- * 使用单例模式确保全局一致性
- */
+// 简化的TaxonomyManager类
 export class TaxonomyManager implements ITaxonomyManager {
   private static instance: TaxonomyManager
-  private categoryConfigs: Map<ModuleType, CategoryConfig>
-  private tagConfigs: Map<ModuleType, TagConfig>
   
-  // 默认颜色配置
-  private defaultColors: CategoryColors = {
-    bg: 'bg-gray-100',
-    text: 'text-gray-700',
-    border: 'border-gray-300',
-    hover: 'hover:bg-gray-200'
+  private categories = {
+    resources: resourcesCategoryConfig.categories,
+    posts: postsCategoryConfig.categories,
+    vibes: vibesCategoryConfig.categories
   }
-
-  private constructor() {
-    // 初始化分类配置
-    this.categoryConfigs = new Map([
-      ['resources', resourcesCategoryConfig],
-      ['posts', postsCategoryConfig],
-      ['vibes', vibesCategoryConfig]
-    ])
-    
-    // 初始化标签配置
-    this.tagConfigs = new Map([
-      ['resources', resourcesTagConfig],
-      ['posts', postsTagConfig],
-      ['vibes', vibesTagConfig]
-    ])
+  
+  private tags = {
+    resources: resourcesTagConfig.tags,
+    posts: postsTagConfig.tags,
+    vibes: vibesTagConfig.tags
   }
-
-  /**
-   * 获取单例实例
-   */
+  
+  private constructor() {}
+  
   static getInstance(): TaxonomyManager {
     if (!TaxonomyManager.instance) {
       TaxonomyManager.instance = new TaxonomyManager()
     }
     return TaxonomyManager.instance
   }
-
-  /**
-   * 获取指定模块的所有分类
-   */
+  
   getCategories(module: ModuleType): Category[] {
-    const config = this.categoryConfigs.get(module)
-    return config?.categories || []
+    return this.categories[module] || []
   }
-
-  /**
-   * 获取指定模块的特定分类
-   */
+  
   getCategory(module: ModuleType, categoryId: string): Category | undefined {
     const categories = this.getCategories(module)
-    return categories.find(cat => cat.id === categoryId)
+    return categories.find(c => c.id === categoryId)
   }
-
-  /**
-   * 获取分类颜色配置
-   */
-  getCategoryColors(module: ModuleType, categoryId: string): CategoryColors {
-    const category = this.getCategory(module, categoryId)
-    return category?.colors || this.defaultColors
-  }
-
-  /**
-   * 根据分类名称查找分类（兼容旧代码）
-   */
-  getCategoryByName(module: ModuleType, categoryName: string): Category | undefined {
-    const categories = this.getCategories(module)
-    return categories.find(cat => cat.name === categoryName)
-  }
-
-  /**
-   * 获取指定模块的默认分类
-   */
-  getDefaultCategory(module: ModuleType): string {
-    const config = this.categoryConfigs.get(module)
-    return config?.defaultCategory || 'all'
-  }
-
-  /**
-   * 获取指定模块的所有标签
-   */
+  
   getTags(module: ModuleType): Tag[] {
-    const config = this.tagConfigs.get(module)
-    return config?.tags || []
+    return this.tags[module] || []
   }
-
-  /**
-   * 获取热门标签
-   */
-  getPopularTags(module: ModuleType, limit: number = 10): Tag[] {
+  
+  getTag(module: ModuleType, tagId: string): Tag | undefined {
     const tags = this.getTags(module)
-    return tags
-      .sort((a, b) => (b.count || 0) - (a.count || 0))
-      .slice(0, limit)
+    return tags.find(t => t.id === tagId)
   }
-
-  /**
-   * 获取趋势标签
-   */
-  getTrendingTags(module: ModuleType, limit: number = 5): Tag[] {
-    const tags = this.getTags(module)
-    return tags
-      .filter(tag => tag.trending)
-      .slice(0, limit)
-  }
-
-  /**
-   * 搜索标签
-   */
+  
   searchTags(module: ModuleType, query: string): Tag[] {
     const tags = this.getTags(module)
     const lowerQuery = query.toLowerCase()
@@ -132,75 +53,130 @@ export class TaxonomyManager implements ITaxonomyManager {
       tag.name.toLowerCase().includes(lowerQuery)
     )
   }
-
-  /**
-   * 检查模块是否允许自定义标签
-   */
-  allowsCustomTags(module: ModuleType): boolean {
-    const config = this.tagConfigs.get(module)
-    return config?.allowCustom || false
+  
+  getPopularTags(module: ModuleType, limit: number = 10): Tag[] {
+    const tags = this.getTags(module)
+    return tags
+      .sort((a, b) => (b.count || 0) - (a.count || 0))
+      .slice(0, limit)
   }
-
-  /**
-   * 获取模块的最大标签数量
-   */
+  
+  // 获取默认分类
+  getDefaultCategory(module: ModuleType): Category | undefined {
+    const categories = this.getCategories(module)
+    return categories.find(c => c.id === 'all') || categories[0]
+  }
+  
+  // 根据名称获取分类
+  getCategoryByName(module: ModuleType, categoryName: string): Category | undefined {
+    const categories = this.getCategories(module)
+    return categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase())
+  }
+  
+  // 格式化分类名称
+  formatCategoryName(category: Category): string {
+    return category.name
+  }
+  
+  // 获取分类统计信息
+  getCategoryStats(module: ModuleType): Record<string, number> {
+    const categories = this.getCategories(module)
+    const stats: Record<string, number> = {}
+    
+    categories.forEach(category => {
+      stats[category.id] = category.count || 0
+    })
+    
+    return stats
+  }
+  
+  // 获取热门标签（基于趋势）
+  getTrendingTags(module: ModuleType, limit: number = 5): Tag[] {
+    const tags = this.getTags(module)
+    return tags
+      .filter(tag => tag.trending === true)
+      .sort((a, b) => (b.count || 0) - (a.count || 0))
+      .slice(0, limit)
+  }
+  
+  // 获取最大标签数限制
   getMaxTags(module: ModuleType): number {
-    const config = this.tagConfigs.get(module)
-    return config?.maxTags || 10
+    // 不同模块可以有不同的标签数限制
+    const limits = {
+      resources: 5,
+      posts: 8,
+      vibes: 3
+    }
+    return limits[module] || 5
   }
-
-  /**
-   * 验证标签是否有效
-   */
+  
+  // 检查是否允许自定义标签
+  allowsCustomTags(module: ModuleType): boolean {
+    // 不同模块对自定义标签的策略
+    const allowCustom = {
+      resources: false, // 资源模块不允许自定义标签
+      posts: true,      // 文章模块允许自定义标签  
+      vibes: false      // 氛围模块不允许自定义标签
+    }
+    return allowCustom[module] || false
+  }
+  
+  // 验证标签数组是否有效
   validateTags(module: ModuleType, tags: string[]): boolean {
     const maxTags = this.getMaxTags(module)
+    const allowsCustom = this.allowsCustomTags(module)
+    
+    // 检查标签数量限制
     if (tags.length > maxTags) {
       return false
     }
     
-    if (!this.allowsCustomTags(module)) {
+    // 如果不允许自定义标签，检查所有标签是否都在预定义列表中
+    if (!allowsCustom) {
       const validTags = this.getTags(module).map(t => t.name)
       return tags.every(tag => validTags.includes(tag))
     }
     
     return true
   }
-
-  /**
-   * 格式化分类名称（用于显示）
-   */
-  formatCategoryName(category: Category): string {
-    return category.icon ? `${category.icon} ${category.name}` : category.name
-  }
-
-  /**
-   * 获取分类统计信息
-   */
-  getCategoryStats(module: ModuleType): { total: number; categories: Array<{ id: string; name: string; count: number }> } {
-    const categories = this.getCategories(module)
-    const stats = categories
-      .filter(cat => cat.id !== 'all')
-      .map(cat => ({
-        id: cat.id,
-        name: cat.name,
-        count: cat.count || 0
-      }))
-    
-    const total = stats.reduce((sum, cat) => sum + cat.count, 0)
-    
-    return { total, categories: stats }
+  
+  getCategoryColors(module: ModuleType, categoryId: string): CategoryColors {
+    const category = this.getCategory(module, categoryId)
+    if (!category) {
+      // 返回默认颜色
+      return {
+        bg: 'bg-gray-100',
+        text: 'text-gray-700',
+        border: 'border-gray-300',
+        hover: 'hover:bg-gray-200'
+      }
+    }
+    return category.colors
   }
 }
 
 // 导出单例实例
 export const taxonomyManager = TaxonomyManager.getInstance()
 
-// 便捷函数导出
-export const getModuleCategories = (module: ModuleType) => 
-  taxonomyManager.getCategories(module)
+// 导出便捷函数
+export function getModuleCategories(module: ModuleType): Category[] {
+  return taxonomyManager.getCategories(module)
+}
 
-export const getModuleTags = (module: ModuleType) => 
-  taxonomyManager.getTags(module)
+export function getModuleTags(module: ModuleType): Tag[] {
+  return taxonomyManager.getTags(module)
+}
 
-export const getCategoryColors = (module: ModuleType, categoryId: string) =>
-  taxonomyManager.getCategoryColors(module, categoryId)
+export function getCategoryColors(module: ModuleType): Record<string, { bg: string; text: string }> {
+  const categories = taxonomyManager.getCategories(module)
+  const colors: Record<string, { bg: string; text: string }> = {}
+  
+  categories.forEach(category => {
+    colors[category.id] = {
+      bg: category.colors.bg,
+      text: category.colors.text
+    }
+  })
+  
+  return colors
+}
