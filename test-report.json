@@ -1,0 +1,130 @@
+{
+  "timestamp": "2025-09-10T12:47:29.321Z",
+  "summary": {
+    "totalRoutes": 9,
+    "successfulRoutes": 0,
+    "totalServices": 3,
+    "existingServices": 3,
+    "totalHooks": 4,
+    "existingHooks": 4,
+    "totalPerformanceComponents": 3,
+    "existingPerformanceComponents": 2
+  },
+  "details": {
+    "routes": {
+      "首页": {
+        "path": "/",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:24.735Z"
+      },
+      "资源页": {
+        "path": "/resources",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:25.244Z"
+      },
+      "文章页": {
+        "path": "/posts",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:25.757Z"
+      },
+      "动态页": {
+        "path": "/vibes",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:26.273Z"
+      },
+      "导航测试页": {
+        "path": "/nav-test",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:26.782Z"
+      },
+      "简单测试页": {
+        "path": "/simple-test",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:27.288Z"
+      },
+      "登录页": {
+        "path": "/login",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:27.794Z"
+      },
+      "注册页": {
+        "path": "/register",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:28.306Z"
+      },
+      "API健康检查": {
+        "path": "/api/health",
+        "error": "",
+        "success": false,
+        "timestamp": "2025-09-10T12:47:28.810Z"
+      }
+    },
+    "services": {
+      "articles.service.ts": {
+        "exists": true,
+        "size": 11895,
+        "modified": "2025-09-10T09:17:45.423Z"
+      },
+      "resources.service.ts": {
+        "exists": true,
+        "size": 16766,
+        "modified": "2025-09-10T09:18:08.866Z"
+      },
+      "vibes.service.ts": {
+        "exists": true,
+        "size": 15106,
+        "modified": "2025-09-10T09:18:20.764Z"
+      }
+    },
+    "hooks": {
+      "use-articles.ts": {
+        "exists": true,
+        "size": 6177,
+        "modified": "2025-09-10T09:12:31.614Z"
+      },
+      "use-resources.ts": {
+        "exists": true,
+        "size": 9505,
+        "modified": "2025-09-10T09:13:07.774Z"
+      },
+      "use-vibes.ts": {
+        "exists": true,
+        "size": 8374,
+        "modified": "2025-09-10T09:13:42.009Z"
+      },
+      "use-user.ts": {
+        "exists": true,
+        "size": 313,
+        "modified": "2025-09-08T14:17:52.698Z"
+      }
+    },
+    "performance": {
+      "PerformanceWrapper": {
+        "path": "src/components/app/PerformanceWrapper.tsx",
+        "exists": true,
+        "size": 3049,
+        "modified": "2025-09-10T11:36:25.018Z"
+      },
+      "LazyImage": {
+        "path": "src/components/ui/lazy-image.tsx",
+        "exists": false,
+        "size": 0,
+        "modified": null
+      },
+      "Dynamic Imports": {
+        "path": "src/lib/utils/dynamic-imports.ts",
+        "exists": true,
+        "size": 8379,
+        "modified": "2025-09-10T09:32:41.628Z"
+      }
+    }
+  }
+}

@@ -6,7 +6,10 @@ import { InteractionStats, Comment } from '@/lib/interaction/interaction-types'
 import { useRouter } from 'next/navigation'
 
 // 点赞 Hook
-export function useLike(targetId: string, targetType: 'post' | 'resource' | 'vibe') {
+export function useLike(
+  targetId: string,
+  targetType: 'post' | 'resource' | 'vibe'
+) {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(false)
@@ -34,9 +37,13 @@ export function useLike(targetId: string, targetType: 'post' | 'resource' | 'vib
 
     setIsLoading(true)
     try {
-      const newLikedState = await InteractionService.toggleLike(targetId, targetType, user.id)
+      const newLikedState = await InteractionService.toggleLike(
+        targetId,
+        targetType,
+        user.id
+      )
       setIsLiked(newLikedState)
-      setLikeCount(prev => newLikedState ? prev + 1 : prev - 1)
+      setLikeCount(prev => (newLikedState ? prev + 1 : prev - 1))
     } catch (error) {
       console.error('Failed to toggle like:', error)
     } finally {
@@ -48,12 +55,15 @@ export function useLike(targetId: string, targetType: 'post' | 'resource' | 'vib
     isLiked,
     likeCount,
     isLoading,
-    toggleLike
+    toggleLike,
   }
 }
 
 // 收藏 Hook
-export function useFavorite(targetId: string, targetType: 'post' | 'resource' | 'vibe') {
+export function useFavorite(
+  targetId: string,
+  targetType: 'post' | 'resource' | 'vibe'
+) {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [isFavorited, setIsFavorited] = useState(false)
@@ -80,9 +90,13 @@ export function useFavorite(targetId: string, targetType: 'post' | 'resource' | 
 
     setIsLoading(true)
     try {
-      const newFavoritedState = await InteractionService.toggleFavorite(targetId, targetType, user.id)
+      const newFavoritedState = await InteractionService.toggleFavorite(
+        targetId,
+        targetType,
+        user.id
+      )
       setIsFavorited(newFavoritedState)
-      setFavoriteCount(prev => newFavoritedState ? prev + 1 : prev - 1)
+      setFavoriteCount(prev => (newFavoritedState ? prev + 1 : prev - 1))
     } catch (error) {
       console.error('Failed to toggle favorite:', error)
     } finally {
@@ -94,12 +108,15 @@ export function useFavorite(targetId: string, targetType: 'post' | 'resource' | 
     isFavorited,
     favoriteCount,
     isLoading,
-    toggleFavorite
+    toggleFavorite,
   }
 }
 
 // 评论 Hook
-export function useComments(targetId: string, targetType: 'post' | 'resource' | 'vibe') {
+export function useComments(
+  targetId: string,
+  targetType: 'post' | 'resource' | 'vibe'
+) {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [comments, setComments] = useState<Comment[]>([])
@@ -126,43 +143,52 @@ export function useComments(targetId: string, targetType: 'post' | 'resource' | 
   }, [targetId, fetchComments])
 
   // 发布评论
-  const createComment = useCallback(async (content: string) => {
-    if (!isAuthenticated || !user) {
-      router.push('/login')
-      return
-    }
+  const createComment = useCallback(
+    async (content: string) => {
+      if (!isAuthenticated || !user) {
+        router.push('/login')
+        return
+      }
 
-    setIsSubmitting(true)
-    try {
-      const newComment = await InteractionService.createComment(
-        { targetId, targetType, content },
-        user.id,
-        user.name,
-        user.avatar
-      )
-      setComments(prev => [newComment, ...prev])
-      return newComment
-    } catch (error) {
-      console.error('Failed to create comment:', error)
-      throw error
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [isAuthenticated, user, targetId, targetType, router])
+      setIsSubmitting(true)
+      try {
+        const newComment = await InteractionService.createComment(
+          { targetId, targetType, content },
+          user.id,
+          user.name,
+          user.avatar
+        )
+        setComments(prev => [newComment, ...prev])
+        return newComment
+      } catch (error) {
+        console.error('Failed to create comment:', error)
+        throw error
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+    [isAuthenticated, user, targetId, targetType, router]
+  )
 
   // 删除评论
-  const deleteComment = useCallback(async (commentId: string) => {
-    if (!user) return
+  const deleteComment = useCallback(
+    async (commentId: string) => {
+      if (!user) return
 
-    try {
-      const success = await InteractionService.deleteComment(commentId, user.id)
-      if (success) {
-        setComments(prev => prev.filter(c => c.id !== commentId))
+      try {
+        const success = await InteractionService.deleteComment(
+          commentId,
+          user.id
+        )
+        if (success) {
+          setComments(prev => prev.filter(c => c.id !== commentId))
+        }
+      } catch (error) {
+        console.error('Failed to delete comment:', error)
       }
-    } catch (error) {
-      console.error('Failed to delete comment:', error)
-    }
-  }, [user])
+    },
+    [user]
+  )
 
   return {
     comments,
@@ -170,7 +196,7 @@ export function useComments(targetId: string, targetType: 'post' | 'resource' | 
     isSubmitting,
     createComment,
     deleteComment,
-    refreshComments: fetchComments
+    refreshComments: fetchComments,
   }
 }
 
@@ -197,48 +223,58 @@ export function useRating(targetId: string) {
   }, [targetId, user?.id])
 
   // 提交评分
-  const rateResource = useCallback(async (score: number, review?: string) => {
-    if (!isAuthenticated || !user) {
-      router.push('/login')
-      return
-    }
+  const rateResource = useCallback(
+    async (score: number, review?: string) => {
+      if (!isAuthenticated || !user) {
+        router.push('/login')
+        return
+      }
 
-    setIsLoading(true)
-    try {
-      await InteractionService.rateResource(
-        { targetId, score, review },
-        user.id
-      )
-      setUserRating(score)
-      
-      // 重新获取统计以更新平均分
-      const stats = await InteractionService.getInteractionStats(targetId, 'resource', user.id)
-      setAverageRating(stats.averageRating)
-      setTotalRatings(stats.totalRatings || 0)
-    } catch (error) {
-      console.error('Failed to rate resource:', error)
-      throw error
-    } finally {
-      setIsLoading(false)
-    }
-  }, [isAuthenticated, user, targetId, router])
+      setIsLoading(true)
+      try {
+        await InteractionService.rateResource(
+          { targetId, score, review },
+          user.id
+        )
+        setUserRating(score)
+
+        // 重新获取统计以更新平均分
+        const stats = await InteractionService.getInteractionStats(
+          targetId,
+          'resource',
+          user.id
+        )
+        setAverageRating(stats.averageRating)
+        setTotalRatings(stats.totalRatings || 0)
+      } catch (error) {
+        console.error('Failed to rate resource:', error)
+        throw error
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [isAuthenticated, user, targetId, router]
+  )
 
   return {
     userRating,
     averageRating,
     totalRatings,
     isLoading,
-    rateResource
+    rateResource,
   }
 }
 
 // 交互统计 Hook
-export function useInteractionStats(targetId: string, targetType: 'post' | 'resource' | 'vibe') {
+export function useInteractionStats(
+  targetId: string,
+  targetType: 'post' | 'resource' | 'vibe'
+) {
   const { user } = useAuth()
   const [stats, setStats] = useState<InteractionStats>({
     likes: 0,
     favorites: 0,
-    comments: 0
+    comments: 0,
   })
   const [isLoading, setIsLoading] = useState(false)
 
@@ -286,6 +322,6 @@ export function useUserFavorites(type?: 'post' | 'resource' | 'vibe') {
   return {
     favorites,
     loading,
-    refresh: fetchFavorites
+    refresh: fetchFavorites,
   }
 }

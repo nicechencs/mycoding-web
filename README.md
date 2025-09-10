@@ -11,7 +11,7 @@ MyCoding Web前端是基于 **Next.js 14** 构建的现代化编程社区平台�
 - **样式**: Tailwind CSS 3.x - 原子化CSS框架
 - **动画**: Framer Motion - 动画库
 - **语言**: TypeScript - 类型安全
-- **性能优化**: 
+- **性能优化**:
   - 图片懒加载 - Intersection Observer API
   - 代码分割 - Dynamic Imports + Suspense
   - 性能监控 - Core Web Vitals跟踪

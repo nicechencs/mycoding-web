@@ -6,8 +6,16 @@ import { ArticleCard } from '@/components/features/community/article-card'
 import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
 
 export default function PostsPage() {
-  const { articles: featuredArticles, loading: featuredLoading, error: featuredError } = useFeaturedArticles(6)
-  const { articles: latestArticles, loading: latestLoading, error: latestError } = useLatestArticles(8)
+  const {
+    articles: featuredArticles,
+    loading: featuredLoading,
+    error: featuredError,
+  } = useFeaturedArticles(6)
+  const {
+    articles: latestArticles,
+    loading: latestLoading,
+    error: latestError,
+  } = useLatestArticles(8)
 
   return (
     <div className="space-y-16 py-8">
@@ -53,7 +61,10 @@ export default function PostsPage() {
         </div>
 
         {featuredLoading ? (
-          <ListSkeleton items={6} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" />
+          <ListSkeleton
+            items={6}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          />
         ) : featuredError ? (
           <div className="text-center py-12">
             <p className="text-red-600">获取精选内容失败</p>

@@ -70,18 +70,18 @@
 
 ```typescript
 const {
-  loadingState,    // 'idle' | 'loading' | 'loaded' | 'error'
-  isLoading,       // 便捷的布尔状态
+  loadingState, // 'idle' | 'loading' | 'loaded' | 'error'
+  isLoading, // 便捷的布尔状态
   isLoaded,
   isError,
-  load,            // 手动加载函数
-  preload,         // 预加载函数
-  retry,           // 重试函数
-  reset,           // 重置状态
+  load, // 手动加载函数
+  preload, // 预加载函数
+  retry, // 重试函数
+  reset, // 重置状态
   handleMouseEnter, // 悬浮预加载
-  currentSrc,      // 当前图片源
-  error,           // 错误信息
-  retryCount,      // 当前重试次数
+  currentSrc, // 当前图片源
+  error, // 错误信息
+  retryCount, // 当前重试次数
 } = useLazyImage(imageSrc, {
   preload: false,
   preloadOnHover: true,
@@ -124,7 +124,7 @@ const dynamicComponents = createBatchDynamicComponents({
 
 // 条件动态导入
 const ConditionalComponent = createConditionalDynamicComponent(
-  condition, 
+  condition,
   () => import('./Component'),
   FallbackComponent
 )
@@ -134,9 +134,9 @@ const ConditionalComponent = createConditionalDynamicComponent(
 
 ```typescript
 // 预加载管理器
-DynamicImportManager.preloadHomeComponents()     // 首页组件
-DynamicImportManager.preloadUserComponents()     // 用户相关组件
-DynamicImportManager.preloadEditorComponents()   // 编辑器组件
+DynamicImportManager.preloadHomeComponents() // 首页组件
+DynamicImportManager.preloadUserComponents() // 用户相关组件
+DynamicImportManager.preloadEditorComponents() // 编辑器组件
 ```
 
 ### 加载状态组件
@@ -147,8 +147,8 @@ DynamicImportManager.preloadEditorComponents()   // 编辑器组件
 
 ```typescript
 // 基础加载器
-<LoadingSpinner 
-  size="lg" 
+<LoadingSpinner
+  size="lg"
   variant="spinner"  // spinner | pulse | dots | bars | skeleton
   text="加载中..."
   fullscreen={false}
@@ -181,10 +181,10 @@ const { metrics, measureComponentLoad, measureImageLoad } = usePerformance({
   reportData: true,
   debug: true,
   sampleRate: 0.1,
-  onReport: (metrics) => {
+  onReport: metrics => {
     // 发送到分析服务
     console.log('Performance metrics:', metrics)
-  }
+  },
 })
 
 // 监控的指标包括：
@@ -208,12 +208,12 @@ export default function HomePage() {
     <div className="space-y-0">
       {/* 首屏内容保持同步加载 */}
       <HeroSection />
-      
+
       {/* 非首屏内容使用懒加载 */}
       <LoadingSuspense fallback={<ComponentLoader />} errorBoundary>
         <DynamicFeaturesSection />
       </LoadingSuspense>
-      
+
       <LoadingSuspense fallback={<ComponentLoader />} errorBoundary>
         <DynamicFeaturedResourcesSection />
       </LoadingSuspense>
@@ -264,12 +264,12 @@ export function PerformanceWrapper({ children }: PerformanceWrapperProps) {
     requestIdleCallback(() => {
       DynamicImportManager.preloadHomeComponents()
     })
-    
+
     // 监听用户交互
     const handleFirstInteraction = () => {
       DynamicImportManager.preloadUserComponents()
     }
-    
+
     window.addEventListener('click', handleFirstInteraction, { passive: true })
   }, [])
 
@@ -291,8 +291,12 @@ export function PerformanceWrapper({ children }: PerformanceWrapperProps) {
 
 /* Shimmer动画 */
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* 渐入动画 */
@@ -301,8 +305,12 @@ export function PerformanceWrapper({ children }: PerformanceWrapperProps) {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 ```
 

@@ -7,8 +7,9 @@ import {
   LoginCredentials,
   RegisterData,
   AuthUser,
+  AuthError,
 } from '@/lib/auth/auth-types'
-import { AuthService, AuthError } from '@/lib/auth/auth-service'
+import { AuthService } from '@/lib/auth/auth-service'
 import { TokenManager } from '@/lib/auth/token-manager'
 
 // 认证状态管理

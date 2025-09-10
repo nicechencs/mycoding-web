@@ -12,11 +12,30 @@ interface ResourceActionsProps {
   className?: string
 }
 
-export function ResourceActions({ resourceId, className }: ResourceActionsProps) {
+export function ResourceActions({
+  resourceId,
+  className,
+}: ResourceActionsProps) {
   const { isAuthenticated } = useAuth()
-  const { isLiked, likeCount, toggleLike, isLoading: isLikeLoading } = useLike(resourceId, 'resource')
-  const { isFavorited, favoriteCount, toggleFavorite, isLoading: isFavoriteLoading } = useFavorite(resourceId, 'resource')
-  const { userRating, averageRating, totalRatings, rateResource, isLoading: isRatingLoading } = useRating(resourceId)
+  const {
+    isLiked,
+    likeCount,
+    toggleLike,
+    isLoading: isLikeLoading,
+  } = useLike(resourceId, 'resource')
+  const {
+    isFavorited,
+    favoriteCount,
+    toggleFavorite,
+    isLoading: isFavoriteLoading,
+  } = useFavorite(resourceId, 'resource')
+  const {
+    userRating,
+    averageRating,
+    totalRatings,
+    rateResource,
+    isLoading: isRatingLoading,
+  } = useRating(resourceId)
   const [hoveredRating, setHoveredRating] = useState(0)
 
   const handleRating = async (score: number) => {
@@ -53,11 +72,11 @@ export function ResourceActions({ resourceId, className }: ResourceActionsProps)
 
       {/* 评分 */}
       <div className="flex items-center gap-1">
-        <div 
+        <div
           className="flex items-center gap-0.5"
           onMouseLeave={() => setHoveredRating(0)}
         >
-          {[1, 2, 3, 4, 5].map((score) => (
+          {[1, 2, 3, 4, 5].map(score => (
             <button
               key={score}
               onClick={() => handleRating(score)}
@@ -69,7 +88,9 @@ export function ResourceActions({ resourceId, className }: ResourceActionsProps)
               <Star
                 className={cn(
                   'h-4 w-4 transition-colors',
-                  score <= displayRating ? 'fill-yellow-500 text-yellow-500' : 'text-gray-300'
+                  score <= displayRating
+                    ? 'fill-yellow-500 text-yellow-500'
+                    : 'text-gray-300'
                 )}
               />
             </button>

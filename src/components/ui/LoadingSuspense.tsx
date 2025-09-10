@@ -24,9 +24,9 @@ const sizeClasses = {
 }
 
 // 旋转加载器
-export const SpinnerLoader: React.FC<{ size?: string; className?: string }> = ({ 
-  size = 'w-6 h-6', 
-  className 
+export const SpinnerLoader: React.FC<{ size?: string; className?: string }> = ({
+  size = 'w-6 h-6',
+  className,
 }) => (
   <div
     className={cn(
@@ -38,7 +38,9 @@ export const SpinnerLoader: React.FC<{ size?: string; className?: string }> = ({
 )
 
 // 脉冲加载器
-export const PulseLoader: React.FC<{ className?: string }> = ({ className }) => (
+export const PulseLoader: React.FC<{ className?: string }> = ({
+  className,
+}) => (
   <div className={cn('flex space-x-2', className)}>
     {[0, 1, 2].map(i => (
       <div
@@ -57,9 +59,9 @@ export const DotsLoader: React.FC<{ className?: string }> = ({ className }) => (
       <div
         key={i}
         className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
-        style={{ 
+        style={{
           animationDelay: `${i * 0.1}s`,
-          animationDuration: '1.4s'
+          animationDuration: '1.4s',
         }}
       />
     ))}
@@ -73,10 +75,10 @@ export const BarsLoader: React.FC<{ className?: string }> = ({ className }) => (
       <div
         key={i}
         className="w-1 bg-blue-600 rounded animate-pulse"
-        style={{ 
-          height: `${12 + (i * 4)}px`,
+        style={{
+          height: `${12 + i * 4}px`,
           animationDelay: `${i * 0.15}s`,
-          animationDuration: '1.2s'
+          animationDuration: '1.2s',
         }}
       />
     ))}
@@ -84,15 +86,11 @@ export const BarsLoader: React.FC<{ className?: string }> = ({ className }) => (
 )
 
 // 骨架屏加载器
-export const SkeletonLoader: React.FC<{ 
+export const SkeletonLoader: React.FC<{
   className?: string
   lines?: number
   height?: string
-}> = ({ 
-  className, 
-  lines = 3,
-  height = '4'
-}) => (
+}> = ({ className, lines = 3, height = '4' }) => (
   <div className={cn('animate-pulse space-y-2', className)}>
     {Array.from({ length: lines }, (_, i) => (
       <div
@@ -149,9 +147,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div className="flex items-center justify-center p-4">
       <div className="flex flex-col items-center space-y-2">
         {renderLoader()}
-        {text && (
-          <p className="text-sm text-gray-600">{text}</p>
-        )}
+        {text && <p className="text-sm text-gray-600">{text}</p>}
       </div>
     </div>
   )
@@ -174,9 +170,7 @@ export const LoadingSuspense: React.FC<LoadingSuspenseProps> = ({
   const defaultFallback = <LoadingSpinner {...loadingProps} />
 
   const content = (
-    <Suspense fallback={fallback || defaultFallback}>
-      {children}
-    </Suspense>
+    <Suspense fallback={fallback || defaultFallback}>{children}</Suspense>
   )
 
   if (errorBoundary) {
@@ -201,7 +195,11 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('LoadingSuspense ErrorBoundary caught an error:', error, errorInfo)
+    console.error(
+      'LoadingSuspense ErrorBoundary caught an error:',
+      error,
+      errorInfo
+    )
   }
 
   render() {
@@ -209,8 +207,18 @@ class ErrorBoundary extends React.Component<
       return (
         <div className="flex flex-col items-center justify-center p-8 text-center">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">加载出错</h3>
@@ -230,7 +238,9 @@ class ErrorBoundary extends React.Component<
 }
 
 // 预设的页面级加载组件
-export const PageLoader: React.FC<{ text?: string }> = ({ text = '页面加载中...' }) => (
+export const PageLoader: React.FC<{ text?: string }> = ({
+  text = '页面加载中...',
+}) => (
   <LoadingSpinner
     size="lg"
     variant="spinner"
@@ -239,27 +249,22 @@ export const PageLoader: React.FC<{ text?: string }> = ({ text = '页面加载�
   />
 )
 
-export const ComponentLoader: React.FC<{ text?: string }> = ({ text = '组件加载中...' }) => (
-  <LoadingSpinner
-    size="md"
-    variant="dots"
-    text={text}
-  />
-)
+export const ComponentLoader: React.FC<{ text?: string }> = ({
+  text = '组件加载中...',
+}) => <LoadingSpinner size="md" variant="dots" text={text} />
 
-export const CardSkeleton: React.FC<{ className?: string }> = ({ className }) => (
+export const CardSkeleton: React.FC<{ className?: string }> = ({
+  className,
+}) => (
   <div className={cn('bg-white rounded-lg p-6 shadow-sm', className)}>
     <SkeletonLoader lines={4} />
   </div>
 )
 
-export const ListSkeleton: React.FC<{ 
+export const ListSkeleton: React.FC<{
   items?: number
   className?: string
-}> = ({ 
-  items = 3,
-  className 
-}) => (
+}> = ({ items = 3, className }) => (
   <div className={cn('space-y-4', className)}>
     {Array.from({ length: items }, (_, i) => (
       <CardSkeleton key={i} />

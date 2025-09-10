@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    typedRoutes: true,
-  },
+  // 暂时禁用实验性类型路由以修复导航问题
+  // experimental: {
+  //   typedRoutes: true,
+  // },
   images: {
     remotePatterns: [
       {

@@ -28,18 +28,18 @@
 ### 1. 基本使用
 
 ```tsx
-import { useArticles, useUser } from '@/hooks';
+import { useArticles, useUser } from '@/hooks'
 
 function ArticlesList() {
   // 获取文章列表
   const { articles, loading, error } = useArticles({
     page: 1,
     limit: 10,
-    sortBy: 'latest'
-  });
+    sortBy: 'latest',
+  })
 
-  if (loading) return <div>加载中...</div>;
-  if (error) return <div>错误: {error}</div>;
+  if (loading) return <div>加载中...</div>
+  if (error) return <div>错误: {error}</div>
 
   return (
     <div>
@@ -47,37 +47,37 @@ function ArticlesList() {
         <ArticleCard key={article.id} article={article} />
       ))}
     </div>
-  );
+  )
 }
 ```
 
 ### 2. 搜索和筛选
 
 ```tsx
-import { useSearchResources } from '@/hooks';
+import { useSearchResources } from '@/hooks'
 
 function ResourcesSearch() {
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('all');
-  
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState('all')
+
   const { resources, loading } = useSearchResources(query, {
     filters: { category: category !== 'all' ? category : undefined },
-    sortBy: 'rating'
-  });
+    sortBy: 'rating',
+  })
 
   return (
     <div>
-      <input 
+      <input
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={e => setQuery(e.target.value)}
         placeholder="搜索资源..."
       />
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+      <select value={category} onChange={e => setCategory(e.target.value)}>
         <option value="all">所有分类</option>
         <option value="frontend">前端开发</option>
         <option value="backend">后端开发</option>
       </select>
-      
+
       {loading ? (
         <div>搜索中...</div>
       ) : (
@@ -86,35 +86,31 @@ function ResourcesSearch() {
         ))
       )}
     </div>
-  );
+  )
 }
 ```
 
 ### 3. 用户操作
 
 ```tsx
-import { useUserActions, useCurrentUser } from '@/hooks';
+import { useUserActions, useCurrentUser } from '@/hooks'
 
 function UserProfile() {
-  const { user, loading } = useCurrentUser();
-  const { updateUser } = useUserActions();
-  
-  const handleUpdateProfile = async (data) => {
+  const { user, loading } = useCurrentUser()
+  const { updateUser } = useUserActions()
+
+  const handleUpdateProfile = async data => {
     try {
-      const result = await updateUser(user.id, data);
+      const result = await updateUser(user.id, data)
       if (result.success) {
-        toast.success('更新成功');
+        toast.success('更新成功')
       }
     } catch (error) {
-      toast.error('更新失败');
+      toast.error('更新失败')
     }
-  };
+  }
 
-  return (
-    <div>
-      {/* 用户资料表单 */}
-    </div>
-  );
+  return <div>{/* 用户资料表单 */}</div>
 }
 ```
 
@@ -131,12 +127,12 @@ function UserProfile() {
 // 自动环境检测
 if (isDevelopment()) {
   // 使用Mock数据
-  const articles = getFeaturedArticles();
-  return { success: true, data: articles };
+  const articles = getFeaturedArticles()
+  return { success: true, data: articles }
 } else {
   // 调用API
-  const response = await this.apiClient.get('/articles/featured');
-  return response;
+  const response = await this.apiClient.get('/articles/featured')
+  return response
 }
 ```
 
@@ -146,15 +142,15 @@ if (isDevelopment()) {
 
 ```typescript
 // 内存缓存
-const cached = this.cache.get(cacheKey);
-if (cached) return cached;
+const cached = this.cache.get(cacheKey)
+if (cached) return cached
 
 // SWR缓存
 const { data } = useSWR(cacheKey, fetcher, {
   refreshInterval: 5 * 60 * 1000, // 5分钟
   revalidateOnFocus: false,
-  revalidateOnReconnect: true
-});
+  revalidateOnReconnect: true,
+})
 ```
 
 ### 3. 类型安全
@@ -163,22 +159,22 @@ const { data } = useSWR(cacheKey, fetcher, {
 
 ```typescript
 interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  timestamp?: string;
+  success: boolean
+  data?: T
+  error?: string
+  timestamp?: string
 }
 
 interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  data: T[];
+  data: T[]
   pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+    hasNext: boolean
+    hasPrev: boolean
+  }
 }
 ```
 
@@ -187,12 +183,12 @@ interface PaginatedResponse<T> extends ApiResponse<T[]> {
 统一的错误处理机制：
 
 ```typescript
-const { data, error, loading } = useArticles();
+const { data, error, loading } = useArticles()
 
 // error 包含了所有可能的错误信息
 if (error) {
   // 网络错误、API错误、业务逻辑错误等
-  console.error('获取文章失败:', error);
+  console.error('获取文章失败:', error)
 }
 ```
 
@@ -204,21 +200,24 @@ if (error) {
 
 ```tsx
 function ArticleDetailPage({ slug }: { slug: string }) {
-  const { article, loading: articleLoading } = useArticle(slug);
-  const { comments, loading: commentsLoading } = useArticleComments(article?.id || '');
-  const { articles: related, loading: relatedLoading } = useRelatedArticles(slug);
-  
-  const loading = articleLoading || commentsLoading || relatedLoading;
-  
-  if (loading) return <Loading />;
-  
+  const { article, loading: articleLoading } = useArticle(slug)
+  const { comments, loading: commentsLoading } = useArticleComments(
+    article?.id || ''
+  )
+  const { articles: related, loading: relatedLoading } =
+    useRelatedArticles(slug)
+
+  const loading = articleLoading || commentsLoading || relatedLoading
+
+  if (loading) return <Loading />
+
   return (
     <div>
       <ArticleContent article={article} />
       <Comments comments={comments} />
       <RelatedArticles articles={related} />
     </div>
-  );
+  )
 }
 ```
 
@@ -227,19 +226,19 @@ function ArticleDetailPage({ slug }: { slug: string }) {
 在用户可能访问的页面预加载数据：
 
 ```tsx
-import { prefetchArticle } from '@/hooks';
+import { prefetchArticle } from '@/hooks'
 
 function ArticleLink({ slug, children }) {
   const handleMouseEnter = () => {
     // 鼠标悬停时预加载文章数据
-    prefetchArticle(slug);
-  };
-  
+    prefetchArticle(slug)
+  }
+
   return (
     <Link href={`/articles/${slug}`} onMouseEnter={handleMouseEnter}>
       {children}
     </Link>
-  );
+  )
 }
 ```
 
@@ -249,27 +248,23 @@ function ArticleLink({ slug, children }) {
 
 ```tsx
 function LikeButton({ articleId, initialLiked = false }) {
-  const [liked, setLiked] = useState(initialLiked);
-  
+  const [liked, setLiked] = useState(initialLiked)
+
   const handleLike = async () => {
     // 乐观更新UI
-    setLiked(!liked);
-    
+    setLiked(!liked)
+
     try {
-      await likeArticle(articleId);
+      await likeArticle(articleId)
       // 成功，UI已经更新
     } catch (error) {
       // 失败，回滚UI状态
-      setLiked(liked);
-      toast.error('操作失败');
+      setLiked(liked)
+      toast.error('操作失败')
     }
-  };
-  
-  return (
-    <button onClick={handleLike}>
-      {liked ? '❤️' : '🤍'}
-    </button>
-  );
+  }
+
+  return <button onClick={handleLike}>{liked ? '❤️' : '🤍'}</button>
 }
 ```
 
@@ -281,16 +276,16 @@ function LikeButton({ articleId, initialLiked = false }) {
 function UserProfile({ userId }: { userId?: string }) {
   // 只有userId存在时才获取数据
   const { user, loading } = useUser(userId || '', {
-    suspense: false // 避免在userId为空时报错
-  });
-  
+    suspense: false, // 避免在userId为空时报错
+  })
+
   if (!userId) {
-    return <div>请先登录</div>;
+    return <div>请先登录</div>
   }
-  
-  if (loading) return <Loading />;
-  
-  return <UserCard user={user} />;
+
+  if (loading) return <Loading />
+
+  return <UserCard user={user} />
 }
 ```
 
@@ -320,18 +315,18 @@ function Sidebar() {
 ```typescript
 // 用户信息 - 缓存时间长
 const { user } = useUser(id, {
-  refreshInterval: 10 * 60 * 1000 // 10分钟
-});
+  refreshInterval: 10 * 60 * 1000, // 10分钟
+})
 
 // 实时动态 - 缓存时间短
 const { vibes } = useLatestVibes(10, {
-  refreshInterval: 30 * 1000 // 30秒
-});
+  refreshInterval: 30 * 1000, // 30秒
+})
 
 // 静态资源 - 长期缓存
 const { categories } = useResourceCategories({
-  refreshInterval: 30 * 60 * 1000 // 30分钟
-});
+  refreshInterval: 30 * 60 * 1000, // 30分钟
+})
 ```
 
 ### 3. 按需加载
@@ -339,16 +334,16 @@ const { categories } = useResourceCategories({
 使用Suspense和lazy loading：
 
 ```tsx
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react'
 
-const LazyComponent = lazy(() => import('./HeavyComponent'));
+const LazyComponent = lazy(() => import('./HeavyComponent'))
 
 function App() {
   return (
     <Suspense fallback={<Loading />}>
       <LazyComponent />
     </Suspense>
-  );
+  )
 }
 ```
 
@@ -370,16 +365,16 @@ function App() {
 获取缓存使用情况：
 
 ```typescript
-import { ServiceManager } from '@/services';
+import { ServiceManager } from '@/services'
 
 // 获取缓存统计信息
-const stats = ServiceManager.getCacheStats();
-console.log('缓存统计:', stats);
+const stats = ServiceManager.getCacheStats()
+console.log('缓存统计:', stats)
 // { totalItems: 25, expiredItems: 3, activeItems: 22, maxSize: 100 }
 
 // 清理过期缓存
-const cleanedCount = ServiceManager.cleanupCache();
-console.log('清理了', cleanedCount, '个过期缓存项');
+const cleanedCount = ServiceManager.cleanupCache()
+console.log('清理了', cleanedCount, '个过期缓存项')
 ```
 
 ### 3. 错误监控
@@ -388,11 +383,11 @@ console.log('清理了', cleanedCount, '个过期缓存项');
 
 ```typescript
 // 在错误拦截器中上报错误
-apiClient.addErrorInterceptor(async (error) => {
+apiClient.addErrorInterceptor(async error => {
   // 上报到错误监控服务
-  errorReportingService.captureException(error);
-  return error;
-});
+  errorReportingService.captureException(error)
+  return error
+})
 ```
 
 ## 扩展指南
@@ -406,7 +401,7 @@ apiClient.addErrorInterceptor(async (error) => {
 export class NewService {
   // 实现INewService接口
 }
-export const newService = new NewService();
+export const newService = new NewService()
 ```
 
 2. 创建对应的Hooks：
@@ -414,7 +409,7 @@ export const newService = new NewService();
 ```typescript
 // src/hooks/use-new-service.ts
 export function useNewData() {
-  return useSWR('new-data', () => newService.getData());
+  return useSWR('new-data', () => newService.getData())
 }
 ```
 
@@ -422,7 +417,7 @@ export function useNewData() {
 
 ```typescript
 // src/services/index.ts
-export { NewService, newService } from './new-service.service';
+export { NewService, newService } from './new-service.service'
 ```
 
 ### 2. 自定义缓存策略
@@ -432,13 +427,13 @@ export { NewService, newService } from './new-service.service';
 const customCache = new CacheManager({
   ttl: 30 * 60 * 1000, // 30分钟
   maxSize: 50,
-  enabled: true
-});
+  enabled: true,
+})
 
 // 在服务中使用
 export class CustomService {
   constructor() {
-    this.cache = customCache;
+    this.cache = customCache
   }
 }
 ```
@@ -447,20 +442,20 @@ export class CustomService {
 
 ```typescript
 // 添加请求拦截器
-apiClient.addRequestInterceptor((config) => {
+apiClient.addRequestInterceptor(config => {
   // 添加认证头
-  config.headers.Authorization = `Bearer ${getToken()}`;
-  return config;
-});
+  config.headers.Authorization = `Bearer ${getToken()}`
+  return config
+})
 
 // 添加响应拦截器
-apiClient.addResponseInterceptor((response) => {
+apiClient.addResponseInterceptor(response => {
   // 处理特殊响应
   if (response.data?.needsRefresh) {
-    refreshToken();
+    refreshToken()
   }
-  return response;
-});
+  return response
+})
 ```
 
 ## 常见问题
@@ -480,9 +475,12 @@ NEXT_PUBLIC_API_BASE_URL=https://api.yoursite.com
 A: 在Hook中传入选项：
 
 ```typescript
-const { data } = useArticles({}, {
-  refreshInterval: 2 * 60 * 1000 // 2分钟
-});
+const { data } = useArticles(
+  {},
+  {
+    refreshInterval: 2 * 60 * 1000, // 2分钟
+  }
+)
 ```
 
 ### Q: 如何处理认证？
@@ -490,13 +488,13 @@ const { data } = useArticles({}, {
 A: 在API客户端中添加认证拦截器：
 
 ```typescript
-apiClient.addRequestInterceptor((config) => {
-  const token = getAuthToken();
+apiClient.addRequestInterceptor(config => {
+  const token = getAuthToken()
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`
   }
-  return config;
-});
+  return config
+})
 ```
 
 ### Q: 如何实现无限滚动？
@@ -504,24 +502,24 @@ apiClient.addRequestInterceptor((config) => {
 A: 使用SWR的无限加载功能：
 
 ```typescript
-import useSWRInfinite from 'swr/infinite';
+import useSWRInfinite from 'swr/infinite'
 
 function useInfiniteArticles() {
   const { data, error, size, setSize } = useSWRInfinite(
-    (index) => ['articles:list', { page: index + 1 }],
+    index => ['articles:list', { page: index + 1 }],
     ([_, params]) => articlesService.getArticles(params)
-  );
-  
-  const articles = data ? data.flatMap(page => page.data) : [];
-  const isLoading = !data && !error;
-  const hasMore = data?.[data.length - 1]?.pagination?.hasNext ?? true;
-  
+  )
+
+  const articles = data ? data.flatMap(page => page.data) : []
+  const isLoading = !data && !error
+  const hasMore = data?.[data.length - 1]?.pagination?.hasNext ?? true
+
   return {
     articles,
     isLoading,
     hasMore,
-    loadMore: () => setSize(size + 1)
-  };
+    loadMore: () => setSize(size + 1),
+  }
 }
 ```
 

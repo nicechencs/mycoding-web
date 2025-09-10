@@ -1,25 +1,37 @@
-import useSWR from 'swr';
-import { resourcesService } from '@/services/resources.service';
-import { Resource, ResourceComment, ResourceRating, ResourceRatingDistribution } from '@/types';
-import { QueryParams, ApiResponse, PaginatedResponse } from '@/services/base/types';
+import useSWR from 'swr'
+import { resourcesService } from '@/services/resources.service'
+import {
+  Resource,
+  ResourceComment,
+  ResourceRating,
+  ResourceRatingDistribution,
+} from '@/types'
+import {
+  QueryParams,
+  ApiResponse,
+  PaginatedResponse,
+} from '@/services/base/types'
 
 /**
  * SWR配置选项
  */
 interface SWROptions {
-  refreshInterval?: number;
-  revalidateOnFocus?: boolean;
-  revalidateOnReconnect?: boolean;
-  errorRetryCount?: number;
-  suspense?: boolean;
+  refreshInterval?: number
+  revalidateOnFocus?: boolean
+  revalidateOnReconnect?: boolean
+  errorRetryCount?: number
+  suspense?: boolean
 }
 
 /**
  * 获取资源列表
  */
-export function useResources(params: QueryParams = {}, options: SWROptions = {}) {
-  const cacheKey = ['resources:list', params];
-  
+export function useResources(
+  params: QueryParams = {},
+  options: SWROptions = {}
+) {
+  const cacheKey = ['resources:list', params]
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResources(params),
@@ -30,7 +42,7 @@ export function useResources(params: QueryParams = {}, options: SWROptions = {})
       refreshInterval: 5 * 60 * 1000, // 5分钟
       ...options,
     }
-  );
+  )
 
   return {
     resources: data?.data || [],
@@ -39,15 +51,15 @@ export function useResources(params: QueryParams = {}, options: SWROptions = {})
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 根据ID获取资源详情
  */
 export function useResource(id: string, options: SWROptions = {}) {
-  const cacheKey = id ? ['resources:detail', id] : null;
-  
+  const cacheKey = id ? ['resources:detail', id] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceById(id),
@@ -57,7 +69,7 @@ export function useResource(id: string, options: SWROptions = {}) {
       errorRetryCount: 3,
       ...options,
     }
-  );
+  )
 
   return {
     resource: data?.data,
@@ -65,15 +77,15 @@ export function useResource(id: string, options: SWROptions = {}) {
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 根据slug获取资源详情
  */
 export function useResourceBySlug(slug: string, options: SWROptions = {}) {
-  const cacheKey = slug ? ['resources:detail-slug', slug] : null;
-  
+  const cacheKey = slug ? ['resources:detail-slug', slug] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceBySlug(slug),
@@ -83,7 +95,7 @@ export function useResourceBySlug(slug: string, options: SWROptions = {}) {
       errorRetryCount: 3,
       ...options,
     }
-  );
+  )
 
   return {
     resource: data?.data,
@@ -91,15 +103,18 @@ export function useResourceBySlug(slug: string, options: SWROptions = {}) {
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取精选资源
  */
-export function useFeaturedResources(limit: number = 6, options: SWROptions = {}) {
-  const cacheKey = ['resources:featured', limit];
-  
+export function useFeaturedResources(
+  limit: number = 6,
+  options: SWROptions = {}
+) {
+  const cacheKey = ['resources:featured', limit]
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getFeaturedResources(limit),
@@ -110,7 +125,7 @@ export function useFeaturedResources(limit: number = 6, options: SWROptions = {}
       refreshInterval: 10 * 60 * 1000, // 10分钟
       ...options,
     }
-  );
+  )
 
   return {
     resources: data?.data || [],
@@ -118,15 +133,19 @@ export function useFeaturedResources(limit: number = 6, options: SWROptions = {}
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 根据分类获取资源
  */
-export function useResourcesByCategory(category: string, params: QueryParams = {}, options: SWROptions = {}) {
-  const cacheKey = category ? ['resources:category', category, params] : null;
-  
+export function useResourcesByCategory(
+  category: string,
+  params: QueryParams = {},
+  options: SWROptions = {}
+) {
+  const cacheKey = category ? ['resources:category', category, params] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourcesByCategory(category, params),
@@ -137,7 +156,7 @@ export function useResourcesByCategory(category: string, params: QueryParams = {
       refreshInterval: 5 * 60 * 1000, // 5分钟
       ...options,
     }
-  );
+  )
 
   return {
     resources: data?.data || [],
@@ -145,15 +164,21 @@ export function useResourcesByCategory(category: string, params: QueryParams = {
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取资源评论
  */
-export function useResourceComments(resourceId: string, params: QueryParams = {}, options: SWROptions = {}) {
-  const cacheKey = resourceId ? ['resources:comments', resourceId, params] : null;
-  
+export function useResourceComments(
+  resourceId: string,
+  params: QueryParams = {},
+  options: SWROptions = {}
+) {
+  const cacheKey = resourceId
+    ? ['resources:comments', resourceId, params]
+    : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceComments(resourceId, params),
@@ -164,7 +189,7 @@ export function useResourceComments(resourceId: string, params: QueryParams = {}
       refreshInterval: 30 * 1000, // 30秒
       ...options,
     }
-  );
+  )
 
   return {
     comments: data?.data || [],
@@ -172,15 +197,18 @@ export function useResourceComments(resourceId: string, params: QueryParams = {}
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取资源评分
  */
-export function useResourceRatings(resourceId: string, options: SWROptions = {}) {
-  const cacheKey = resourceId ? ['resources:ratings', resourceId] : null;
-  
+export function useResourceRatings(
+  resourceId: string,
+  options: SWROptions = {}
+) {
+  const cacheKey = resourceId ? ['resources:ratings', resourceId] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceRatings(resourceId),
@@ -191,7 +219,7 @@ export function useResourceRatings(resourceId: string, options: SWROptions = {})
       refreshInterval: 2 * 60 * 1000, // 2分钟
       ...options,
     }
-  );
+  )
 
   return {
     ratings: data?.data || [],
@@ -199,15 +227,20 @@ export function useResourceRatings(resourceId: string, options: SWROptions = {})
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取资源评分分布
  */
-export function useResourceRatingDistribution(resourceId: string, options: SWROptions = {}) {
-  const cacheKey = resourceId ? ['resources:rating-distribution', resourceId] : null;
-  
+export function useResourceRatingDistribution(
+  resourceId: string,
+  options: SWROptions = {}
+) {
+  const cacheKey = resourceId
+    ? ['resources:rating-distribution', resourceId]
+    : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceRatingDistribution(resourceId),
@@ -218,7 +251,7 @@ export function useResourceRatingDistribution(resourceId: string, options: SWROp
       refreshInterval: 5 * 60 * 1000, // 5分钟
       ...options,
     }
-  );
+  )
 
   return {
     distribution: data?.data,
@@ -226,15 +259,19 @@ export function useResourceRatingDistribution(resourceId: string, options: SWROp
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取相关资源
  */
-export function useRelatedResources(resourceId: string, limit: number = 4, options: SWROptions = {}) {
-  const cacheKey = resourceId ? ['resources:related', resourceId, limit] : null;
-  
+export function useRelatedResources(
+  resourceId: string,
+  limit: number = 4,
+  options: SWROptions = {}
+) {
+  const cacheKey = resourceId ? ['resources:related', resourceId, limit] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getRelatedResources(resourceId, limit),
@@ -245,7 +282,7 @@ export function useRelatedResources(resourceId: string, limit: number = 4, optio
       refreshInterval: 10 * 60 * 1000, // 10分钟
       ...options,
     }
-  );
+  )
 
   return {
     resources: data?.data || [],
@@ -253,15 +290,19 @@ export function useRelatedResources(resourceId: string, limit: number = 4, optio
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 搜索资源
  */
-export function useSearchResources(query: string, params: QueryParams = {}, options: SWROptions = {}) {
-  const cacheKey = query ? ['resources:search', query, params] : null;
-  
+export function useSearchResources(
+  query: string,
+  params: QueryParams = {},
+  options: SWROptions = {}
+) {
+  const cacheKey = query ? ['resources:search', query, params] : null
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.searchResources(query, params),
@@ -272,7 +313,7 @@ export function useSearchResources(query: string, params: QueryParams = {}, opti
       dedupingInterval: 1000, // 1秒内相同请求去重
       ...options,
     }
-  );
+  )
 
   return {
     resources: data?.data || [],
@@ -280,15 +321,15 @@ export function useSearchResources(query: string, params: QueryParams = {}, opti
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 获取资源分类
  */
 export function useResourceCategories(options: SWROptions = {}) {
-  const cacheKey = 'resources:categories';
-  
+  const cacheKey = 'resources:categories'
+
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     cacheKey,
     () => resourcesService.getResourceCategories(),
@@ -299,7 +340,7 @@ export function useResourceCategories(options: SWROptions = {}) {
       refreshInterval: 30 * 60 * 1000, // 30分钟（分类不经常变化）
       ...options,
     }
-  );
+  )
 
   return {
     categories: data?.data || [],
@@ -307,44 +348,51 @@ export function useResourceCategories(options: SWROptions = {}) {
     error: error || (data && !data.success ? data.error : null),
     mutate,
     isValidating,
-  };
+  }
 }
 
 /**
  * 组合hook：获取资源详情及其相关数据
  */
-export function useResourceDetail(resourceId: string, options: SWROptions = {}) {
+export function useResourceDetail(
+  resourceId: string,
+  options: SWROptions = {}
+) {
   const {
     resource,
     loading: resourceLoading,
     error: resourceError,
     mutate: mutateResource,
-  } = useResource(resourceId, options);
+  } = useResource(resourceId, options)
 
   const {
     comments,
     loading: commentsLoading,
     mutate: mutateComments,
-  } = useResourceComments(resourceId, {}, options);
+  } = useResourceComments(resourceId, {}, options)
 
   const {
     distribution,
     loading: distributionLoading,
     mutate: mutateDistribution,
-  } = useResourceRatingDistribution(resourceId, options);
+  } = useResourceRatingDistribution(resourceId, options)
 
   const {
     resources: relatedResources,
     loading: relatedLoading,
     mutate: mutateRelated,
-  } = useRelatedResources(resourceId, 4, options);
+  } = useRelatedResources(resourceId, 4, options)
 
   return {
     resource,
     comments,
     ratingDistribution: distribution,
     relatedResources,
-    loading: resourceLoading || commentsLoading || distributionLoading || relatedLoading,
+    loading:
+      resourceLoading ||
+      commentsLoading ||
+      distributionLoading ||
+      relatedLoading,
     error: resourceError,
     mutate: {
       resource: mutateResource,
@@ -352,24 +400,24 @@ export function useResourceDetail(resourceId: string, options: SWROptions = {}) 
       distribution: mutateDistribution,
       related: mutateRelated,
     },
-  };
+  }
 }
 
 /**
  * 预加载资源数据的工具函数
  */
 export function prefetchResource(id: string) {
-  return resourcesService.getResourceById(id);
+  return resourcesService.getResourceById(id)
 }
 
 export function prefetchResourceBySlug(slug: string) {
-  return resourcesService.getResourceBySlug(slug);
+  return resourcesService.getResourceBySlug(slug)
 }
 
 export function prefetchResources(params: QueryParams = {}) {
-  return resourcesService.getResources(params);
+  return resourcesService.getResources(params)
 }
 
 export function prefetchFeaturedResources(limit: number = 6) {
-  return resourcesService.getFeaturedResources(limit);
+  return resourcesService.getFeaturedResources(limit)
 }

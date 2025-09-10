@@ -38,15 +38,31 @@ export function Header() {
             <nav className="hidden md:flex gap-6">
               {navConfig.mainNav?.map(
                 (item, index) =>
-                  item.href && (
+                  item.href &&
+                  !item.disabled && (
                     <Link
                       key={index}
-                      href={item.href as any}
+                      href={item.href}
                       className={`flex items-center text-sm font-medium transition-colors hover:text-blue-600 ${
                         pathname === item.href
                           ? 'text-blue-600 font-semibold'
                           : 'text-gray-600'
                       }`}
+                      onClick={e => {
+                        console.log('Desktop navigation clicked:', {
+                          title: item.title,
+                          href: item.href,
+                          currentPath: pathname,
+                          timestamp: new Date().toISOString(),
+                        })
+                        // 确保导航事件能正常传播
+                        console.log('Event details:', {
+                          target: e.target,
+                          currentTarget: e.currentTarget,
+                          bubbles: e.bubbles,
+                          defaultPrevented: e.defaultPrevented,
+                        })
+                      }}
                     >
                       {item.title}
                     </Link>
@@ -173,16 +189,25 @@ export function Header() {
           <nav className="container py-4 space-y-2">
             {navConfig.mainNav?.map(
               (item, index) =>
-                item.href && (
+                item.href &&
+                !item.disabled && (
                   <Link
                     key={index}
-                    href={item.href as any}
+                    href={item.href}
                     className={`block py-2 text-sm font-medium transition-colors hover:text-blue-600 ${
                       pathname === item.href
                         ? 'text-blue-600 font-semibold'
                         : 'text-gray-600'
                     }`}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={e => {
+                      console.log('Mobile navigation clicked:', {
+                        title: item.title,
+                        href: item.href,
+                        currentPath: pathname,
+                        timestamp: new Date().toISOString(),
+                      })
+                      setMobileMenuOpen(false)
+                    }}
                   >
                     {item.title}
                   </Link>

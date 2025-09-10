@@ -299,7 +299,7 @@ export default function ResourceDetailPage() {
 
               {/* 评论列表 */}
               {activeTab === 'comments' && (
-                <ResourceComments 
+                <ResourceComments
                   resourceId={resource.id}
                   resourceTitle={resource.title}
                 />

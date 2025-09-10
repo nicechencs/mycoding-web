@@ -21,7 +21,8 @@ export default function VibeDetailPage({ params }: Props) {
   const { user } = useAuth()
   const [newComment, setNewComment] = useState('')
 
-  const { vibe, comments, relatedVibes, loading, error, mutate } = useVibeDetail(params.id)
+  const { vibe, comments, relatedVibes, loading, error, mutate } =
+    useVibeDetail(params.id)
 
   const { likeCount, isLiked, handleLike } = useLike(
     vibe?.likeCount || 0,
@@ -46,11 +47,23 @@ export default function VibeDetailPage({ params }: Props) {
       <div className="container py-8">
         <div className="max-w-2xl mx-auto text-center py-16">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">加载动态失败</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            加载动态失败
+          </h3>
           <p className="text-gray-600 mb-4">动态不存在或已被删除</p>
           <button
             onClick={() => router.back()}
@@ -78,7 +91,7 @@ export default function VibeDetailPage({ params }: Props) {
     // 手动更新缓存
     const updatedVibe = { ...vibe!, commentCount: vibe!.commentCount + 1 }
     const updatedComments = [...(comments || []), comment]
-    
+
     mutate.comments(updatedComments, false)
     mutate.vibe({ ...updatedVibe }, false)
     setNewComment('')

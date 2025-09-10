@@ -1,8 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createDynamicComponent, DynamicImportManager } from '@/lib/utils/dynamic-imports'
-import { LoadingSuspense, PageLoader, ComponentLoader } from '@/components/ui/LoadingSuspense'
+import {
+  createDynamicComponent,
+  DynamicImportManager,
+} from '@/lib/utils/dynamic-imports'
+import {
+  LoadingSuspense,
+  PageLoader,
+  ComponentLoader,
+} from '@/components/ui/LoadingSuspense'
 import { HeroSection } from '@/components/features/home' // 保持Hero部分同步加载，因为是首屏内容
 
 // 动态导入非首屏组件
@@ -38,7 +45,7 @@ export default function HomePage() {
     <div className="space-y-0">
       {/* 首屏内容保持同步加载 */}
       <HeroSection />
-      
+
       {/* 非首屏内容使用懒加载 */}
       <LoadingSuspense
         fallback={<ComponentLoader text="功能介绍加载中..." />}

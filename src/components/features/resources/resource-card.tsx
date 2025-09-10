@@ -18,6 +18,7 @@ export const ResourceCard = React.memo(
 
     const handleCardClick = useCallback(
       (e: React.MouseEvent) => {
+        console.log('ResourceCard clicked:', resource.title)
         // 阻止点击特定元素时触发卡片跳转
         const target = e.target as HTMLElement
         if (
@@ -25,10 +26,18 @@ export const ResourceCard = React.memo(
           target.closest('button') ||
           target.closest('[data-no-click]')
         ) {
+          console.log('Click blocked by target element')
           return
         }
         // 跳转到资源详情页
-        router.push(`/resources/${resource.slug}`)
+        const targetPath = `/resources/${resource.slug}`
+        console.log('Attempting to navigate to:', targetPath)
+        try {
+          router.push(targetPath)
+          console.log('Navigation call completed')
+        } catch (error) {
+          console.error('Navigation error:', error)
+        }
       },
       [router, resource.slug]
     )

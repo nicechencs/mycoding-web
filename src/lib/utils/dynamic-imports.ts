@@ -3,7 +3,11 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 import { ComponentType } from 'react'
-import { LoadingSpinner, PageLoader, ComponentLoader } from '@/components/ui/LoadingSuspense'
+import {
+  LoadingSpinner,
+  PageLoader,
+  ComponentLoader,
+} from '@/components/ui/LoadingSuspense'
 
 // 动态导入选项
 export interface DynamicImportOptions {
@@ -23,9 +27,12 @@ export interface DynamicImportOptions {
 export const loadingComponents = {
   page: () => React.createElement(PageLoader),
   component: () => React.createElement(ComponentLoader),
-  spinner: () => React.createElement(LoadingSpinner, { size: "md", variant: "spinner" }),
-  skeleton: () => React.createElement(LoadingSpinner, { size: "md", variant: "skeleton" }),
-  dots: () => React.createElement(LoadingSpinner, { size: "sm", variant: "dots" }),
+  spinner: () =>
+    React.createElement(LoadingSpinner, { size: 'md', variant: 'spinner' }),
+  skeleton: () =>
+    React.createElement(LoadingSpinner, { size: 'md', variant: 'skeleton' }),
+  dots: () =>
+    React.createElement(LoadingSpinner, { size: 'sm', variant: 'dots' }),
 } as const
 
 // 工具函数：创建动态组件
@@ -161,11 +168,11 @@ export function createConditionalDynamicComponent<T = {}>(
   options: DynamicImportOptions = {}
 ) {
   const shouldLoad = typeof condition === 'function' ? condition() : condition
-  
+
   if (!shouldLoad && fallback) {
     return fallback
   }
-  
+
   return createDynamicComponent(importFn, options)
 }
 
@@ -193,11 +200,11 @@ export function createBatchDynamicComponents<T extends Record<string, any>>(
   const result = {} as {
     [K in keyof T]: ComponentType<T[K]>
   }
-  
+
   for (const [key, importFn] of Object.entries(imports)) {
     result[key as keyof T] = createDynamicComponent(importFn, options)
   }
-  
+
   return result
 }
 
@@ -215,72 +222,75 @@ export function preloadDynamicComponent(
 export function preloadDynamicComponents(
   importFns: Array<() => Promise<{ default: ComponentType<any> }>>
 ) {
-  const promises = importFns.map(fn => 
+  const promises = importFns.map(fn =>
     fn().catch(error => {
       console.warn('Failed to preload dynamic component:', error)
     })
   )
-  
+
   return Promise.allSettled(promises)
 }
 
 // === 路由级预加载策略 ===
 export class DynamicImportManager {
   private static preloadedComponents = new Set<string>()
-  
+
   // 预加载首页组件
   static preloadHomeComponents() {
     if (typeof window === 'undefined') return
-    
+
     const homeComponents = [
       () => import('@/components/features/home/HeroSection'),
       () => import('@/components/features/home/FeaturedResourcesSection'),
       () => import('@/components/features/home/LatestArticlesSection'),
       () => import('@/components/features/home/LatestVibesSection'),
     ]
-    
+
     homeComponents.forEach((importFn, index) => {
       const componentId = `home-component-${index}`
       if (!this.preloadedComponents.has(componentId)) {
         // 延迟预加载，避免影响初始页面加载
-        setTimeout(() => {
-          preloadDynamicComponent(importFn)
-          this.preloadedComponents.add(componentId)
-        }, 2000 + index * 500)
+        setTimeout(
+          () => {
+            preloadDynamicComponent(importFn)
+            this.preloadedComponents.add(componentId)
+          },
+          2000 + index * 500
+        )
       }
     })
   }
-  
+
   // 预加载用户相关组件
   static preloadUserComponents() {
     if (typeof window === 'undefined') return
-    
+
     const userComponents = [
       () => import('@/app/(user)/dashboard/page'),
       () => import('@/app/(user)/settings/page'),
       () => import('@/app/(user)/my-favorites/page'),
     ]
-    
+
     preloadDynamicComponents(userComponents)
   }
-  
+
   // 预加载编辑器组件（在用户可能需要时）
   static preloadEditorComponents() {
     if (typeof window === 'undefined') return
-    
+
     // 暂时注释，需要确保组件存在
     // const editorComponents = [
     //   () => import('@/components/features/vibes/vibe-composer'),
     //   () => import('@/components/ui/markdown'),
     // ]
-    
+
     // setTimeout(() => {
     //   preloadDynamicComponents(editorComponents)
     // }, 3000)
-    
+
     console.log('Editor components preloading skipped - components not ready')
   }
-  
+
   // 清理预加载记录
   static clearPreloadedComponents() {
     this.preloadedComponents.clear()

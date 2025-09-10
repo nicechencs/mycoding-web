@@ -14,9 +14,13 @@ interface ResourceCommentsProps {
   resourceTitle: string
 }
 
-export function ResourceComments({ resourceId, resourceTitle }: ResourceCommentsProps) {
+export function ResourceComments({
+  resourceId,
+  resourceTitle,
+}: ResourceCommentsProps) {
   const { user, isAuthenticated } = useAuth()
-  const { comments, isLoading, isSubmitting, createComment, deleteComment } = useComments(resourceId, 'resource')
+  const { comments, isLoading, isSubmitting, createComment, deleteComment } =
+    useComments(resourceId, 'resource')
   const [commentText, setCommentText] = useState('')
   const [showComments, setShowComments] = useState(false)
 
@@ -62,7 +66,7 @@ export function ResourceComments({ resourceId, resourceTitle }: ResourceComments
                 <div className="flex-1">
                   <textarea
                     value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
+                    onChange={e => setCommentText(e.target.value)}
                     placeholder={`评论《${resourceTitle}》...`}
                     className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                     disabled={isSubmitting}
@@ -83,7 +87,11 @@ export function ResourceComments({ resourceId, resourceTitle }: ResourceComments
           ) : (
             <div className="mb-6 rounded-lg bg-muted p-4 text-center">
               <p className="text-muted-foreground">
-                请 <a href="/login" className="text-primary underline">登录</a> 后发表评论
+                请{' '}
+                <a href="/login" className="text-primary underline">
+                  登录
+                </a>{' '}
+                后发表评论
               </p>
             </div>
           )}
@@ -99,21 +107,29 @@ export function ResourceComments({ resourceId, resourceTitle }: ResourceComments
             </div>
           ) : (
             <div className="space-y-4">
-              {comments.map((comment) => (
-                <div key={comment.id} className="flex gap-3 p-4 rounded-lg bg-muted/30">
+              {comments.map(comment => (
+                <div
+                  key={comment.id}
+                  className="flex gap-3 p-4 rounded-lg bg-muted/30"
+                >
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={comment.userAvatar} alt={comment.userName} />
+                    <AvatarImage
+                      src={comment.userAvatar}
+                      alt={comment.userName}
+                    />
                     <AvatarFallback>{comment.userName[0]}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">{comment.userName}</span>
+                          <span className="font-semibold">
+                            {comment.userName}
+                          </span>
                           <span className="text-xs text-muted-foreground">
                             {formatDistanceToNow(new Date(comment.createdAt), {
                               addSuffix: true,
-                              locale: zhCN
+                              locale: zhCN,
                             })}
                           </span>
                         </div>

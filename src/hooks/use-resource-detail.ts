@@ -1,11 +1,11 @@
 // 这个文件已被弃用，请使用 use-resources.ts 中的 useResourceDetail Hook 代替
 // @deprecated Use useResourceDetail from '@/hooks/use-resources' instead
 
-import { 
-  useResourceBySlug, 
-  useResourceComments, 
-  useResourceRatingDistribution, 
-  useRelatedResources 
+import {
+  useResourceBySlug,
+  useResourceComments,
+  useResourceRatingDistribution,
+  useRelatedResources,
 } from './use-resources'
 import type {
   Resource,
@@ -33,7 +33,7 @@ export interface UseResourceDetailReturn {
 
 /**
  * 资源详情数据管理 Hook
- * 
+ *
  * @deprecated 此 Hook 已被弃用，请使用 `useResourceDetail` from '@/hooks/use-resources' 代替
  * 新的 Hook 基于 SWR，提供更好的缓存和性能
  *
@@ -55,34 +55,39 @@ export interface UseResourceDetailReturn {
 export function useResourceDetail(slug: string): UseResourceDetailReturn {
   console.warn(
     'useResourceDetail from use-resource-detail.ts is deprecated. ' +
-    'Please use useResourceDetail from use-resources.ts instead for better performance and caching.'
+      'Please use useResourceDetail from use-resources.ts instead for better performance and caching.'
   )
 
   // 通过 slug 获取资源
-  const { resource, loading: resourceLoading, error: resourceError } = useResourceBySlug(slug)
-  
+  const {
+    resource,
+    loading: resourceLoading,
+    error: resourceError,
+  } = useResourceBySlug(slug)
+
   // 获取资源相关数据
   const resourceId = resource?.id || ''
-  
-  const { 
-    comments, 
-    loading: commentsLoading, 
-    mutate: mutateComments 
+
+  const {
+    comments,
+    loading: commentsLoading,
+    mutate: mutateComments,
   } = useResourceComments(resourceId)
-  
-  const { 
-    distribution: ratingDistribution, 
-    loading: distributionLoading, 
-    mutate: mutateDistribution 
+
+  const {
+    distribution: ratingDistribution,
+    loading: distributionLoading,
+    mutate: mutateDistribution,
   } = useResourceRatingDistribution(resourceId)
-  
-  const { 
-    resources: relatedResources, 
-    loading: relatedLoading, 
-    mutate: mutateRelated 
+
+  const {
+    resources: relatedResources,
+    loading: relatedLoading,
+    mutate: mutateRelated,
   } = useRelatedResources(resourceId, 3)
 
-  const loading = resourceLoading || commentsLoading || distributionLoading || relatedLoading
+  const loading =
+    resourceLoading || commentsLoading || distributionLoading || relatedLoading
   const error = resourceError
 
   const refresh = () => {
