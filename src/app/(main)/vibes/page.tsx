@@ -1,21 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useAuth } from '@/hooks/use-auth'
-import { getLatestVibes } from '@/lib/mock/vibes'
+import { useLatestVibes } from '@/hooks/use-vibes'
 import { VibeCard } from '@/components/features/vibes/vibe-card'
 import { VibeComposer } from '@/components/features/vibes/vibe-composer'
 import { Avatar, FloatingAvatar } from '@/components/ui/avatar'
 import { QuickFilterBar } from '@/components/ui/content-filter'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { useTags } from '@/lib/taxonomy'
+import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
 
 export default function VibesPage() {
   const { user, isAuthenticated } = useAuth()
-  const [vibes, setVibes] = useState(getLatestVibes())
   const [showComposer, setShowComposer] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('all')
   const { trendingTags } = useTags('vibes')
+
+  // 构建查询参数
+  const queryParams = useMemo(() => {
+    const params: any = {}
+    if (selectedCategory !== 'all') {
+      params.category = selectedCategory
+    }
+    return params
+  }, [selectedCategory])
+
+  const { vibes, loading, error, mutate } = useLatestVibes(20)
 
   const handleNewVibe = (content: string, tags: string[]) => {
     if (!user) return
@@ -39,12 +50,59 @@ export default function VibesPage() {
       isLiked: false,
     }
 
-    setVibes([newVibe, ...vibes])
+    // 手动更新缓存
+    mutate([newVibe, ...(vibes || [])], false)
     setShowComposer(false)
   }
 
   const handleLoginClick = () => {
     window.location.href = '/login'
+  }
+
+  if (loading) {
+    return (
+      <div className="container py-8">
+        {/* Header */}
+        <div className="text-center space-y-4 mb-12">
+          <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            分享你的编程想法、学习心得，记录编程生活的精彩瞬间
+          </p>
+        </div>
+
+        <PageLoader text="正在加载动态..." />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8">
+        {/* Header */}
+        <div className="text-center space-y-4 mb-12">
+          <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            分享你的编程想法、学习心得，记录编程生活的精彩瞬间
+          </p>
+        </div>
+
+        <div className="text-center py-16">
+          <div className="text-red-500 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">加载动态失败</h3>
+          <p className="text-gray-600 mb-4">网络错误或服务暂时不可用</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            重新加载
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -134,7 +192,7 @@ export default function VibesPage() {
 
       {/* Vibes Feed */}
       <div className="space-y-6">
-        {vibes.length > 0 ? (
+        {vibes && vibes.length > 0 ? (
           vibes.map(vibe => <VibeCard key={vibe.id} vibe={vibe} />)
         ) : (
           <div className="text-center py-16">
@@ -154,7 +212,7 @@ export default function VibesPage() {
       </div>
 
       {/* Load More */}
-      {vibes.length > 0 && (
+      {vibes && vibes.length > 0 && (
         <div className="text-center mt-12">
           <button className="btn-secondary px-8 py-3">加载更多动态</button>
         </div>

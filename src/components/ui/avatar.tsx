@@ -90,3 +90,41 @@ export function FloatingAvatar({ className, ...props }: FloatingAvatarProps) {
     />
   )
 }
+
+// Avatar Image 组件 - 用于显示头像图片
+interface AvatarImageProps {
+  src?: string
+  alt?: string
+  className?: string
+}
+
+export function AvatarImage({ src, alt, className }: AvatarImageProps) {
+  if (!src) return null
+  
+  return (
+    <img
+      src={src}
+      alt={alt || 'Avatar'}
+      className={cn('w-full h-full object-cover rounded-full', className)}
+    />
+  )
+}
+
+// Avatar Fallback 组件 - 用于在没有图片时显示的后备内容
+interface AvatarFallbackProps {
+  children: React.ReactNode
+  className?: string
+}
+
+export function AvatarFallback({ children, className }: AvatarFallbackProps) {
+  return (
+    <div
+      className={cn(
+        'w-full h-full flex items-center justify-center text-white font-medium bg-blue-500 rounded-full',
+        className
+      )}
+    >
+      {children}
+    </div>
+  )
+}

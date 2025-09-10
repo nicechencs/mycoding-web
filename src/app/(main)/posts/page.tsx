@@ -1,12 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { getFeaturedArticles, getLatestArticles } from '@/lib/mock/articles'
+import { useFeaturedArticles, useLatestArticles } from '@/hooks/use-articles'
 import { ArticleCard } from '@/components/features/community/article-card'
+import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
 
 export default function PostsPage() {
-  const featuredArticles = getFeaturedArticles()
-  const latestArticles = getLatestArticles()
+  const { articles: featuredArticles, loading: featuredLoading, error: featuredError } = useFeaturedArticles(6)
+  const { articles: latestArticles, loading: latestLoading, error: latestError } = useLatestArticles(8)
 
   return (
     <div className="space-y-16 py-8">
@@ -51,11 +52,23 @@ export default function PostsPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredArticles.map(article => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-        </div>
+        {featuredLoading ? (
+          <ListSkeleton items={6} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" />
+        ) : featuredError ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">获取精选内容失败</p>
+          </div>
+        ) : featuredArticles && featuredArticles.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredArticles.map(article => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-600">暂无精选内容</p>
+          </div>
+        )}
       </section>
 
       {/* Latest Posts */}
@@ -74,11 +87,25 @@ export default function PostsPage() {
             </Link>
           </div>
 
-          <div className="space-y-4">
-            {latestArticles.slice(0, 8).map(article => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
+          {latestLoading ? (
+            <div className="space-y-4">
+              <ListSkeleton items={8} className="space-y-4" />
+            </div>
+          ) : latestError ? (
+            <div className="text-center py-12">
+              <p className="text-red-600">获取最新发布失败</p>
+            </div>
+          ) : latestArticles && latestArticles.length > 0 ? (
+            <div className="space-y-4">
+              {latestArticles.map(article => (
+                <ArticleCard key={article.id} article={article} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-600">暂无最新发布</p>
+            </div>
+          )}
         </div>
       </section>
 

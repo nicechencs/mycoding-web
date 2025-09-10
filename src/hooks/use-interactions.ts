@@ -254,3 +254,38 @@ export function useInteractionStats(targetId: string, targetType: 'post' | 'reso
 
   return { stats, isLoading }
 }
+
+// 用户收藏列表 Hook
+export function useUserFavorites(type?: 'post' | 'resource' | 'vibe') {
+  const { user, isAuthenticated } = useAuth()
+  const [favorites, setFavorites] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const fetchFavorites = useCallback(async () => {
+    if (!user || !isAuthenticated) {
+      setFavorites([])
+      return
+    }
+
+    setLoading(true)
+    try {
+      const data = await InteractionService.getUserFavorites(user.id, type)
+      setFavorites(data)
+    } catch (error) {
+      console.error('Failed to fetch user favorites:', error)
+      setFavorites([])
+    } finally {
+      setLoading(false)
+    }
+  }, [user, isAuthenticated, type])
+
+  useEffect(() => {
+    fetchFavorites()
+  }, [fetchFavorites])
+
+  return {
+    favorites,
+    loading,
+    refresh: fetchFavorites
+  }
+}

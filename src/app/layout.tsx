@@ -5,6 +5,7 @@ import 'highlight.js/styles/github-dark.css'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { PerformanceWrapper } from '@/components/app/PerformanceWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,13 +22,15 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={inter.className}>
-        <AuthProvider>
-          <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </AuthProvider>
+        <PerformanceWrapper>
+          <AuthProvider>
+            <div className="min-h-screen flex flex-col bg-gray-50">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </AuthProvider>
+        </PerformanceWrapper>
       </body>
     </html>
   )

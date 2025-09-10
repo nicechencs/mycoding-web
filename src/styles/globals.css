@@ -80,4 +80,53 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* 懒加载图片相关样式 */
+  .lazy-image-container {
+    @apply relative overflow-hidden;
+  }
+
+  .lazy-image-skeleton {
+    @apply bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse;
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  .lazy-image-loading-indicator {
+    @apply absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75;
+  }
+
+  .lazy-image-error {
+    @apply absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500;
+  }
+}
+
+@layer utilities {
+  /* Shimmer动画关键帧 */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* 懒加载相关工具类 */
+  .animate-shimmer {
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }

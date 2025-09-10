@@ -1,15 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { notFound } from 'next/navigation'
-import { getVibeById, getVibeComments, getRelatedVibes } from '@/lib/mock/vibes'
-import { getCurrentUser } from '@/lib/mock/users'
-import { Vibe, VibeComment, User } from '@/types'
+import { useVibeDetail } from '@/hooks/use-vibes'
+import { useAuth } from '@/hooks/use-auth'
+import { VibeComment } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
 import { VibeCard } from '@/components/features/vibes/vibe-card'
 import { useLike } from '@/hooks/use-like'
 import { formatRelativeTime } from '@/utils/date'
+import { PageLoader } from '@/components/ui/LoadingSuspense'
 
 interface Props {
   params: { id: string }
@@ -17,49 +18,70 @@ interface Props {
 
 export default function VibeDetailPage({ params }: Props) {
   const router = useRouter()
-  const [vibe, setVibe] = useState<Vibe | null>(null)
-  const [comments, setComments] = useState<VibeComment[]>([])
-  const [relatedVibes, setRelatedVibes] = useState<Vibe[]>([])
+  const { user } = useAuth()
   const [newComment, setNewComment] = useState('')
-  const [currentUser] = useState<User>(getCurrentUser())
-  const [loading, setLoading] = useState(true)
+
+  const { vibe, comments, relatedVibes, loading, error, mutate } = useVibeDetail(params.id)
 
   const { likeCount, isLiked, handleLike } = useLike(
     vibe?.likeCount || 0,
     vibe?.isLiked || false
   )
 
-  useEffect(() => {
-    const foundVibe = getVibeById(params.id)
-    if (!foundVibe) {
+  if (loading) {
+    return (
+      <div className="container py-8">
+        <div className="max-w-2xl mx-auto">
+          <PageLoader text="正在加载动态详情..." />
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !vibe) {
+    if (error?.message?.includes('404')) {
       notFound()
     }
-
-    setVibe(foundVibe)
-    setComments(getVibeComments(params.id))
-    setRelatedVibes(getRelatedVibes(params.id, 3))
-    setLoading(false)
-  }, [params.id])
+    return (
+      <div className="container py-8">
+        <div className="max-w-2xl mx-auto text-center py-16">
+          <div className="text-red-500 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">加载动态失败</h3>
+          <p className="text-gray-600 mb-4">动态不存在或已被删除</p>
+          <button
+            onClick={() => router.back()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            返回上一页
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newComment.trim()) return
+    if (!newComment.trim() || !user) return
 
     const comment: VibeComment = {
       id: Date.now().toString(),
       vibeId: params.id,
       content: newComment.trim(),
-      author: currentUser,
+      author: user,
       createdAt: new Date(),
     }
 
-    setComments([...comments, comment])
+    // 手动更新缓存
+    const updatedVibe = { ...vibe!, commentCount: vibe!.commentCount + 1 }
+    const updatedComments = [...(comments || []), comment]
+    
+    mutate.comments(updatedComments, false)
+    mutate.vibe({ ...updatedVibe }, false)
     setNewComment('')
-
-    // 更新评论计数
-    if (vibe) {
-      setVibe({ ...vibe, commentCount: vibe.commentCount + 1 })
-    }
   }
 
   const handleShare = () => {
@@ -74,30 +96,6 @@ export default function VibeDetailPage({ params }: Props) {
       alert('链接已复制到剪贴板')
     }
   }
-
-  if (loading) {
-    return (
-      <div className="container py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white border border-gray-200 rounded-lg p-6 animate-pulse">
-            <div className="flex items-start space-x-3 mb-4">
-              <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-              <div className="flex-1">
-                <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
-                <div className="h-3 bg-gray-300 rounded w-1/6"></div>
-              </div>
-            </div>
-            <div className="space-y-2 mb-4">
-              <div className="h-4 bg-gray-300 rounded"></div>
-              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (!vibe) return null
 
   return (
     <div className="container py-8">
@@ -297,35 +295,47 @@ export default function VibeDetailPage({ params }: Props) {
               </h3>
 
               {/* 评论输入 */}
-              <form onSubmit={handleSubmitComment} className="mb-6">
-                <div className="flex space-x-3">
-                  <Avatar size="md" theme="primary">
-                    {currentUser.name.charAt(0)}
-                  </Avatar>
-                  <div className="flex-1">
-                    <textarea
-                      value={newComment}
-                      onChange={e => setNewComment(e.target.value)}
-                      placeholder="写下你的评论..."
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
-                      rows={3}
-                    />
-                    <div className="flex justify-end mt-2">
-                      <button
-                        type="submit"
-                        disabled={!newComment.trim()}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                      >
-                        发布评论
-                      </button>
+              {user ? (
+                <form onSubmit={handleSubmitComment} className="mb-6">
+                  <div className="flex space-x-3">
+                    <Avatar size="md" theme="primary">
+                      {user.name.charAt(0)}
+                    </Avatar>
+                    <div className="flex-1">
+                      <textarea
+                        value={newComment}
+                        onChange={e => setNewComment(e.target.value)}
+                        placeholder="写下你的评论..."
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
+                        rows={3}
+                      />
+                      <div className="flex justify-end mt-2">
+                        <button
+                          type="submit"
+                          disabled={!newComment.trim()}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                        >
+                          发布评论
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </form>
+              ) : (
+                <div className="text-center py-4 bg-gray-50 rounded-lg mb-6">
+                  <p className="text-gray-600 mb-2">登录后即可发表评论</p>
+                  <button
+                    onClick={() => router.push('/login')}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    立即登录
+                  </button>
                 </div>
-              </form>
+              )}
 
               {/* 评论列表 */}
               <div className="space-y-4">
-                {comments.length > 0 ? (
+                {comments && comments.length > 0 ? (
                   comments.map(comment => (
                     <div
                       key={comment.id}
@@ -384,7 +394,7 @@ export default function VibeDetailPage({ params }: Props) {
             </div>
 
             {/* 相关动态 */}
-            {relatedVibes.length > 0 && (
+            {relatedVibes && relatedVibes.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">相关动态</h3>
                 <div className="space-y-4">

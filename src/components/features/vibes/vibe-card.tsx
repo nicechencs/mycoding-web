@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Vibe } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
+import { LazyImage } from '@/components/ui/LazyImage'
 import { VibeActionsCompact } from './vibe-actions'
 import { useAuth } from '@/hooks/use-auth'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
@@ -84,13 +85,28 @@ export function VibeCard({ vibe }: VibeCardProps) {
             {vibe.images.map((image, index) => (
               <div
                 key={index}
-                className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer"
+                className="aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer"
               >
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">
-                    图片 {index + 1}
-                  </span>
-                </div>
+                {typeof image === 'string' ? (
+                  <LazyImage
+                    src={image}
+                    alt={`${vibe.author.name} 分享的图片 ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    options={{
+                      rootMargin: '100px',
+                      fadeIn: true,
+                      retryCount: 2,
+                      preloadOnHover: true,
+                    }}
+                    showLoadingIndicator={true}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500 text-sm">
+                      图片 {index + 1}
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>

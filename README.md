@@ -9,12 +9,12 @@ MyCoding Web前端是基于 **Next.js 14** 构建的现代化编程社区平台�
 - **框架**: Next.js 14 - React全栈框架
 - **UI库**: React 18+ - 用户界面库
 - **样式**: Tailwind CSS 3.x - 原子化CSS框架
-- **组件库**: shadcn/ui - 高质量React组件
-- **状态管理**: Zustand 4.x - 轻量级状态管理
-- **数据获取**: TanStack Query 5.x - 服务器状态管理
-- **表单**: React Hook Form + Zod - 表单验证
 - **动画**: Framer Motion - 动画库
 - **语言**: TypeScript - 类型安全
+- **性能优化**: 
+  - 图片懒加载 - Intersection Observer API
+  - 代码分割 - Dynamic Imports + Suspense
+  - 性能监控 - Core Web Vitals跟踪
 
 ## 📦 项目结构
 
