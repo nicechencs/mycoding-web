@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useNavigation } from './use-navigation'
 
 // 支持的卡片类型
 type CardType = 'resource' | 'article' | 'vibe'
@@ -80,7 +80,7 @@ const DEFAULT_PREVENT_SELECTORS = [
 export function useCardInteraction<T extends BaseCardItem>(
   options: UseCardInteractionOptions
 ) {
-  const router = useRouter()
+  const { navigate } = useNavigation()
   
   const {
     cardType,
@@ -171,7 +171,7 @@ export function useCardInteraction<T extends BaseCardItem>(
         logInteraction(item, route, event)
         
         // 执行导航
-        router.push(route)
+        navigate(route)
         
         // 执行后置回调
         if (afterNavigate) {
@@ -192,7 +192,7 @@ export function useCardInteraction<T extends BaseCardItem>(
     beforeNavigate, 
     generateRoute, 
     logInteraction, 
-    router, 
+    navigate, 
     afterNavigate, 
     cardType, 
     enableDebugLog
@@ -247,7 +247,7 @@ export function useCardInteraction<T extends BaseCardItem>(
         // 默认行为：导航到详情页的对应部分
         const route = generateRoute(item)
         const anchorRoute = `${route}#${statType}`
-        router.push(anchorRoute)
+        navigate(anchorRoute)
       }
       
       if (enableDebugLog) {
@@ -259,7 +259,7 @@ export function useCardInteraction<T extends BaseCardItem>(
         })
       }
     }
-  }, [generateRoute, router, cardType, enableDebugLog])
+  }, [generateRoute, navigate, cardType, enableDebugLog])
 
   return {
     // 核心交互函数
