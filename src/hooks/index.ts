@@ -87,6 +87,8 @@ export {
 
 export { usePerformance, PerformanceTracker } from './use-performance'
 
+export { useNavigationHandler } from './use-navigation-handler'
+
 // === Hook管理器 ===
 export class HookManager {
   /**

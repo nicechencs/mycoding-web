@@ -1,17 +1,27 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { siteConfig, navConfig } from '@/lib/config'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
+import { useNavigationHandler } from '@/hooks/use-navigation-handler'
 
 export function Header() {
-  const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
+  
+  // 桌面端导航处理
+  const desktopNavigation = useNavigationHandler({
+    platform: 'desktop'
+  })
+  
+  // 移动端导航处理
+  const mobileNavigation = useNavigationHandler({
+    platform: 'mobile',
+    onNavigate: () => setMobileMenuOpen(false)
+  })
 
   const handleLogout = async () => {
     try {
@@ -23,7 +33,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
@@ -43,26 +53,12 @@ export function Header() {
                     <Link
                       key={index}
                       href={item.href}
-                      className={`flex items-center text-sm font-medium transition-colors hover:text-blue-600 ${
-                        pathname === item.href
-                          ? 'text-blue-600 font-semibold'
-                          : 'text-gray-600'
-                      }`}
-                      onClick={e => {
-                        console.log('Desktop navigation clicked:', {
-                          title: item.title,
-                          href: item.href,
-                          currentPath: pathname,
-                          timestamp: new Date().toISOString(),
-                        })
-                        // 确保导航事件能正常传播
-                        console.log('Event details:', {
-                          target: e.target,
-                          currentTarget: e.currentTarget,
-                          bubbles: e.bubbles,
-                          defaultPrevented: e.defaultPrevented,
-                        })
-                      }}
+                      className={desktopNavigation.getNavigationClassName(
+                        item.href,
+                        'flex items-center text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
+                        'text-blue-600 font-semibold'
+                      )}
+                      onClick={e => desktopNavigation.handleNavigation(item, e)}
                     >
                       {item.title}
                     </Link>
@@ -194,20 +190,12 @@ export function Header() {
                   <Link
                     key={index}
                     href={item.href}
-                    className={`block py-2 text-sm font-medium transition-colors hover:text-blue-600 ${
-                      pathname === item.href
-                        ? 'text-blue-600 font-semibold'
-                        : 'text-gray-600'
-                    }`}
-                    onClick={e => {
-                      console.log('Mobile navigation clicked:', {
-                        title: item.title,
-                        href: item.href,
-                        currentPath: pathname,
-                        timestamp: new Date().toISOString(),
-                      })
-                      setMobileMenuOpen(false)
-                    }}
+                    className={mobileNavigation.getNavigationClassName(
+                      item.href,
+                      'block py-2 text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
+                      'text-blue-600 font-semibold'
+                    )}
+                    onClick={e => mobileNavigation.handleNavigation(item, e)}
                   >
                     {item.title}
                   </Link>

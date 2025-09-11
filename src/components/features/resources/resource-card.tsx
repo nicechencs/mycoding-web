@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import { Resource } from '@/types/resource'
 import { Avatar } from '@/components/ui/avatar'
 import { RatingStars } from './rating-stars'
 import { getCategoryClasses } from '@/lib/utils/category'
 import { Markdown } from '@/components/ui/markdown'
+import { useResourceCard } from '@/hooks/use-resource-card'
+import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
 
 interface ResourceCardProps {
   resource: Resource
@@ -14,33 +15,7 @@ interface ResourceCardProps {
 
 export const ResourceCard = React.memo(
   ({ resource }: ResourceCardProps) => {
-    const router = useRouter()
-
-    const handleCardClick = useCallback(
-      (e: React.MouseEvent) => {
-        console.log('ResourceCard clicked:', resource.title)
-        // 阻止点击特定元素时触发卡片跳转
-        const target = e.target as HTMLElement
-        if (
-          target.closest('a') ||
-          target.closest('button') ||
-          target.closest('[data-no-click]')
-        ) {
-          console.log('Click blocked by target element')
-          return
-        }
-        // 跳转到资源详情页
-        const targetPath = `/resources/${resource.slug}`
-        console.log('Attempting to navigate to:', targetPath)
-        try {
-          router.push(targetPath)
-          console.log('Navigation call completed')
-        } catch (error) {
-          console.error('Navigation error:', error)
-        }
-      },
-      [router, resource.slug]
-    )
+    const { handleCardClick, handleActionClick } = useResourceCard(resource)
 
     return (
       <div
@@ -86,7 +61,6 @@ export const ResourceCard = React.memo(
             <span
               key={tag}
               className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
-              data-no-click
             >
               #{tag}
             </span>
@@ -108,7 +82,7 @@ export const ResourceCard = React.memo(
 
           <button
             className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
-            data-no-click
+            onClick={handleActionClick}
           >
             查看详情
             <svg
@@ -127,67 +101,31 @@ export const ResourceCard = React.memo(
           </button>
         </div>
 
-        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1">
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-              {resource.viewCount.toLocaleString()}
-            </span>
-            <span className="flex items-center gap-1">
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                />
-              </svg>
-              {resource.commentCount}
-            </span>
-          </div>
-          <span className="text-yellow-500 font-medium">
-            {resource.rating.toFixed(1)}
+        <div className="mt-3 flex items-center justify-between">
+          <ResourceStats
+            stats={createStatsConfig.resource({
+              viewCount: resource.viewCount,
+              commentCount: resource.commentCount,
+              rating: resource.rating,
+              onComment: (e) => {
+                e.stopPropagation()
+                // 这里可以添加评论相关逻辑，暂时保留原有行为
+              }
+            })}
+            variant="default"
+            size="xs"
+            className="text-gray-500"
+            interactive={false}
+          />
+          <span className="text-yellow-500 font-medium text-xs">
+            ⭐ {resource.rating.toFixed(1)}
           </span>
         </div>
       </div>
     )
   },
-  (prevProps, nextProps) => {
-    // 自定义比较函数：只在关键属性变化时重新渲染
-    const prev = prevProps.resource
-    const next = nextProps.resource
-
-    return (
-      prev.id === next.id &&
-      prev.title === next.title &&
-      prev.rating === next.rating &&
-      prev.viewCount === next.viewCount &&
-      prev.commentCount === next.commentCount &&
-      prev.featured === next.featured &&
-      prev.slug === next.slug
-    )
-  }
+  // 简化的memo比较：只比较resource对象的引用
+  // 如果resource对象没有变化，则不重新渲染
+  // 这比之前的深度比较更加高效
+  (prevProps, nextProps) => prevProps.resource === nextProps.resource
 )
