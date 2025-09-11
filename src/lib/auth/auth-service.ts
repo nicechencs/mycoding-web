@@ -65,7 +65,7 @@ function generateTokens(user: AuthUser): AuthToken {
 function parseToken(token: string): any {
   try {
     const parts = token.split('.')
-    if (parts.length !== 3 || !parts[0].startsWith('mock')) {
+    if (parts.length !== 3 || !(parts[0].startsWith('mock') || parts[0].startsWith('refresh'))) {
       throw new Error('Invalid token format')
     }
     return JSON.parse(atob(parts[1]))
@@ -209,7 +209,7 @@ export class AuthService {
     }
 
     // 在实际项目中，这里会发送重置密码邮件
-    console.log(`重置密码邮件已发送至: ${data.email}`)
+    // 重置密码邮件已发送（生产环境不记录敏感信息）
   }
 
   // 验证Token有效性

@@ -207,7 +207,7 @@ export function VibeContent({ content, images, className }: VibeContentProps) {
 }
 
 // 卡片底部信息组件
-interface CardFooterProps {
+interface CardContentFooterProps {
   createdAt?: Date
   updatedAt?: Date
   showCreated?: boolean
@@ -216,14 +216,14 @@ interface CardFooterProps {
   className?: string
 }
 
-export function CardFooter({
+export function CardContentFooter({
   createdAt,
   updatedAt,
   showCreated = true,
   showUpdated = true,
   customContent,
   className,
-}: CardFooterProps) {
+}: CardContentFooterProps) {
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('zh-CN')
   }
@@ -265,7 +265,7 @@ export function CardFooter({
 }
 
 // 卡片操作区域
-interface CardActionsProps {
+interface CardContentActionsProps {
   primaryAction?: {
     label: string
     href?: string
@@ -282,11 +282,11 @@ interface CardActionsProps {
   className?: string
 }
 
-export function CardActions({
+export function CardContentActions({
   primaryAction,
   secondaryActions,
   className,
-}: CardActionsProps) {
+}: CardContentActionsProps) {
   const buttonVariants = {
     default: 'text-blue-600 hover:text-blue-700 hover:bg-blue-50',
     primary: 'bg-blue-600 text-white hover:bg-blue-700',

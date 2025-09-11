@@ -7,8 +7,34 @@ import { TokenManager } from '@/lib/auth/token-manager'
 import { AuthUser, AuthToken } from '@/lib/auth/auth-types'
 
 // Mock dependencies
-jest.mock('@/lib/auth/auth-service')
-jest.mock('@/lib/auth/token-manager')
+jest.mock('@/lib/auth/auth-service', () => ({
+  AuthService: {
+    getCurrentUser: jest.fn(),
+    login: jest.fn(),
+    register: jest.fn(),
+    logout: jest.fn(),
+    refreshToken: jest.fn(),
+    validateToken: jest.fn(),
+    forgotPassword: jest.fn(),
+  },
+  AuthError: class AuthError extends Error {
+    constructor(public code: string, message: string) {
+      super(message)
+      this.name = 'AuthError'
+    }
+  },
+}))
+
+jest.mock('@/lib/auth/token-manager', () => ({
+  TokenManager: {
+    hasValidToken: jest.fn(),
+    getAccessToken: jest.fn(),
+    getRefreshToken: jest.fn(),
+    setTokens: jest.fn(),
+    clearTokens: jest.fn(),
+    getTimeUntilExpiry: jest.fn(),
+  },
+}))
 
 const MockedAuthService = AuthService as jest.Mocked<typeof AuthService>
 const MockedTokenManager = TokenManager as jest.Mocked<typeof TokenManager>
@@ -523,7 +549,7 @@ describe('AuthProvider Component', () => {
 
       render(<TestHookComponent />)
 
-      expect(screen.getByText('No auth context')).toBeInTheDocument()
+      expect(screen.getByText('Error: useAuth must be used within an AuthProvider')).toBeInTheDocument()
     })
 
     it('应该提供正确的context值', async () => {

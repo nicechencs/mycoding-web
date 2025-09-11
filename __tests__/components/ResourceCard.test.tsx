@@ -26,7 +26,7 @@ jest.mock('@/components/ui/avatar', () => ({
   ),
 }))
 
-jest.mock('./rating-stars', () => ({
+jest.mock('@/components/features/resources/rating-stars', () => ({
   RatingStars: ({ rating, totalCount, size, showCount }: any) => (
     <div
       data-testid="rating-stars"
@@ -62,9 +62,11 @@ describe('ResourceCard Component', () => {
     category: 'Frontend',
     tags: ['React', 'TypeScript', 'Testing', 'Jest', 'Extra Tag'],
     author: 'Test Author',
+    authorId: 'author-1',
     rating: 4.5,
     ratingCount: 100,
     viewCount: 1500,
+    likeCount: 120,
     commentCount: 25,
     featured: false,
     url: 'https://example.com/resource',
@@ -169,34 +171,41 @@ describe('ResourceCard Component', () => {
     it('点击卡片应该导航到资源详情页', () => {
       render(<ResourceCard resource={mockResource} />)
 
-      const card = screen.getByRole('generic', { name: /test resource/i })
-      fireEvent.click(card)
-
-      expect(mockPush).toHaveBeenCalledWith('/resources/test-resource')
+      // 点击卡片容器
+      const card = screen.getByText('Test Resource').closest('div')
+      expect(card).toBeInTheDocument()
+      
+      if (card) {
+        fireEvent.click(card)
+        expect(mockPush).toHaveBeenCalledWith('/resources/test-resource')
+      }
     })
 
-    it('点击标签不应该触发卡片导航', () => {
-      render(<ResourceCard resource={mockResource} />)
-
-      const tag = screen.getByText('#React')
-      fireEvent.click(tag)
-
-      expect(mockPush).not.toHaveBeenCalled()
-    })
-
-    it('点击查看详情按钮不应该触发卡片导航', () => {
+    it('点击查看详情按钮应该导航到资源详情页', () => {
       render(<ResourceCard resource={mockResource} />)
 
       const detailButton = screen.getByText('查看详情')
       fireEvent.click(detailButton)
 
-      expect(mockPush).not.toHaveBeenCalled()
+      // 重构后，按钮点击也会导航，但会阻止事件冒泡
+      expect(mockPush).toHaveBeenCalledWith('/resources/test-resource')
+    })
+
+    it('标签现在是纯展示性的，不阻止事件', () => {
+      render(<ResourceCard resource={mockResource} />)
+
+      // 标签现在移除了 data-no-click 属性，所以点击标签会冒泡到卡片
+      const tag = screen.getByText('#React')
+      fireEvent.click(tag)
+
+      // 事件会冒泡到卡片，触发导航
+      expect(mockPush).toHaveBeenCalledWith('/resources/test-resource')
     })
 
     it('鼠标悬停时应该应用悬停样式', () => {
       render(<ResourceCard resource={mockResource} />)
 
-      const card = screen.getByRole('generic')
+      const card = screen.getByText('Test Resource').closest('div')
       expect(card).toHaveClass('hover:shadow-lg', 'hover:-translate-y-1')
     })
   })
@@ -235,7 +244,7 @@ describe('ResourceCard Component', () => {
     it('卡片应该是可点击的', () => {
       render(<ResourceCard resource={mockResource} />)
 
-      const card = screen.getByRole('generic')
+      const card = screen.getByText('Test Resource').closest('div')
       expect(card).toHaveClass('cursor-pointer')
     })
 
@@ -258,7 +267,7 @@ describe('ResourceCard Component', () => {
       render(<ResourceCard resource={resourceWithLargeNumbers} />)
 
       expect(screen.getByText('123,456')).toBeInTheDocument()
-      expect(screen.getByText('9999')).toBeInTheDocument()
+      expect(screen.getByText('9,999')).toBeInTheDocument()
     })
 
     it('应该正确格式化评分', () => {

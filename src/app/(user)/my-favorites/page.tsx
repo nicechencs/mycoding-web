@@ -246,7 +246,7 @@ export default function MyFavoritesPage() {
                     <button
                       onClick={() => {
                         // 这里应该实现取消收藏功能
-                        console.log('取消收藏', favorite.id)
+                        // 取消收藏操作
                       }}
                       className="text-red-600 hover:text-red-700 font-medium"
                     >

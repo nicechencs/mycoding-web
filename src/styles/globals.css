@@ -129,4 +129,25 @@
       opacity: 1;
     }
   }
+
+  /* 确保可点击元素有正确的交互状态 */
+  .clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .clickable:hover {
+    opacity: 0.8;
+  }
+
+  /* 防止事件阻止的通用类 */
+  .prevent-click-block {
+    pointer-events: auto !important;
+  }
+  
+  /* z-index管理工具类 */
+  .z-header { z-index: 40; }
+  .z-dropdown { z-index: 50; }
+  .z-modal { z-index: 60; }
+  .z-toast { z-index: 70; }
 }
