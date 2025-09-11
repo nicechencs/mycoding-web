@@ -175,90 +175,167 @@ export function ResourceStats({
 }
 
 // 便捷的统计数据构建器
-export const createStatsConfig = {
+// 数值格式化工具函数
+const formatNumber = (value: number): string => {
+  if (value >= 1000) {
+    return value.toLocaleString()
+  }
+  return value.toString()
+}
+
+const formatRating = (value: number): string => {
+  return value.toFixed(1)
+}
+
+// 统计配置类型
+type StatsDataType = 'article' | 'resource' | 'vibe'
+
+interface ArticleStatsData {
+  viewCount: number
+  likeCount: number
+  commentCount: number
+  onLike?: (e: React.MouseEvent) => void
+  onComment?: (e: React.MouseEvent) => void
+  isLiked?: boolean
+}
+
+interface ResourceStatsData {
+  viewCount: number
+  commentCount: number
+  rating?: number
+  onComment?: (e: React.MouseEvent) => void
+}
+
+interface VibeStatsData {
+  likeCount: number
+  commentCount: number
+  onLike?: (e: React.MouseEvent) => void
+  onComment?: (e: React.MouseEvent) => void
+  isLiked?: boolean
+}
+
+/**
+ * 类型安全的统计配置创建器
+ */
+export function createStatsConfig(
+  type: 'article',
+  data: ArticleStatsData
+): StatItem[]
+export function createStatsConfig(
+  type: 'resource', 
+  data: ResourceStatsData
+): StatItem[]
+export function createStatsConfig(
+  type: 'vibe',
+  data: VibeStatsData  
+): StatItem[]
+export function createStatsConfig(
+  type: StatsDataType,
+  data: ArticleStatsData | ResourceStatsData | VibeStatsData
+): StatItem[] {
+  switch (type) {
+    case 'article': {
+      const articleData = data as ArticleStatsData
+      return [
+        {
+          key: 'view',
+          value: formatNumber(articleData.viewCount),
+          icon: EmojiIcons.view,
+          label: '浏览'
+        },
+        {
+          key: 'like',
+          value: formatNumber(articleData.likeCount),
+          icon: EmojiIcons.like,
+          label: '点赞',
+          onClick: articleData.onLike,
+          active: articleData.isLiked,
+          className: articleData.isLiked ? 'text-red-500' : undefined
+        },
+        {
+          key: 'comment',
+          value: formatNumber(articleData.commentCount),
+          icon: EmojiIcons.comment,
+          label: '评论',
+          onClick: articleData.onComment
+        }
+      ]
+    }
+
+    case 'resource': {
+      const resourceData = data as ResourceStatsData
+      const baseStats: StatItem[] = [
+        {
+          key: 'view',
+          value: formatNumber(resourceData.viewCount),
+          icon: StatIcons.view,
+          label: '浏览'
+        },
+        {
+          key: 'comment',
+          value: formatNumber(resourceData.commentCount),
+          icon: StatIcons.comment,
+          label: '评论',
+          onClick: resourceData.onComment
+        }
+      ]
+
+      if (resourceData.rating !== undefined) {
+        baseStats.push({
+          key: 'rating',
+          value: formatRating(resourceData.rating),
+          icon: StatIcons.rating,
+          label: '评分',
+          className: 'text-yellow-500 font-medium'
+        })
+      }
+
+      return baseStats
+    }
+
+    case 'vibe': {
+      const vibeData = data as VibeStatsData
+      return [
+        {
+          key: 'like',
+          value: formatNumber(vibeData.likeCount),
+          icon: EmojiIcons.like,
+          label: '点赞',
+          onClick: vibeData.onLike,
+          active: vibeData.isLiked,
+          className: vibeData.isLiked ? 'text-red-500' : undefined
+        },
+        {
+          key: 'comment',
+          value: formatNumber(vibeData.commentCount),
+          icon: EmojiIcons.comment,
+          label: '评论',
+          onClick: vibeData.onComment
+        }
+      ]
+    }
+
+    default:
+      return []
+  }
+}
+
+// 快捷配置创建器
+export const StatsConfig = {
   /**
    * 创建文章统计配置
    */
-  article: (data: {
-    viewCount: number
-    likeCount: number
-    commentCount: number
-    onLike?: (e: React.MouseEvent) => void
-    onComment?: (e: React.MouseEvent) => void
-    isLiked?: boolean
-  }): StatItem[] => [
-    {
-      key: 'view',
-      value: data.viewCount,
-      icon: EmojiIcons.view,
-    },
-    {
-      key: 'like',
-      value: data.likeCount,
-      icon: EmojiIcons.like,
-      onClick: data.onLike,
-      active: data.isLiked
-    },
-    {
-      key: 'comment',
-      value: data.commentCount,
-      icon: EmojiIcons.comment,
-      onClick: data.onComment
-    }
-  ],
-
+  forArticle: (data: ArticleStatsData): StatItem[] => createStatsConfig('article', data),
+  
   /**
-   * 创建资源统计配置
+   * 创建资源统计配置  
    */
-  resource: (data: {
-    viewCount: number
-    commentCount: number
-    rating?: number
-    onComment?: (e: React.MouseEvent) => void
-  }): StatItem[] => [
-    {
-      key: 'view',
-      value: data.viewCount,
-      icon: StatIcons.view,
-    },
-    {
-      key: 'comment',
-      value: data.commentCount,
-      icon: StatIcons.comment,
-      onClick: data.onComment
-    },
-    ...(data.rating ? [{
-      key: 'rating' as const,
-      value: data.rating.toFixed(1),
-      icon: StatIcons.rating,
-      className: 'text-yellow-500'
-    }] : [])
-  ],
-
+  forResource: (data: ResourceStatsData): StatItem[] => createStatsConfig('resource', data),
+  
   /**
    * 创建Vibe统计配置
    */
-  vibe: (data: {
-    likeCount: number
-    commentCount: number
-    onLike?: (e: React.MouseEvent) => void
-    onComment?: (e: React.MouseEvent) => void
-    isLiked?: boolean
-  }): StatItem[] => [
-    {
-      key: 'like',
-      value: data.likeCount,
-      icon: EmojiIcons.like,
-      onClick: data.onLike,
-      active: data.isLiked
-    },
-    {
-      key: 'comment',
-      value: data.commentCount,
-      icon: EmojiIcons.comment,
-      onClick: data.onComment
-    }
-  ]
+  forVibe: (data: VibeStatsData): StatItem[] => createStatsConfig('vibe', data)
 }
 
 export default ResourceStats

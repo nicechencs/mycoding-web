@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Article } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
+import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
+import { useArticleCardInteraction } from '@/hooks/use-card-interaction'
 import { getCategoryClasses } from '@/lib/utils/category'
 
 interface ArticleCardProps {
@@ -13,28 +14,26 @@ interface ArticleCardProps {
 
 export const ArticleCard = React.memo(
   ({ article }: ArticleCardProps) => {
-    const router = useRouter()
+    // 使用统一的卡片交互Hook
+    const { getCardProps, handleStatsClick } = useArticleCardInteraction({
+      enableDebugLog: process.env.NODE_ENV === 'development'
+    })
 
-    const handleCardClick = useCallback(
-      (e: React.MouseEvent) => {
-        // 阻止点击特定元素时触发卡片跳转
-        const target = e.target as HTMLElement
-        if (
-          target.closest('a') ||
-          target.closest('button') ||
-          target.closest('[data-no-click]')
-        ) {
-          return
-        }
-        router.push(`/posts/${article.slug}`)
-      },
-      [router, article.slug]
-    )
+    // 创建统计数据配置
+    const statsConfig = createStatsConfig('article', {
+      viewCount: article.viewCount || 0,
+      likeCount: article.likeCount || 0,
+      commentCount: article.commentCount || 0,
+      onComment: handleStatsClick(article, 'comment'),
+      // 这里可以添加点赞功能
+      // onLike: handleLikeClick,
+      // isLiked: article.isLiked
+    })
 
     return (
       <div
-        className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
-        onClick={handleCardClick}
+        {...getCardProps(article)}
+        className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group transform hover:-translate-y-1 relative"
       >
         {/* 精选书签 */}
         {article.featured && (
@@ -79,8 +78,7 @@ export const ArticleCard = React.memo(
           {article.tags.slice(0, 3).map(tag => (
             <span
               key={tag}
-              className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors cursor-pointer"
-              data-no-click
+              className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
             >
               #{tag}
             </span>
@@ -94,29 +92,12 @@ export const ArticleCard = React.memo(
 
         {/* Stats and Actions */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4 text-xs text-gray-500">
-            <span
-              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
-              data-no-click
-            >
-              <span>👀</span>
-              <span>{article.viewCount}</span>
-            </span>
-            <span
-              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
-              data-no-click
-            >
-              <span>❤️</span>
-              <span>{article.likeCount}</span>
-            </span>
-            <span
-              className="flex items-center space-x-1 hover:text-blue-600 transition-colors cursor-pointer"
-              data-no-click
-            >
-              <span>💬</span>
-              <span>{article.commentCount}</span>
-            </span>
-          </div>
+          <ResourceStats 
+            stats={statsConfig}
+            variant="emoji"
+            size="xs"
+            className="text-xs"
+          />
 
           <Link
             href={`/posts/${article.slug}`}

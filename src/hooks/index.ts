@@ -89,6 +89,16 @@ export { usePerformance, PerformanceTracker } from './use-performance'
 
 export { useNavigationHandler } from './use-navigation-handler'
 
+export { 
+  useCardInteraction,
+  useResourceCardInteraction,
+  useArticleCardInteraction, 
+  useVibeCardInteraction,
+  type UseCardInteractionOptions,
+  type BaseCardItem,
+  type CardType
+} from './use-card-interaction'
+
 // === Hook管理器 ===
 export class HookManager {
   /**

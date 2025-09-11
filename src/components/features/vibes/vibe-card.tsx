@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Vibe } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
 import { LazyImage } from '@/components/ui/LazyImage'
+import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
 import { VibeActionsCompact } from './vibe-actions'
 import { useAuth } from '@/hooks/use-auth'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
+import { useVibeCardInteraction } from '@/hooks/use-card-interaction'
 import { formatRelativeTime } from '@/utils/date'
 
 interface VibeCardProps {
@@ -17,25 +18,26 @@ interface VibeCardProps {
 export function VibeCard({ vibe }: VibeCardProps) {
   const { user, isAuthenticated } = useAuth()
   const [showComments, setShowComments] = useState(false)
-  const router = useRouter()
 
-  const handleCardClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement
-    if (
-      target.closest('a') ||
-      target.closest('button') ||
-      target.closest('input') ||
-      target.closest('[data-no-click]')
-    ) {
-      return
-    }
-    router.push(`/vibes/${vibe.id}`)
-  }
+  // 使用统一的卡片交互Hook
+  const { getCardProps, handleStatsClick } = useVibeCardInteraction({
+    enableDebugLog: process.env.NODE_ENV === 'development'
+  })
+
+  // 创建统计数据配置
+  const statsConfig = createStatsConfig('vibe', {
+    likeCount: vibe.likeCount || 0,
+    commentCount: vibe.commentCount || 0,
+    onComment: handleStatsClick(vibe, 'comment'),
+    // 这里可以添加点赞功能
+    // onLike: handleLikeClick,
+    // isLiked: vibe.isLiked
+  })
 
   return (
     <div
-      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-      onClick={handleCardClick}
+      {...getCardProps(vibe)}
+      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
     >
       {/* Header */}
       <div className="flex items-start space-x-3 mb-4">
@@ -129,11 +131,20 @@ export function VibeCard({ vibe }: VibeCardProps) {
 
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-        <VibeActionsCompact vibeId={vibe.id} />
+        <div className="flex items-center gap-4">
+          <VibeActionsCompact vibeId={vibe.id} />
+          <ResourceStats 
+            stats={statsConfig}
+            variant="emoji"
+            size="xs"
+            className="text-sm"
+          />
+        </div>
 
         <button
           onClick={() => setShowComments(!showComments)}
           className="flex items-center space-x-1 text-sm text-gray-500 hover:text-blue-500 transition-colors"
+          data-no-click
         >
           <svg
             className="w-4 h-4"
@@ -148,7 +159,7 @@ export function VibeCard({ vibe }: VibeCardProps) {
               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-          <span>{vibe.commentCount} 评论</span>
+          <span>查看评论</span>
         </button>
       </div>
 
