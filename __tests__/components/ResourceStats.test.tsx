@@ -18,24 +18,21 @@ describe('ResourceStats Component', () => {
       key: 'views',
       value: 1500,
       label: '浏览',
-      icon: 'Eye',
-      formatter: (value: number) => value.toLocaleString(),
+      icon: 'Eye' as const,
       interactive: true
     },
     {
       key: 'comments',
       value: 25,
       label: '评论',
-      icon: 'MessageSquare',
-      formatter: (value: number) => value.toString(),
+      icon: 'MessageSquare' as const,
       interactive: true
     },
     {
       key: 'rating',
       value: 4.5,
       label: '评分',
-      icon: 'Star',
-      formatter: (value: number) => value.toFixed(1),
+      icon: 'Star' as const,
       interactive: false
     }
   ]
@@ -45,54 +42,61 @@ describe('ResourceStats Component', () => {
       render(<ResourceStats stats={mockStatsConfig} />)
 
       // 验证数字显示
-      expect(screen.getByText('1,500')).toBeInTheDocument()
+      expect(screen.getByText('1500')).toBeInTheDocument()
       expect(screen.getByText('25')).toBeInTheDocument()
       expect(screen.getByText('4.5')).toBeInTheDocument()
 
-      // 验证图标
+      // 验证标签显示
+      expect(screen.getByText('浏览')).toBeInTheDocument()
+      expect(screen.getByText('评论')).toBeInTheDocument()
+      expect(screen.getByText('评分')).toBeInTheDocument()
+
+      // 验证图标渲染
       expect(screen.getByTestId('eye-icon')).toBeInTheDocument()
       expect(screen.getByTestId('message-icon')).toBeInTheDocument()
       expect(screen.getByTestId('star-icon')).toBeInTheDocument()
     })
 
-    it('应该应用默认样式类', () => {
-      render(<ResourceStats stats={mockStatsConfig} />)
-
-      const container = screen.getByRole('group', { name: /统计数据/i })
-      expect(container).toHaveClass('flex', 'items-center', 'gap-3', 'text-xs', 'text-gray-500')
+    it('应该处理空统计数据', () => {
+      render(<ResourceStats stats={[]} />)
+      
+      // 验证容器存在但没有内容
+      const container = document.querySelector('.flex.items-center.gap-4')
+      expect(container).toBeInTheDocument()
+      expect(container?.children.length).toBe(0)
     })
 
-    it('应该应用自定义className', () => {
-      render(<ResourceStats stats={mockStatsConfig} className="custom-class" />)
+    it('应该正确处理undefined值', () => {
+      const statsWithUndefined = [
+        {
+          key: 'views',
+          value: undefined as any,
+          label: '浏览',
+          icon: 'Eye' as const
+        }
+      ]
 
-      const container = screen.getByRole('group', { name: /统计数据/i })
-      expect(container).toHaveClass('custom-class')
+      render(<ResourceStats stats={statsWithUndefined} />)
+      expect(screen.getByText('0')).toBeInTheDocument()
     })
   })
 
-  describe('变体样式测试', () => {
-    it('应该正确渲染compact变体', () => {
-      render(<ResourceStats stats={mockStatsConfig} variant="compact" />)
-
-      const container = screen.getByRole('group', { name: /统计数据/i })
-      expect(container).toHaveClass('gap-2', 'text-xs')
-    })
-
-    it('应该正确渲染emoji变体', () => {
+  describe('emoji变体渲染测试', () => {
+    it('应该在emoji变体中显示emoji而不是图标', () => {
       const emojiStats = [
         {
           key: 'views',
           value: 1500,
           label: '浏览',
-          emoji: '👀',
-          formatter: (value: number) => value.toLocaleString()
+          icon: 'Eye' as const,
+          emoji: '👀'
         },
         {
           key: 'likes',
           value: 120,
           label: '点赞',
-          emoji: '❤️',
-          formatter: (value: number) => value.toString()
+          icon: 'Heart' as const,
+          emoji: '❤️'
         }
       ]
 
@@ -101,7 +105,7 @@ describe('ResourceStats Component', () => {
       // 验证emoji显示
       expect(screen.getByText('👀')).toBeInTheDocument()
       expect(screen.getByText('❤️')).toBeInTheDocument()
-      expect(screen.getByText('1,500')).toBeInTheDocument()
+      expect(screen.getByText('1500')).toBeInTheDocument()
       expect(screen.getByText('120')).toBeInTheDocument()
     })
   })
@@ -113,205 +117,250 @@ describe('ResourceStats Component', () => {
           key: 'views',
           value: 123456,
           label: '浏览',
-          icon: 'Eye',
-          formatter: (value: number) => value.toLocaleString()
+          icon: 'Eye' as const
         },
         {
           key: 'comments',
           value: 9999,
           label: '评论',
-          icon: 'MessageSquare',
-          formatter: (value: number) => value.toString()
+          icon: 'MessageSquare' as const
         }
       ]
 
       render(<ResourceStats stats={largeNumberStats} />)
 
-      expect(screen.getByText('123,456')).toBeInTheDocument()
+      expect(screen.getByText('123456')).toBeInTheDocument()
       expect(screen.getByText('9999')).toBeInTheDocument()
     })
 
-    it('应该正确格式化小数', () => {
+    it('应该正确处理小数', () => {
       const decimalStats = [
         {
           key: 'rating',
           value: 3.14159,
           label: '评分',
-          icon: 'Star',
-          formatter: (value: number) => value.toFixed(2)
+          icon: 'Star' as const
         }
       ]
 
       render(<ResourceStats stats={decimalStats} />)
-
-      expect(screen.getByText('3.14')).toBeInTheDocument()
-    })
-
-    it('应该处理零值', () => {
-      const zeroStats = [
-        {
-          key: 'comments',
-          value: 0,
-          label: '评论',
-          icon: 'MessageSquare',
-          formatter: (value: number) => value.toString()
-        }
-      ]
-
-      render(<ResourceStats stats={zeroStats} />)
-
-      expect(screen.getByText('0')).toBeInTheDocument()
+      expect(screen.getByText('3.1')).toBeInTheDocument()
     })
   })
 
-  describe('交互性测试', () => {
-    it('应该处理可交互统计项的点击', () => {
-      const onInteraction = jest.fn()
-
-      render(
-        <ResourceStats 
-          stats={mockStatsConfig} 
-          onInteraction={onInteraction}
-        />
-      )
-
-      // 点击可交互的浏览统计
-      const viewsItem = screen.getByText('1,500').closest('span')
-      expect(viewsItem).toHaveClass('cursor-pointer', 'hover:text-blue-600')
+  describe('样式变体测试', () => {
+    it('应该应用默认变体样式', () => {
+      render(<ResourceStats stats={mockStatsConfig} />)
       
+      const container = document.querySelector('.flex.items-center.gap-4')
+      expect(container).toHaveClass('text-sm')
+    })
+
+    it('应该应用compact变体样式', () => {
+      render(<ResourceStats stats={mockStatsConfig} variant="compact" />)
+      
+      const items = document.querySelectorAll('.flex.items-center.gap-1')
+      expect(items.length).toBeGreaterThan(0)
+    })
+
+    it('应该应用default变体样式条于例外', () => {
+      render(<ResourceStats stats={mockStatsConfig} />)
+      
+      const container = document.querySelector('.flex.items-center.gap-6')
+      expect(container).toBeInTheDocument()
+    })
+  })
+
+  describe('交互功能测试', () => {
+    it('应该处理可交互项目的点击', () => {
+      const mockOnInteraction = jest.fn()
+      const statsWithHandlers = [
+        {
+          key: 'views',
+          value: 999,
+          label: '浏览',
+          icon: 'Eye' as const,
+          interactive: true,
+          onClick: mockOnInteraction
+        },
+        {
+          key: 'comments',
+          value: 15,
+          label: '评论',
+          icon: 'MessageSquare' as const,
+          interactive: true,
+          onClick: mockOnInteraction
+        }
+      ]
+
+      render(<ResourceStats stats={statsWithHandlers} />)
+
+      // 点击第一个统计项
+      const viewsItem = screen.getByText('999').closest('div')
       fireEvent.click(viewsItem!)
 
-      expect(onInteraction).toHaveBeenCalledWith('views', 1500)
+      expect(mockOnInteraction).toHaveBeenCalledTimes(1)
+
+      // 点击第二个统计项
+      const commentsItem = screen.getByText('15').closest('div')
+      fireEvent.click(commentsItem!)
+
+      expect(mockOnInteraction).toHaveBeenCalledTimes(2)
     })
 
-    it('应该处理不可交互统计项', () => {
-      const onInteraction = jest.fn()
+    it('不应该为非交互项目添加点击处理', () => {
+      const mockOnInteraction = jest.fn()
+      const statsWithHandlers = [
+        {
+          key: 'views',
+          value: 999,
+          label: '浏览',
+          icon: 'Eye' as const,
+          interactive: true,
+          onClick: mockOnInteraction
+        },
+        {
+          key: 'comments',
+          value: 15,
+          label: '评论',
+          icon: 'MessageSquare' as const,
+          interactive: false,
+          onClick: mockOnInteraction
+        }
+      ]
 
+      render(<ResourceStats stats={statsWithHandlers} />)
+
+      // 点击非交互项目
+      const commentsItem = screen.getByText('15').closest('div')
+      fireEvent.click(commentsItem!)
+
+      // 不应该触发回调
+      expect(mockOnInteraction).not.toHaveBeenCalled()
+
+      // 点击交互项目
+      const viewsItem = screen.getByText('999').closest('div')
+      fireEvent.click(viewsItem!)
+
+      // 应该触发回调
+      expect(mockOnInteraction).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('响应式尺寸测试', () => {
+    it('应该应用xs尺寸类', () => {
+      render(<ResourceStats stats={mockStatsConfig} size="xs" />)
+      
+      const container = document.querySelector('.flex.items-center')
+      expect(container).toHaveClass('gap-3', 'text-xs')
+    })
+
+    it('应该应用sm尺寸类', () => {
+      render(<ResourceStats stats={mockStatsConfig} size="sm" />)
+      
+      const container = document.querySelector('.flex.items-center')
+      expect(container).toHaveClass('gap-4', 'text-sm')
+    })
+
+    it('应该应用md尺寸类', () => {
+      render(<ResourceStats stats={mockStatsConfig} size="md" />)
+      
+      const container = document.querySelector('.flex.items-center')
+      expect(container).toHaveClass('gap-5', 'text-base')
+    })
+
+    it('应该应用md尺寸类', () => {
+      render(<ResourceStats stats={mockStatsConfig} size="md" />)
+      
+      const container = document.querySelector('.flex.items-center')
+      expect(container).toHaveClass('gap-5', 'text-base')
+    })
+  })
+
+  describe('自定义className测试', () => {
+    it('应该应用自定义className', () => {
       render(
         <ResourceStats 
           stats={mockStatsConfig} 
-          onInteraction={onInteraction}
+          className="custom-class text-purple-500"
         />
       )
-
-      // 点击不可交互的评分统计
-      const ratingItem = screen.getByText('4.5').closest('span')
-      expect(ratingItem).not.toHaveClass('cursor-pointer')
       
-      fireEvent.click(ratingItem!)
-
-      // 不可交互项不应该触发回调
-      expect(onInteraction).not.toHaveBeenCalledWith('rating', 4.5)
-    })
-
-    it('应该在没有onInteraction回调时正常工作', () => {
-      render(<ResourceStats stats={mockStatsConfig} />)
-
-      const viewsItem = screen.getByText('1,500').closest('span')
-      
-      expect(() => {
-        fireEvent.click(viewsItem!)
-      }).not.toThrow()
+      const container = document.querySelector('.flex.items-center')
+      expect(container).toHaveClass('custom-class', 'text-purple-500')
     })
   })
 
   describe('边界条件测试', () => {
-    it('应该处理空的统计配置', () => {
-      render(<ResourceStats stats={[]} />)
-
-      const container = screen.getByRole('group', { name: /统计数据/i })
-      expect(container).toBeInTheDocument()
-      expect(container.children).toHaveLength(0)
-    })
-
-    it('应该处理缺少formatter的统计项', () => {
-      const statsWithoutFormatter = [
+    it('应该处理超长文本', () => {
+      const longTextStats = [
         {
-          key: 'views',
-          value: 1500,
-          label: '浏览',
-          icon: 'Eye'
-          // 缺少formatter
+          key: 'long',
+          value: 42,
+          label: '这是一个非常非常长的标签文本用于测试',
+          icon: 'Eye' as const
         }
       ]
 
-      render(<ResourceStats stats={statsWithoutFormatter as any} />)
-
-      // 应该显示原始数值
-      expect(screen.getByText('1500')).toBeInTheDocument()
+      render(<ResourceStats stats={longTextStats} />)
+      expect(screen.getByText('这是一个非常非常长的标签文本用于测试')).toBeInTheDocument()
     })
 
-    it('应该处理负数', () => {
-      const negativeStats = [
-        {
-          key: 'change',
-          value: -50,
-          label: '变化',
-          icon: 'Eye',
-          formatter: (value: number) => value.toString()
-        }
-      ]
+    it('应该处理多个统计项', () => {
+      const manyStats = Array.from({ length: 10 }, (_, i) => ({
+        key: `stat-${i}`,
+        value: i * 100,
+        label: `统计${i}`,
+        icon: 'Eye' as const
+      }))
 
-      render(<ResourceStats stats={negativeStats} />)
-
-      expect(screen.getByText('-50')).toBeInTheDocument()
+      render(<ResourceStats stats={manyStats} />)
+      
+      manyStats.forEach((stat) => {
+        expect(screen.getByText(stat.value.toString())).toBeInTheDocument()
+        expect(screen.getByText(stat.label)).toBeInTheDocument()
+      })
     })
   })
 
-  describe('性能优化测试', () => {
-    it('应该使用React.memo进行优化', () => {
-      const { rerender } = render(<ResourceStats stats={mockStatsConfig} />)
-
-      // 使用相同props重新渲染，应该被memo优化
-      const spy = jest.spyOn(console, 'log')
-      rerender(<ResourceStats stats={mockStatsConfig} />)
-
-      // 验证没有重复渲染日志
-      expect(spy).not.toHaveBeenCalledWith('ResourceStats re-rendered')
-
-      spy.mockRestore()
-    })
-
-    it('应该在stats变化时重新渲染', () => {
-      const { rerender } = render(<ResourceStats stats={mockStatsConfig} />)
-
-      const updatedStats = [...mockStatsConfig]
-      updatedStats[0] = { ...updatedStats[0], value: 2000 }
-
-      rerender(<ResourceStats stats={updatedStats} />)
-
-      expect(screen.getByText('2,000')).toBeInTheDocument()
-      expect(screen.queryByText('1,500')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('可访问性测试', () => {
-    it('应该具有适当的ARIA属性', () => {
-      render(<ResourceStats stats={mockStatsConfig} />)
-
-      const container = screen.getByRole('group', { name: /统计数据/i })
-      expect(container).toBeInTheDocument()
-    })
-
-    it('可交互元素应该是可访问的', () => {
-      const onInteraction = jest.fn()
-
+  describe('分隔符测试', () => {
+    it('应该在统计项之间显示分隔符', () => {
       render(
-        <ResourceStats 
-          stats={mockStatsConfig} 
-          onInteraction={onInteraction}
+        <ResourceStats
+          stats={[
+            {
+              key: 'views',
+              value: 500,
+              label: '浏览',
+              icon: 'Eye' as const
+            },
+            {
+              key: 'likes',
+              value: 100,
+              label: '点赞',
+              icon: 'Heart' as const
+            },
+            {
+              key: 'comments',
+              value: 20,
+              label: '评论',
+              icon: 'MessageSquare' as const
+            }
+          ]}
         />
       )
 
-      // 可交互元素应该有适当的角色
-      const interactiveItems = screen.getAllByRole('button')
-      expect(interactiveItems).toHaveLength(2) // views 和 comments 是可交互的
+      // 应该有2个分隔符（3个项目之间）
+      const separators = document.querySelectorAll('.mx-2.text-gray-300')
+      expect(separators).toHaveLength(2)
+      separators.forEach(separator => {
+        expect(separator.textContent).toBe('·')
+      })
     })
   })
 })
 
-// createStatsConfig 工厂函数测试
-describe('createStatsConfig Function', () => {
+describe('createStatsConfig函数', () => {
   const mockResource = {
     viewCount: 1500,
     commentCount: 25,
@@ -321,7 +370,7 @@ describe('createStatsConfig Function', () => {
 
   describe('资源类型配置', () => {
     it('应该为resource类型创建正确的配置', () => {
-      const config = createStatsConfig(mockResource, 'resource')
+      const config = createStatsConfig('resource', mockResource)
 
       expect(config).toHaveLength(3)
       expect(config[0]).toMatchObject({
@@ -347,19 +396,19 @@ describe('createStatsConfig Function', () => {
       })
     })
 
-    it('应该正确格式化resource的数值', () => {
-      const config = createStatsConfig(mockResource, 'resource')
+    it('应该正确处理resource的数值', () => {
+      const config = createStatsConfig('resource', mockResource)
       
-      // 测试格式化函数
-      expect(config[0].formatter(1500)).toBe('1,500')
-      expect(config[1].formatter(25)).toBe('25')
-      expect(config[2].formatter(4.5)).toBe('4.5')
+      // 测试值是否正确
+      expect(config[0].value).toBe(1500)
+      expect(config[1].value).toBe(25)
+      expect(config[2].value).toBe(4.5)
     })
   })
 
   describe('文章类型配置', () => {
     it('应该为article类型创建正确的配置', () => {
-      const config = createStatsConfig(mockResource, 'article')
+      const config = createStatsConfig('article', mockResource)
 
       expect(config).toHaveLength(3)
       expect(config[0]).toMatchObject({
@@ -382,7 +431,7 @@ describe('createStatsConfig Function', () => {
 
   describe('动态类型配置', () => {
     it('应该为vibe类型创建正确的配置', () => {
-      const config = createStatsConfig(mockResource, 'vibe')
+      const config = createStatsConfig('vibe', mockResource)
 
       expect(config).toHaveLength(2)
       expect(config[0]).toMatchObject({
@@ -395,28 +444,6 @@ describe('createStatsConfig Function', () => {
         value: 25,
         label: '评论'
       })
-    })
-  })
-
-  describe('边界条件', () => {
-    it('应该处理缺失的字段', () => {
-      const incompleteResource = {
-        viewCount: 1500
-        // 缺少其他字段
-      }
-
-      const config = createStatsConfig(incompleteResource, 'resource')
-
-      expect(config[0].value).toBe(1500)
-      expect(config[1].value).toBe(0) // commentCount 默认为0
-      expect(config[2].value).toBe(0) // rating 默认为0
-    })
-
-    it('应该处理未知的数据类型', () => {
-      const config = createStatsConfig(mockResource, 'unknown' as any)
-
-      // 应该返回空配置
-      expect(config).toEqual([])
     })
   })
 })

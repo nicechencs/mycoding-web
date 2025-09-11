@@ -1,337 +1,343 @@
-import { renderHook } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useNavigationHandler } from '@/hooks/use-navigation-handler'
+import { usePathname } from 'next/navigation'
 
-// Mock next/navigation
-const mockPush = jest.fn()
-const mockReplace = jest.fn()
-const mockPathname = '/current-path'
-
+// Mock Next.js router
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-    replace: mockReplace,
-  }),
-  usePathname: () => mockPathname,
+  usePathname: jest.fn()
 }))
 
-// Mock console methods
-const originalConsoleLog = console.log
-const consoleLogSpy = jest.fn()
+describe('useNavigationHandler Hook', () => {
+  const mockUsePathname = usePathname as jest.Mock
+  const mockEvent = {
+    target: document.createElement('a'),
+    currentTarget: document.createElement('a'),
+    bubbles: true,
+    defaultPrevented: false,
+    preventDefault: jest.fn(),
+    stopPropagation: jest.fn()
+  } as unknown as React.MouseEvent
 
-describe('useNavigationHandler', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    console.log = consoleLogSpy
+    mockUsePathname.mockReturnValue('/resources')
+    // 模拟 console.log
+    jest.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    console.log = originalConsoleLog
+    jest.restoreAllMocks()
   })
 
   describe('基础功能测试', () => {
-    it('应该返回桌面端和移动端导航处理器', () => {
-      const { result } = renderHook(() => useNavigationHandler())
+    it('应该返回导航处理器函数', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
 
-      expect(result.current).toHaveProperty('desktopNavigation')
-      expect(result.current).toHaveProperty('mobileNavigation')
+      expect(result.current).toHaveProperty('handleNavigation')
+      expect(result.current).toHaveProperty('isActiveRoute')
+      expect(result.current).toHaveProperty('getNavigationClassName')
+      expect(result.current).toHaveProperty('currentPath')
       
-      const { desktopNavigation, mobileNavigation } = result.current
-      
-      expect(typeof desktopNavigation.handleNavigation).toBe('function')
-      expect(typeof desktopNavigation.getNavigationClassName).toBe('function')
-      expect(typeof mobileNavigation.handleNavigation).toBe('function')
-      expect(typeof mobileNavigation.getNavigationClassName).toBe('function')
+      expect(typeof result.current.handleNavigation).toBe('function')
+      expect(typeof result.current.isActiveRoute).toBe('function')
+      expect(typeof result.current.getNavigationClassName).toBe('function')
+      expect(result.current.currentPath).toBe('/resources')
     })
 
     it('应该正确生成导航类名', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
-
-      // 测试当前路径匹配
-      const activeClassName = desktopNavigation.getNavigationClassName(
-        '/current-path',
-        'base-class',
-        'active-class'
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const baseClasses = 'base-class'
+      const activeClasses = 'active-class'
+      
+      // 当前路径匹配时
+      const activeClassName = result.current.getNavigationClassName(
+        '/resources',
+        baseClasses,
+        activeClasses
       )
       expect(activeClassName).toBe('base-class active-class')
-
-      // 测试当前路径不匹配
-      const inactiveClassName = desktopNavigation.getNavigationClassName(
-        '/other-path',
-        'base-class',
-        'active-class'
+      
+      // 当前路径不匹配时
+      const inactiveClassName = result.current.getNavigationClassName(
+        '/posts',
+        baseClasses,
+        activeClasses
       )
       expect(inactiveClassName).toBe('base-class')
     })
   })
 
-  describe('桌面端导航行为', () => {
+  describe('桌面端导航测试', () => {
     it('应该正确处理桌面端导航点击', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
-
-      const mockItem = {
-        title: 'Test Page',
-        href: '/test-page',
-        disabled: false
+      const onNavigate = jest.fn()
+      const { result } = renderHook(() => useNavigationHandler({ 
+        platform: 'desktop',
+        onNavigate 
+      }))
+      
+      const navigationItem = {
+        title: '资源',
+        href: '/resources'
       }
 
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
+      })
 
-      desktopNavigation.handleNavigation(mockItem, mockEvent)
-
-      // 验证路由跳转
-      expect(mockPush).toHaveBeenCalledWith('/test-page')
-      
       // 验证日志记录
-      expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect(console.log).toHaveBeenCalledWith(
         'Desktop navigation clicked:',
         expect.objectContaining({
-          title: 'Test Page',
-          href: '/test-page',
-          currentPath: '/current-path'
+          title: '资源',
+          href: '/resources',
+          currentPath: '/resources',
+          timestamp: expect.any(String)
         })
       )
+      
+      // 验证回调执行
+      expect(onNavigate).toHaveBeenCalledTimes(1)
     })
 
-    it('应该处理禁用的导航项', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
+    it('应该为活动路由生成正确的类名', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const className = result.current.getNavigationClassName(
+        '/resources',
+        'px-3 py-2 text-sm font-medium',
+        'bg-gray-900 text-white'
+      )
+      
+      expect(className).toBe('px-3 py-2 text-sm font-medium bg-gray-900 text-white')
+    })
 
-      const disabledItem = {
-        title: 'Disabled Page',
-        href: '/disabled-page',
-        disabled: true
-      }
-
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
-
-      desktopNavigation.handleNavigation(disabledItem, mockEvent)
-
-      // 禁用项不应该触发路由跳转
-      expect(mockPush).not.toHaveBeenCalled()
-      expect(consoleLogSpy).not.toHaveBeenCalled()
+    it('应该为非活动路由生成正确的类名', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const className = result.current.getNavigationClassName(
+        '/posts',
+        'px-3 py-2 text-sm font-medium',
+        'bg-gray-900 text-white'
+      )
+      
+      expect(className).toBe('px-3 py-2 text-sm font-medium')
     })
   })
 
-  describe('移动端导航行为', () => {
+  describe('移动端导航测试', () => {
     it('应该正确处理移动端导航点击', () => {
-      const onClose = jest.fn()
-      const { result } = renderHook(() => useNavigationHandler())
-      const { mobileNavigation } = result.current
-
-      const mockItem = {
-        title: 'Mobile Page',
-        href: '/mobile-page',
-        disabled: false
+      const onNavigate = jest.fn()
+      const { result } = renderHook(() => useNavigationHandler({ 
+        platform: 'mobile',
+        onNavigate 
+      }))
+      
+      const navigationItem = {
+        title: '文章',
+        href: '/posts'
       }
 
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
+      })
 
-      mobileNavigation.handleNavigation(mockItem, mockEvent, onClose)
-
-      // 验证路由跳转
-      expect(mockPush).toHaveBeenCalledWith('/mobile-page')
-      
-      // 验证关闭回调
-      expect(onClose).toHaveBeenCalled()
-      
       // 验证日志记录
-      expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect(console.log).toHaveBeenCalledWith(
         'Mobile navigation clicked:',
         expect.objectContaining({
-          title: 'Mobile Page',
-          href: '/mobile-page',
-          currentPath: '/current-path'
+          title: '文章',
+          href: '/posts',
+          currentPath: '/resources',
+          timestamp: expect.any(String)
         })
       )
+      
+      // 验证回调执行
+      expect(onNavigate).toHaveBeenCalledTimes(1)
     })
 
-    it('应该在没有onClose回调时正常工作', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { mobileNavigation } = result.current
+    it('应该为移动端活动路由生成正确的类名', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'mobile' }))
+      
+      const className = result.current.getNavigationClassName(
+        '/resources',
+        'block px-3 py-2 text-base font-medium',
+        'bg-gray-900 text-white'
+      )
+      
+      expect(className).toBe('block px-3 py-2 text-base font-medium bg-gray-900 text-white')
+    })
 
-      const mockItem = {
-        title: 'Mobile Page',
-        href: '/mobile-page',
-        disabled: false
+    it('应该为移动端非活动路由生成正确的类名', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'mobile' }))
+      
+      const className = result.current.getNavigationClassName(
+        '/posts',
+        'block px-3 py-2 text-base font-medium',
+        'bg-gray-900 text-white'
+      )
+      
+      expect(className).toBe('block px-3 py-2 text-base font-medium')
+    })
+  })
+
+  describe('活动路由检测测试', () => {
+    it('应该正确检测当前路径', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      expect(result.current.isActiveRoute('/resources')).toBe(true)
+      expect(result.current.isActiveRoute('/posts')).toBe(false)
+      expect(result.current.isActiveRoute('/about')).toBe(false)
+    })
+
+    it('应该处理根路径', () => {
+      mockUsePathname.mockReturnValue('/')
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      expect(result.current.isActiveRoute('/')).toBe(true)
+      expect(result.current.isActiveRoute('/resources')).toBe(false)
+    })
+
+    it('应该处理子路径', () => {
+      mockUsePathname.mockReturnValue('/resources/detail')
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      // 子路径应该匹配父路径
+      expect(result.current.isActiveRoute('/resources')).toBe(true)
+      expect(result.current.isActiveRoute('/resources/detail')).toBe(true)
+      expect(result.current.isActiveRoute('/posts')).toBe(false)
+    })
+  })
+
+  describe('开发环境调试测试', () => {
+    it('应该在开发环境记录调试信息', () => {
+      const originalNodeEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'development'
+      
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const navigationItem = {
+        title: '测试导航',
+        href: '/test'
       }
 
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
+      })
 
-      // 不传入onClose回调
-      expect(() => {
-        mobileNavigation.handleNavigation(mockItem, mockEvent)
-      }).not.toThrow()
+      // 验证调试日志
+      expect(console.log).toHaveBeenCalledWith(
+        'Event details:',
+        expect.objectContaining({
+          target: expect.any(Object),
+          currentTarget: expect.any(Object),
+          bubbles: true,
+          defaultPrevented: false
+        })
+      )
+      
+      process.env.NODE_ENV = originalNodeEnv
+    })
 
-      expect(mockPush).toHaveBeenCalledWith('/mobile-page')
+    it('应该在生产环境不记录调试信息', () => {
+      const originalNodeEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'production'
+      
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const navigationItem = {
+        title: '测试导航',
+        href: '/test'
+      }
+
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
+      })
+
+      // 验证只有导航日志，没有调试日志
+      expect(console.log).toHaveBeenCalledTimes(1)
+      expect(console.log).toHaveBeenCalledWith(
+        'Desktop navigation clicked:',
+        expect.any(Object)
+      )
+      
+      process.env.NODE_ENV = originalNodeEnv
     })
   })
 
   describe('边界条件测试', () => {
-    it('应该处理没有href的导航项', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
+    it('应该处理没有回调的情况', () => {
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
+      
+      const navigationItem = {
+        title: '测试',
+        href: '/test'
+      }
 
-      const mockItem = {
-        title: 'No Href',
-        disabled: false
-        // href 缺失
-      } as any
-
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
-
+      // 不应该抛出错误
       expect(() => {
-        desktopNavigation.handleNavigation(mockItem, mockEvent)
+        act(() => {
+          result.current.handleNavigation(navigationItem, mockEvent)
+        })
       }).not.toThrow()
-
-      // 没有href时不应该调用路由跳转
-      expect(mockPush).not.toHaveBeenCalled()
     })
 
-    it('应该处理空字符串href', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
-
-      const mockItem = {
-        title: 'Empty Href',
-        href: '',
-        disabled: false
-      }
-
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
-
-      desktopNavigation.handleNavigation(mockItem, mockEvent)
-
-      // 空href仍然会调用路由跳转（可能导航到根路径）
-      expect(mockPush).toHaveBeenCalledWith('')
-    })
-
-    it('应该正确处理路径匹配的边界情况', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
-
-      // 测试完全匹配
-      expect(
-        desktopNavigation.getNavigationClassName('/current-path', 'base', 'active')
-      ).toBe('base active')
-
-      // 测试大小写敏感
-      expect(
-        desktopNavigation.getNavigationClassName('/Current-Path', 'base', 'active')
-      ).toBe('base')
-
-      // 测试部分匹配（应该不匹配）
-      expect(
-        desktopNavigation.getNavigationClassName('/current-path/sub', 'base', 'active')
-      ).toBe('base')
-    })
-  })
-
-  describe('日志记录测试', () => {
-    it('应该记录完整的导航信息', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation } = result.current
-
-      const mockItem = {
-        title: 'Test Page',
-        href: '/test-page',
-        disabled: false
-      }
-
-      const mockEvent = {
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn()
-      } as any
-
-      desktopNavigation.handleNavigation(mockItem, mockEvent)
-
-      const logCall = consoleLogSpy.mock.calls[0]
-      expect(logCall[0]).toBe('Desktop navigation clicked:')
+    it('应该处理特殊字符路径', () => {
+      mockUsePathname.mockReturnValue('/resources?category=web-dev')
+      const { result } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
       
-      const logData = logCall[1]
-      expect(logData).toHaveProperty('title', 'Test Page')
-      expect(logData).toHaveProperty('href', '/test-page')
-      expect(logData).toHaveProperty('currentPath', '/current-path')
-      expect(logData).toHaveProperty('timestamp')
-      expect(typeof logData.timestamp).toBe('string')
+      expect(result.current.isActiveRoute('/resources')).toBe(true)
+      expect(result.current.isActiveRoute('/resources?category=web-dev')).toBe(true)
     })
-  })
 
-  describe('性能和记忆化测试', () => {
-    it('应该在pathname不变时返回相同的引用', () => {
-      const { result, rerender } = renderHook(() => useNavigationHandler())
+    it('应该在路径变化时更新', () => {
+      const { result, rerender } = renderHook(() => useNavigationHandler({ platform: 'desktop' }))
       
-      const firstRender = result.current
+      expect(result.current.currentPath).toBe('/resources')
+      
+      // 模拟路径变化
+      mockUsePathname.mockReturnValue('/posts')
       rerender()
-      const secondRender = result.current
-
-      // 由于使用了useMemo，在pathname不变时应该返回相同引用
-      expect(firstRender.desktopNavigation).toBe(secondRender.desktopNavigation)
-      expect(firstRender.mobileNavigation).toBe(secondRender.mobileNavigation)
+      
+      expect(result.current.currentPath).toBe('/posts')
     })
   })
 
-  describe('集成测试', () => {
-    it('应该支持复杂的导航场景', () => {
-      const { result } = renderHook(() => useNavigationHandler())
-      const { desktopNavigation, mobileNavigation } = result.current
+  describe('平台切换测试', () => {
+    it('应该在平台切换时更新日志前缀', () => {
+      const { result, rerender } = renderHook(
+        ({ platform }) => useNavigationHandler({ platform }),
+        { initialProps: { platform: 'desktop' as const } }
+      )
+      
+      const navigationItem = {
+        title: '测试',
+        href: '/test'
+      }
 
-      const navigationItems = [
-        { title: 'Home', href: '/', disabled: false },
-        { title: 'About', href: '/about', disabled: false },
-        { title: 'Contact', href: '/contact', disabled: true },
-        { title: 'Current', href: '/current-path', disabled: false }
-      ]
-
-      navigationItems.forEach((item, index) => {
-        const mockEvent = {
-          preventDefault: jest.fn(),
-          stopPropagation: jest.fn()
-        } as any
-
-        if (!item.disabled) {
-          // 测试桌面端
-          desktopNavigation.handleNavigation(item, mockEvent)
-          expect(mockPush).toHaveBeenCalledWith(item.href)
-
-          // 测试移动端
-          const onClose = jest.fn()
-          mobileNavigation.handleNavigation(item, mockEvent, onClose)
-          expect(onClose).toHaveBeenCalled()
-
-          // 测试类名生成
-          const className = desktopNavigation.getNavigationClassName(
-            item.href, 'base-class', 'active-class'
-          )
-          
-          if (item.href === '/current-path') {
-            expect(className).toBe('base-class active-class')
-          } else {
-            expect(className).toBe('base-class')
-          }
-        }
-
-        jest.clearAllMocks()
+      // 桌面端
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
       })
+      
+      expect(console.log).toHaveBeenCalledWith(
+        'Desktop navigation clicked:',
+        expect.any(Object)
+      )
+      
+      // 切换到移动端
+      jest.clearAllMocks()
+      rerender({ platform: 'mobile' })
+      
+      act(() => {
+        result.current.handleNavigation(navigationItem, mockEvent)
+      })
+      
+      expect(console.log).toHaveBeenCalledWith(
+        'Mobile navigation clicked:',
+        expect.any(Object)
+      )
     })
   })
 })

@@ -103,7 +103,7 @@ export const ResourceCard = React.memo(
 
         <div className="mt-3 flex items-center justify-between">
           <ResourceStats
-            stats={createStatsConfig.resource({
+            stats={createStatsConfig('resource', {
               viewCount: resource.viewCount,
               commentCount: resource.commentCount,
               rating: resource.rating,

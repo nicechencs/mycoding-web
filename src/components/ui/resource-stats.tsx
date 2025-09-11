@@ -8,7 +8,7 @@ interface StatItem {
   icon: React.ReactNode
   label?: string
   className?: string
-  onClick?: (e: React.MouseEvent) => void
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
   active?: boolean
   disabled?: boolean
 }
@@ -194,8 +194,8 @@ interface ArticleStatsData {
   viewCount: number
   likeCount: number
   commentCount: number
-  onLike?: (e: React.MouseEvent) => void
-  onComment?: (e: React.MouseEvent) => void
+  onLike?: (e: React.MouseEvent<HTMLElement>) => void
+  onComment?: (e: React.MouseEvent<HTMLElement>) => void
   isLiked?: boolean
 }
 
@@ -203,14 +203,14 @@ interface ResourceStatsData {
   viewCount: number
   commentCount: number
   rating?: number
-  onComment?: (e: React.MouseEvent) => void
+  onComment?: (e: React.MouseEvent<HTMLElement>) => void
 }
 
 interface VibeStatsData {
   likeCount: number
   commentCount: number
-  onLike?: (e: React.MouseEvent) => void
-  onComment?: (e: React.MouseEvent) => void
+  onLike?: (e: React.MouseEvent<HTMLElement>) => void
+  onComment?: (e: React.MouseEvent<HTMLElement>) => void
   isLiked?: boolean
 }
 
