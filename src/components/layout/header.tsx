@@ -58,7 +58,6 @@ export function Header() {
                         'flex items-center text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
                         'text-blue-600 font-semibold'
                       )}
-                      onClick={e => desktopNavigation.handleNavigation(item, e)}
                     >
                       {item.title}
                     </Link>
@@ -195,7 +194,7 @@ export function Header() {
                       'block py-2 text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
                       'text-blue-600 font-semibold'
                     )}
-                    onClick={e => mobileNavigation.handleNavigation(item, e)}
+                    onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.title}
                   </Link>

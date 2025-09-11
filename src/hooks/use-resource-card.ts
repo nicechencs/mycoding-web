@@ -13,7 +13,8 @@ export function useResourceCard(resource: Resource) {
    * 处理卡片点击事件
    * 简洁的实现，只处理核心导航逻辑
    */
-  const handleCardClick = useCallback(() => {
+  const handleCardClick = useCallback((e?: React.MouseEvent) => {
+    // React会自动传递事件对象，我们需要接收它
     router.push(`/resources/${resource.slug}`)
   }, [router, resource.slug])
 

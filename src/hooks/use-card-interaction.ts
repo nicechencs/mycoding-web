@@ -57,9 +57,10 @@ const DEFAULT_ROUTE_CONFIG: RouteConfig = {
 }
 
 // 默认的点击阻止选择器
+// 当点击这些元素时，不触发卡片的导航
 const DEFAULT_PREVENT_SELECTORS = [
-  'a',
-  'button', 
+  'button',  // 按钮有自己的处理逻辑
+  'a',       // 链接有自己的跳转
   'input',
   'textarea',
   'select',
