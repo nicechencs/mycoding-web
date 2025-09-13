@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import 'highlight.js/styles/github-dark.css'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { Header } from '@/components/layout/header'
+// import { HeaderSimple } from '@/components/layout/header-simple'
 import { Footer } from '@/components/layout/footer'
 import { PerformanceWrapper } from '@/components/app/PerformanceWrapper'
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={inter.className}>
-        <PerformanceWrapper>
+        {/* <PerformanceWrapper> */}
           <AuthProvider>
             <div className="min-h-screen flex flex-col bg-gray-50">
               <Header />
@@ -30,7 +31,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </AuthProvider>
-        </PerformanceWrapper>
+        {/* </PerformanceWrapper> */}
       </body>
     </html>
   )

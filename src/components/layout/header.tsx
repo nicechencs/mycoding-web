@@ -55,7 +55,7 @@ export function Header() {
                       href={item.href}
                       className={desktopNavigation.getNavigationClassName(
                         item.href,
-                        'flex items-center text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
+                        'flex items-center text-sm font-medium transition-colors hover:text-blue-600',
                         'text-blue-600 font-semibold'
                       )}
                     >
@@ -71,7 +71,7 @@ export function Header() {
           {/* 认证相关UI */}
           {isAuthenticated ? (
             /* 已登录状态 - 用户菜单 */
-            <div className="relative">
+            <div className="relative" data-testid="user-menu">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -181,7 +181,7 @@ export function Header() {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-white/95 backdrop-blur-md">
-          <nav className="container py-4 space-y-2">
+          <nav className="container py-4 space-y-2" data-testid="mobile-nav">
             {navConfig.mainNav?.map(
               (item, index) =>
                 item.href &&
@@ -191,10 +191,9 @@ export function Header() {
                     href={item.href}
                     className={mobileNavigation.getNavigationClassName(
                       item.href,
-                      'block py-2 text-sm font-medium transition-colors hover:text-blue-600 text-gray-600',
+                      'block py-2 text-sm font-medium transition-colors hover:text-blue-600',
                       'text-blue-600 font-semibold'
                     )}
-                    onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.title}
                   </Link>

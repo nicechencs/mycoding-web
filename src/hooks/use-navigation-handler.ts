@@ -48,11 +48,17 @@ export function useNavigationHandler(options: NavigationHandlerOptions) {
   }, [platform, pathname, onNavigate])
 
   const isActiveRoute = useCallback((href: string) => {
-    return pathname === href
+    if (!href) return false
+    // 根路径只在首页时高亮
+    if (href === '/') return pathname === '/'
+    // 精确匹配或子路径匹配均视为激活
+    return pathname === href || pathname.startsWith(href + '/')
   }, [pathname])
 
   const getNavigationClassName = useCallback((href: string, baseClasses: string, activeClasses: string) => {
-    return `${baseClasses} ${isActiveRoute(href) ? activeClasses : ''}`
+    return isActiveRoute(href) 
+      ? `${baseClasses} ${activeClasses}` 
+      : `${baseClasses} text-gray-600`
   }, [isActiveRoute])
 
   return {

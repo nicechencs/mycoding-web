@@ -16,7 +16,9 @@ export default function ResourcesPage() {
   const queryParams = useMemo(() => {
     const params: any = {}
     if (selectedCategory !== 'all') {
-      params.category = selectedCategory
+      params.filters = {
+        category: selectedCategory
+      }
     }
     const searchTerm = displayQuery || searchQuery
     if (searchTerm) {
