@@ -65,7 +65,10 @@ function generateTokens(user: AuthUser): AuthToken {
 function parseToken(token: string): any {
   try {
     const parts = token.split('.')
-    if (parts.length !== 3 || !(parts[0].startsWith('mock') || parts[0].startsWith('refresh'))) {
+    if (
+      parts.length !== 3 ||
+      !(parts[0].startsWith('mock') || parts[0].startsWith('refresh'))
+    ) {
       throw new Error('Invalid token format')
     }
     return JSON.parse(atob(parts[1]))

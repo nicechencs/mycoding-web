@@ -245,7 +245,11 @@ export function ResourceActions({
         {/* 显示平均评分 */}
         {totalRatings > 0 && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <RatingStars rating={averageRating ?? 0} size="xs" showCount={false} />
+            <RatingStars
+              rating={averageRating ?? 0}
+              size="xs"
+              showCount={false}
+            />
             <span>
               {averageRating?.toFixed(1)} ({totalRatings} 人评分)
             </span>

@@ -92,8 +92,14 @@ export default function VibeDetailPage({ params }: Props) {
     const updatedVibe = { ...vibe!, commentCount: vibe!.commentCount + 1 }
     const updatedComments = [...(comments || []), comment]
 
-    mutate.comments(prev => ({ ...(prev || { success: true }), data: updatedComments }), false)
-    mutate.vibe(prev => ({ ...(prev || { success: true }), data: updatedVibe }), false)
+    mutate.comments(
+      prev => ({ ...(prev || { success: true }), data: updatedComments }),
+      false
+    )
+    mutate.vibe(
+      prev => ({ ...(prev || { success: true }), data: updatedVibe }),
+      false
+    )
     setNewComment('')
   }
 

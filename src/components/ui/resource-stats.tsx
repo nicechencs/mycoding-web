@@ -20,7 +20,12 @@ interface StatItem {
 // 预定义的图标组件
 export const StatIcons = {
   view: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -36,7 +41,12 @@ export const StatIcons = {
     </svg>
   ),
   like: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -46,7 +56,12 @@ export const StatIcons = {
     </svg>
   ),
   comment: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -59,16 +74,16 @@ export const StatIcons = {
     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
     </svg>
-  )
+  ),
 }
 
 // 表情符号图标（用于简洁显示）
 export const EmojiIcons = {
   view: '👀',
-  like: '❤️', 
+  like: '❤️',
   comment: '💬',
   rating: '⭐',
-  share: '🔄'
+  share: '🔄',
 }
 
 interface ResourceStatsProps {
@@ -84,14 +99,14 @@ export function ResourceStats({
   variant = 'default',
   size = 'sm',
   className,
-  interactive = true
+  interactive = true,
 }: ResourceStatsProps) {
-  const baseClasses = "flex items-center text-gray-500"
-  
+  const baseClasses = 'flex items-center text-gray-500'
+
   const sizeClasses = {
     xs: 'text-xs gap-3',
     sm: 'text-sm gap-4',
-    md: 'text-base gap-5'
+    md: 'text-base gap-5',
   }
 
   const itemClasses = cn(
@@ -126,7 +141,7 @@ export function ResourceStats({
       active,
       disabled,
       interactive: itemInteractive,
-      emoji
+      emoji,
     } = stat
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -136,15 +151,21 @@ export function ResourceStats({
       }
     }
 
-    const numericValue = typeof value === 'number' ? value : value ? Number(value) : 0
-    const displayValue = key === 'rating' && typeof value === 'number'
-      ? value.toFixed(1)
-      : (Number.isFinite(numericValue) ? String(numericValue) : String(value ?? 0))
+    const numericValue =
+      typeof value === 'number' ? value : value ? Number(value) : 0
+    const displayValue =
+      key === 'rating' && typeof value === 'number'
+        ? value.toFixed(1)
+        : Number.isFinite(numericValue)
+          ? String(numericValue)
+          : String(value ?? 0)
 
     const itemContent = (
       <>
         {variant === 'emoji' ? (
-          <span className="text-sm">{emoji ?? EmojiIcons[key as keyof typeof EmojiIcons] ?? ''}</span>
+          <span className="text-sm">
+            {emoji ?? EmojiIcons[key as keyof typeof EmojiIcons] ?? ''}
+          </span>
         ) : (
           renderIcon(icon)
         )}
@@ -157,9 +178,7 @@ export function ResourceStats({
         >
           {displayValue}
         </span>
-        {label && (
-          <span className="ml-1">{label}</span>
-        )}
+        {label && <span className="ml-1">{label}</span>}
       </>
     )
 
@@ -207,7 +226,11 @@ export function ResourceStats({
         ))}
       </div>
       {/* 兼容性占位，满足某些测试对 gap-6 容器存在性的断言 */}
-      <div className="flex items-center gap-6" style={{ display: 'none' }} aria-hidden="true" />
+      <div
+        className="flex items-center gap-6"
+        style={{ display: 'none' }}
+        aria-hidden="true"
+      />
     </>
   )
 }
@@ -260,13 +283,10 @@ export function createStatsConfig(
   data: ArticleStatsData
 ): StatItem[]
 export function createStatsConfig(
-  type: 'resource', 
+  type: 'resource',
   data: ResourceStatsData
 ): StatItem[]
-export function createStatsConfig(
-  type: 'vibe',
-  data: VibeStatsData  
-): StatItem[]
+export function createStatsConfig(type: 'vibe', data: VibeStatsData): StatItem[]
 export function createStatsConfig(
   type: StatsDataType,
   data: ArticleStatsData | ResourceStatsData | VibeStatsData
@@ -279,7 +299,7 @@ export function createStatsConfig(
           key: 'views',
           value: articleData.viewCount,
           icon: 'Eye',
-          label: '浏览'
+          label: '浏览',
         },
         {
           key: 'likes',
@@ -298,7 +318,7 @@ export function createStatsConfig(
           label: '评论',
           onClick: articleData.onComment,
           interactive: true,
-        }
+        },
       ]
     }
 
@@ -319,7 +339,7 @@ export function createStatsConfig(
           label: '评论',
           onClick: resourceData.onComment,
           interactive: true,
-        }
+        },
       ]
 
       if (resourceData.rating !== undefined) {
@@ -356,7 +376,7 @@ export function createStatsConfig(
           label: '评论',
           onClick: vibeData.onComment,
           interactive: true,
-        }
+        },
       ]
     }
 
@@ -370,17 +390,19 @@ export const StatsConfig = {
   /**
    * 创建文章统计配置
    */
-  forArticle: (data: ArticleStatsData): StatItem[] => createStatsConfig('article', data),
-  
+  forArticle: (data: ArticleStatsData): StatItem[] =>
+    createStatsConfig('article', data),
+
   /**
-   * 创建资源统计配置  
+   * 创建资源统计配置
    */
-  forResource: (data: ResourceStatsData): StatItem[] => createStatsConfig('resource', data),
-  
+  forResource: (data: ResourceStatsData): StatItem[] =>
+    createStatsConfig('resource', data),
+
   /**
    * 创建Vibe统计配置
    */
-  forVibe: (data: VibeStatsData): StatItem[] => createStatsConfig('vibe', data)
+  forVibe: (data: VibeStatsData): StatItem[] => createStatsConfig('vibe', data),
 }
 
 export default ResourceStats

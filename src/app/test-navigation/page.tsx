@@ -11,7 +11,10 @@ export default function TestNavigationPage() {
 
   const addLog = (message: string) => {
     console.log(message)
-    setClickLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`])
+    setClickLog(prev => [
+      ...prev,
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ])
   }
 
   // 测试直接的router.push
@@ -36,14 +39,16 @@ export default function TestNavigationPage() {
   // 测试模拟卡片点击
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement
-    addLog(`Card clicked, target: ${target.tagName}, class: ${target.className}`)
-    
+    addLog(
+      `Card clicked, target: ${target.tagName}, class: ${target.className}`
+    )
+
     // 检查是否点击了按钮或链接
     if (target.closest('button') || target.closest('a')) {
       addLog('Click on button/link detected - stopping card navigation')
       return
     }
-    
+
     addLog('Navigating from card click...')
     router.push('/resources')
   }
@@ -51,22 +56,19 @@ export default function TestNavigationPage() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-2xl font-bold mb-6">导航测试页面</h1>
-      
+
       {/* 测试基础Link组件 */}
       <section className="mb-8 p-4 border rounded">
         <h2 className="text-lg font-semibold mb-4">1. Next.js Link 组件测试</h2>
         <div className="space-x-4">
-          <Link 
-            href="/resources" 
+          <Link
+            href="/resources"
             className="text-blue-600 hover:underline"
             onClick={() => addLog('Link clicked - /resources')}
           >
             Link to Resources
           </Link>
-          <Link 
-            href="/posts" 
-            className="text-blue-600 hover:underline"
-          >
+          <Link href="/posts" className="text-blue-600 hover:underline">
             Link to Posts (no onClick)
           </Link>
         </div>
@@ -100,7 +102,7 @@ export default function TestNavigationPage() {
       {/* 测试卡片点击 */}
       <section className="mb-8 p-4 border rounded">
         <h2 className="text-lg font-semibold mb-4">3. 模拟卡片点击测试</h2>
-        <div 
+        <div
           className="p-6 bg-gray-100 rounded cursor-pointer hover:bg-gray-200"
           onClick={handleCardClick}
         >
@@ -108,7 +110,7 @@ export default function TestNavigationPage() {
           <p className="mb-4">点击卡片任意位置应该跳转</p>
           <button
             className="px-3 py-1 bg-blue-600 text-white rounded"
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation()
               addLog('Card button clicked - stopPropagation called')
               router.push('/vibes')
@@ -138,7 +140,9 @@ export default function TestNavigationPage() {
             <p className="text-gray-500">还没有点击事件...</p>
           ) : (
             clickLog.map((log, index) => (
-              <div key={index} className="text-sm font-mono">{log}</div>
+              <div key={index} className="text-sm font-mono">
+                {log}
+              </div>
             ))
           )}
         </div>
@@ -156,18 +160,18 @@ export default function TestNavigationPage() {
 // 模拟ResourceCard组件
 function TestResourceCard() {
   const router = useRouter()
-  
+
   const handleCardClick = (e?: React.MouseEvent) => {
     console.log('TestResourceCard clicked', e)
     router.push('/resources/test-resource')
   }
-  
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     console.log('Action button clicked')
     router.push('/resources/test-resource')
   }
-  
+
   return (
     <div
       className="p-6 bg-white rounded-lg shadow hover:shadow-lg cursor-pointer"

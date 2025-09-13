@@ -18,7 +18,10 @@ jest.mock('@/lib/auth/auth-service', () => ({
     forgotPassword: jest.fn(),
   },
   AuthError: class AuthError extends Error {
-    constructor(public code: string, message: string) {
+    constructor(
+      public code: string,
+      message: string
+    ) {
       super(message)
       this.name = 'AuthError'
     }
@@ -549,7 +552,9 @@ describe('AuthProvider Component', () => {
 
       render(<TestHookComponent />)
 
-      expect(screen.getByText('Error: useAuth must be used within an AuthProvider')).toBeInTheDocument()
+      expect(
+        screen.getByText('Error: useAuth must be used within an AuthProvider')
+      ).toBeInTheDocument()
     })
 
     it('应该提供正确的context值', async () => {

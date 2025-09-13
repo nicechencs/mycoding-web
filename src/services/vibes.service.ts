@@ -319,7 +319,7 @@ export class VibesService implements IVibesService {
 
     if (isDevelopment()) {
       const searchLower = query.toLowerCase()
-      let vibes = mockVibes.filter(
+      const vibes = mockVibes.filter(
         vibe =>
           vibe.content.toLowerCase().includes(searchLower) ||
           vibe.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
@@ -383,7 +383,7 @@ export class VibesService implements IVibesService {
     }
 
     if (isDevelopment()) {
-      let vibes = mockVibes.filter(vibe =>
+      const vibes = mockVibes.filter(vibe =>
         vibe.tags.some(t => t.toLowerCase() === tag.toLowerCase())
       )
 

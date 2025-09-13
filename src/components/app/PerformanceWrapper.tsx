@@ -93,7 +93,6 @@ if (typeof window !== 'undefined' && !window.requestIdleCallback) {
       })
     }, 1) as unknown as number
   }
-
   ;(window as any).cancelIdleCallback = function (id: number) {
     clearTimeout(id)
   }

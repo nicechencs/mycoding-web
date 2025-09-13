@@ -17,7 +17,7 @@ export default function ResourcesPage() {
     const params: any = {}
     if (selectedCategory !== 'all') {
       params.filters = {
-        category: selectedCategory
+        category: selectedCategory,
       }
     }
     const searchTerm = displayQuery || searchQuery

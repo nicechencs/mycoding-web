@@ -10,16 +10,16 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
-  
+
   // 桌面端导航处理
   const desktopNavigation = useNavigationHandler({
-    platform: 'desktop'
+    platform: 'desktop',
   })
-  
+
   // 移动端导航处理
   const mobileNavigation = useNavigationHandler({
     platform: 'mobile',
-    onNavigate: () => setMobileMenuOpen(false)
+    onNavigate: () => setMobileMenuOpen(false),
   })
 
   const handleLogout = async () => {
@@ -115,6 +115,13 @@ export function Header() {
                   >
                     个人中心
                   </Link>
+                  <Link
+                    href="/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    设置
+                  </Link>
                   <div className="border-t border-gray-100 my-1"></div>
                   <button
                     onClick={handleLogout}
@@ -128,13 +135,13 @@ export function Header() {
           ) : (
             /* 未登录状态 - 登录注册文本菜单 */
             <div className="hidden md:flex items-center space-x-6">
-              <Link 
+              <Link
                 href="/login"
                 className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
               >
                 登录
               </Link>
-              <Link 
+              <Link
                 href="/register"
                 className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
               >

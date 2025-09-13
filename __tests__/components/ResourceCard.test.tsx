@@ -174,7 +174,7 @@ describe('ResourceCard Component', () => {
       // 点击卡片容器
       const card = screen.getByText('Test Resource').closest('div')
       expect(card).toBeInTheDocument()
-      
+
       if (card) {
         fireEvent.click(card)
         expect(mockPush).toHaveBeenCalledWith('/resources/test-resource')

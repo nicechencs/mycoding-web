@@ -474,7 +474,7 @@ export class ResourcesService implements IResourcesService {
 
     if (isDevelopment()) {
       const searchLower = query.toLowerCase()
-      let resources = mockResources.filter(
+      const resources = mockResources.filter(
         resource =>
           resource.title.toLowerCase().includes(searchLower) ||
           resource.description.toLowerCase().includes(searchLower) ||

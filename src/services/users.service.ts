@@ -360,7 +360,7 @@ export class UsersService implements IUsersService {
 
     if (isDevelopment()) {
       const searchLower = query.toLowerCase()
-      let users = mockUsers.filter(
+      const users = mockUsers.filter(
         user =>
           user.name.toLowerCase().includes(searchLower) ||
           user.email.toLowerCase().includes(searchLower)

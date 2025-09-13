@@ -202,7 +202,9 @@ export default function SettingsPage() {
                 <div className="lg:col-span-2">
                   <BaseCard>
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-xl font-semibold text-gray-900">最近活动</h2>
+                      <h2 className="text-xl font-semibold text-gray-900">
+                        最近活动
+                      </h2>
                       <Link
                         href="/my-favorites"
                         className="text-sm text-blue-600 hover:text-blue-500"
@@ -218,8 +220,12 @@ export default function SettingsPage() {
                         >
                           <span className="text-xl">{activity.icon}</span>
                           <div className="flex-1">
-                            <p className="text-sm text-gray-900">{activity.title}</p>
-                            <p className="text-xs text-gray-500">{activity.time}</p>
+                            <p className="text-sm text-gray-900">
+                              {activity.title}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {activity.time}
+                            </p>
                           </div>
                         </div>
                       ))}

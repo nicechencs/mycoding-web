@@ -87,7 +87,8 @@ describe('API Integration Tests', () => {
     describe('Token刷新API', () => {
       it('应该成功刷新token', async () => {
         // 模拟有效的refresh token（使用正确的格式）
-        const validRefreshToken = 'refresh.eyJ1c2VySWQiOiIxIiwidHlwZSI6InJlZnJlc2gifQ==.signature'
+        const validRefreshToken =
+          'refresh.eyJ1c2VySWQiOiIxIiwidHlwZSI6InJlZnJlc2gifQ==.signature'
         MockedTokenManager.getRefreshToken.mockReturnValue(validRefreshToken)
 
         const result = await AuthService.refreshToken()
@@ -109,7 +110,9 @@ describe('API Integration Tests', () => {
     describe('获取用户信息API', () => {
       it('应该成功获取当前用户信息', async () => {
         // 模拟有效的access token
-        MockedTokenManager.getAccessToken.mockReturnValue('mock.eyJ1c2VySWQiOiIxIn0=.signature')
+        MockedTokenManager.getAccessToken.mockReturnValue(
+          'mock.eyJ1c2VySWQiOiIxIn0=.signature'
+        )
 
         const result = await AuthService.getCurrentUser()
 
@@ -121,7 +124,9 @@ describe('API Integration Tests', () => {
       it('应该处理未认证的情况', async () => {
         MockedTokenManager.getAccessToken.mockReturnValue('invalid-token')
 
-        await expect(AuthService.getCurrentUser()).rejects.toThrow('无效的访问令牌')
+        await expect(AuthService.getCurrentUser()).rejects.toThrow(
+          '无效的访问令牌'
+        )
       })
     })
   })
@@ -153,7 +158,9 @@ describe('API Integration Tests', () => {
     it('应该处理token缺失错误', async () => {
       MockedTokenManager.getAccessToken.mockReturnValue(null)
 
-      await expect(AuthService.getCurrentUser()).rejects.toThrow('未找到访问令牌')
+      await expect(AuthService.getCurrentUser()).rejects.toThrow(
+        '未找到访问令牌'
+      )
     })
   })
 
@@ -187,7 +194,8 @@ describe('API Integration Tests', () => {
   describe('Token管理测试', () => {
     it('应该正确处理token刷新', async () => {
       // 模拟有效的refresh token（使用正确的格式）
-      const validRefreshToken = 'refresh.eyJ1c2VySWQiOiIxIiwidHlwZSI6InJlZnJlc2gifQ==.signature'
+      const validRefreshToken =
+        'refresh.eyJ1c2VySWQiOiIxIiwidHlwZSI6InJlZnJlc2gifQ==.signature'
       MockedTokenManager.getRefreshToken.mockReturnValue(validRefreshToken)
 
       const result = await AuthService.refreshToken()

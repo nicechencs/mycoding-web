@@ -7,7 +7,10 @@ import { RatingStars } from './rating-stars'
 import { getCategoryClasses } from '@/lib/utils/category'
 import { Markdown } from '@/components/ui/markdown'
 import { useResourceCard } from '@/hooks/use-resource-card'
-import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
+import {
+  ResourceStats,
+  createStatsConfig,
+} from '@/components/ui/resource-stats'
 
 interface ResourceCardProps {
   resource: Resource
@@ -104,13 +107,17 @@ export const ResourceCard = React.memo(
         <div className="mt-3 flex items-center justify-between">
           <ResourceStats
             stats={createStatsConfig('resource', {
-              viewCount: Number(resource.viewCount).toLocaleString('en-US') as any,
-              commentCount: Number(resource.commentCount).toLocaleString('en-US') as any,
+              viewCount: Number(resource.viewCount).toLocaleString(
+                'en-US'
+              ) as any,
+              commentCount: Number(resource.commentCount).toLocaleString(
+                'en-US'
+              ) as any,
               rating: resource.rating,
-              onComment: (e) => {
+              onComment: e => {
                 e.stopPropagation()
                 // 这里可以添加评论相关逻辑，暂时保留原有行为
-              }
+              },
             })}
             variant="default"
             size="xs"

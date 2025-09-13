@@ -4,7 +4,10 @@ import React from 'react'
 import Link from 'next/link'
 import { Article } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
-import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
+import {
+  ResourceStats,
+  createStatsConfig,
+} from '@/components/ui/resource-stats'
 import { useArticleCardInteraction } from '@/hooks/use-card-interaction'
 import { getCategoryClasses } from '@/lib/utils/category'
 
@@ -16,7 +19,7 @@ export const ArticleCard = React.memo(
   ({ article }: ArticleCardProps) => {
     // 使用统一的卡片交互Hook
     const { getCardProps, handleStatsClick } = useArticleCardInteraction({
-      enableDebugLog: process.env.NODE_ENV === 'development'
+      enableDebugLog: process.env.NODE_ENV === 'development',
     })
 
     // 创建统计数据配置
@@ -92,7 +95,7 @@ export const ArticleCard = React.memo(
 
         {/* Stats and Actions */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <ResourceStats 
+          <ResourceStats
             stats={statsConfig}
             variant="emoji"
             size="xs"

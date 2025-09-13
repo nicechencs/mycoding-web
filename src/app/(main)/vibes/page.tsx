@@ -51,10 +51,16 @@ export default function VibesPage() {
     }
 
     // 手动更新缓存
-    mutate(prev => ({
-      ...(prev || { success: true }),
-      data: [newVibe, ...((prev && (prev as any).data) ? (prev as any).data : (vibes || []))],
-    }), false)
+    mutate(
+      prev => ({
+        ...(prev || { success: true }),
+        data: [
+          newVibe,
+          ...(prev && (prev as any).data ? (prev as any).data : vibes || []),
+        ],
+      }),
+      false
+    )
     setShowComposer(false)
   }
 

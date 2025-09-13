@@ -359,7 +359,7 @@ export class ArticlesService implements IArticlesService {
 
     if (isDevelopment()) {
       const searchLower = query.toLowerCase()
-      let articles = mockArticles.filter(
+      const articles = mockArticles.filter(
         article =>
           article.title.toLowerCase().includes(searchLower) ||
           article.excerpt.toLowerCase().includes(searchLower) ||

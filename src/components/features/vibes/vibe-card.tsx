@@ -4,7 +4,10 @@ import { useState } from 'react'
 import { Vibe } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
 import { LazyImage } from '@/components/ui/LazyImage'
-import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
+import {
+  ResourceStats,
+  createStatsConfig,
+} from '@/components/ui/resource-stats'
 import { VibeActionsCompact } from './vibe-actions'
 import { useAuth } from '@/hooks/use-auth'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
@@ -23,7 +26,7 @@ export function VibeCard({ vibe }: VibeCardProps) {
 
   // 使用统一的卡片交互Hook
   const { getCardProps, handleStatsClick } = useVibeCardInteraction({
-    enableDebugLog: process.env.NODE_ENV === 'development'
+    enableDebugLog: process.env.NODE_ENV === 'development',
   })
 
   // 创建统计数据配置
@@ -134,7 +137,7 @@ export function VibeCard({ vibe }: VibeCardProps) {
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <div className="flex items-center gap-4">
           <VibeActionsCompact vibeId={vibe.id} />
-          <ResourceStats 
+          <ResourceStats
             stats={statsConfig}
             variant="emoji"
             size="xs"

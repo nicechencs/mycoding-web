@@ -17,19 +17,20 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const sizeClasses = {
       sm: 'h-8 w-8',
       md: 'h-10 w-10',
-      lg: 'h-12 w-12'
+      lg: 'h-12 w-12',
     }
-    
+
     const Component = onClick ? 'button' : 'div'
-    
+
     return (
       <Component
         ref={ref as any}
         className={clsx(
           'relative flex shrink-0 overflow-hidden rounded-full',
-          typeof size === 'string' && sizeClasses[size as keyof typeof sizeClasses] 
-            ? sizeClasses[size as keyof typeof sizeClasses] 
-            : size === 'sm' || size === 'md' || size === 'lg' 
+          typeof size === 'string' &&
+            sizeClasses[size as keyof typeof sizeClasses]
+            ? sizeClasses[size as keyof typeof sizeClasses]
+            : size === 'sm' || size === 'md' || size === 'lg'
               ? sizeClasses[size]
               : 'h-10 w-10',
           onClick && 'cursor-pointer hover:opacity-80 transition-opacity',
@@ -94,23 +95,26 @@ interface FloatingAvatarProps {
   children: React.ReactNode
 }
 
-export const FloatingAvatar = forwardRef<HTMLButtonElement, FloatingAvatarProps>(
-  ({ className, onClick, theme = 'primary', title, children }, ref) => (
-    <button
-      ref={ref}
-      className={clsx(
-        'fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2',
-        {
-          'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500': theme === 'primary',
-          'bg-slate-500 text-white hover:bg-slate-600 focus:ring-slate-500': theme === 'secondary',
-        },
-        className
-      )}
-      onClick={onClick}
-      title={title}
-    >
-      {children}
-    </button>
-  )
-)
+export const FloatingAvatar = forwardRef<
+  HTMLButtonElement,
+  FloatingAvatarProps
+>(({ className, onClick, theme = 'primary', title, children }, ref) => (
+  <button
+    ref={ref}
+    className={clsx(
+      'fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2',
+      {
+        'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500':
+          theme === 'primary',
+        'bg-slate-500 text-white hover:bg-slate-600 focus:ring-slate-500':
+          theme === 'secondary',
+      },
+      className
+    )}
+    onClick={onClick}
+    title={title}
+  >
+    {children}
+  </button>
+))
 FloatingAvatar.displayName = 'FloatingAvatar'

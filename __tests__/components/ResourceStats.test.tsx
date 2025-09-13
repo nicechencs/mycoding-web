@@ -1,14 +1,25 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { ResourceStats, createStatsConfig } from '@/components/ui/resource-stats'
+import {
+  ResourceStats,
+  createStatsConfig,
+} from '@/components/ui/resource-stats'
 
 // Mock Lucide React icons
 jest.mock('lucide-react', () => ({
-  Eye: ({ className }: any) => <div data-testid="eye-icon" className={className} />,
-  MessageSquare: ({ className }: any) => <div data-testid="message-icon" className={className} />,
-  Star: ({ className }: any) => <div data-testid="star-icon" className={className} />,
-  Heart: ({ className }: any) => <div data-testid="heart-icon" className={className} />,
+  Eye: ({ className }: any) => (
+    <div data-testid="eye-icon" className={className} />
+  ),
+  MessageSquare: ({ className }: any) => (
+    <div data-testid="message-icon" className={className} />
+  ),
+  Star: ({ className }: any) => (
+    <div data-testid="star-icon" className={className} />
+  ),
+  Heart: ({ className }: any) => (
+    <div data-testid="heart-icon" className={className} />
+  ),
 }))
 
 describe('ResourceStats Component', () => {
@@ -19,22 +30,22 @@ describe('ResourceStats Component', () => {
       value: 1500,
       label: '浏览',
       icon: 'Eye' as const,
-      interactive: true
+      interactive: true,
     },
     {
       key: 'comments',
       value: 25,
       label: '评论',
       icon: 'MessageSquare' as const,
-      interactive: true
+      interactive: true,
     },
     {
       key: 'rating',
       value: 4.5,
       label: '评分',
       icon: 'Star' as const,
-      interactive: false
-    }
+      interactive: false,
+    },
   ]
 
   describe('基础渲染测试', () => {
@@ -59,7 +70,7 @@ describe('ResourceStats Component', () => {
 
     it('应该处理空统计数据', () => {
       render(<ResourceStats stats={[]} />)
-      
+
       // 验证容器存在但没有内容
       const container = document.querySelector('.flex.items-center.gap-4')
       expect(container).toBeInTheDocument()
@@ -72,8 +83,8 @@ describe('ResourceStats Component', () => {
           key: 'views',
           value: undefined as any,
           label: '浏览',
-          icon: 'Eye' as const
-        }
+          icon: 'Eye' as const,
+        },
       ]
 
       render(<ResourceStats stats={statsWithUndefined} />)
@@ -89,15 +100,15 @@ describe('ResourceStats Component', () => {
           value: 1500,
           label: '浏览',
           icon: 'Eye' as const,
-          emoji: '👀'
+          emoji: '👀',
         },
         {
           key: 'likes',
           value: 120,
           label: '点赞',
           icon: 'Heart' as const,
-          emoji: '❤️'
-        }
+          emoji: '❤️',
+        },
       ]
 
       render(<ResourceStats stats={emojiStats} variant="emoji" />)
@@ -117,14 +128,14 @@ describe('ResourceStats Component', () => {
           key: 'views',
           value: 123456,
           label: '浏览',
-          icon: 'Eye' as const
+          icon: 'Eye' as const,
         },
         {
           key: 'comments',
           value: 9999,
           label: '评论',
-          icon: 'MessageSquare' as const
-        }
+          icon: 'MessageSquare' as const,
+        },
       ]
 
       render(<ResourceStats stats={largeNumberStats} />)
@@ -139,8 +150,8 @@ describe('ResourceStats Component', () => {
           key: 'rating',
           value: 3.14159,
           label: '评分',
-          icon: 'Star' as const
-        }
+          icon: 'Star' as const,
+        },
       ]
 
       render(<ResourceStats stats={decimalStats} />)
@@ -151,21 +162,21 @@ describe('ResourceStats Component', () => {
   describe('样式变体测试', () => {
     it('应该应用默认变体样式', () => {
       render(<ResourceStats stats={mockStatsConfig} />)
-      
+
       const container = document.querySelector('.flex.items-center.gap-4')
       expect(container).toHaveClass('text-sm')
     })
 
     it('应该应用compact变体样式', () => {
       render(<ResourceStats stats={mockStatsConfig} variant="compact" />)
-      
+
       const items = document.querySelectorAll('.flex.items-center.gap-1')
       expect(items.length).toBeGreaterThan(0)
     })
 
     it('应该应用default变体样式条于例外', () => {
       render(<ResourceStats stats={mockStatsConfig} />)
-      
+
       const container = document.querySelector('.flex.items-center.gap-6')
       expect(container).toBeInTheDocument()
     })
@@ -181,7 +192,7 @@ describe('ResourceStats Component', () => {
           label: '浏览',
           icon: 'Eye' as const,
           interactive: true,
-          onClick: mockOnInteraction
+          onClick: mockOnInteraction,
         },
         {
           key: 'comments',
@@ -189,8 +200,8 @@ describe('ResourceStats Component', () => {
           label: '评论',
           icon: 'MessageSquare' as const,
           interactive: true,
-          onClick: mockOnInteraction
-        }
+          onClick: mockOnInteraction,
+        },
       ]
 
       render(<ResourceStats stats={statsWithHandlers} />)
@@ -217,7 +228,7 @@ describe('ResourceStats Component', () => {
           label: '浏览',
           icon: 'Eye' as const,
           interactive: true,
-          onClick: mockOnInteraction
+          onClick: mockOnInteraction,
         },
         {
           key: 'comments',
@@ -225,8 +236,8 @@ describe('ResourceStats Component', () => {
           label: '评论',
           icon: 'MessageSquare' as const,
           interactive: false,
-          onClick: mockOnInteraction
-        }
+          onClick: mockOnInteraction,
+        },
       ]
 
       render(<ResourceStats stats={statsWithHandlers} />)
@@ -250,28 +261,28 @@ describe('ResourceStats Component', () => {
   describe('响应式尺寸测试', () => {
     it('应该应用xs尺寸类', () => {
       render(<ResourceStats stats={mockStatsConfig} size="xs" />)
-      
+
       const container = document.querySelector('.flex.items-center')
       expect(container).toHaveClass('gap-3', 'text-xs')
     })
 
     it('应该应用sm尺寸类', () => {
       render(<ResourceStats stats={mockStatsConfig} size="sm" />)
-      
+
       const container = document.querySelector('.flex.items-center')
       expect(container).toHaveClass('gap-4', 'text-sm')
     })
 
     it('应该应用md尺寸类', () => {
       render(<ResourceStats stats={mockStatsConfig} size="md" />)
-      
+
       const container = document.querySelector('.flex.items-center')
       expect(container).toHaveClass('gap-5', 'text-base')
     })
 
     it('应该应用md尺寸类', () => {
       render(<ResourceStats stats={mockStatsConfig} size="md" />)
-      
+
       const container = document.querySelector('.flex.items-center')
       expect(container).toHaveClass('gap-5', 'text-base')
     })
@@ -280,12 +291,12 @@ describe('ResourceStats Component', () => {
   describe('自定义className测试', () => {
     it('应该应用自定义className', () => {
       render(
-        <ResourceStats 
-          stats={mockStatsConfig} 
+        <ResourceStats
+          stats={mockStatsConfig}
           className="custom-class text-purple-500"
         />
       )
-      
+
       const container = document.querySelector('.flex.items-center')
       expect(container).toHaveClass('custom-class', 'text-purple-500')
     })
@@ -298,12 +309,14 @@ describe('ResourceStats Component', () => {
           key: 'long',
           value: 42,
           label: '这是一个非常非常长的标签文本用于测试',
-          icon: 'Eye' as const
-        }
+          icon: 'Eye' as const,
+        },
       ]
 
       render(<ResourceStats stats={longTextStats} />)
-      expect(screen.getByText('这是一个非常非常长的标签文本用于测试')).toBeInTheDocument()
+      expect(
+        screen.getByText('这是一个非常非常长的标签文本用于测试')
+      ).toBeInTheDocument()
     })
 
     it('应该处理多个统计项', () => {
@@ -311,12 +324,12 @@ describe('ResourceStats Component', () => {
         key: `stat-${i}`,
         value: i * 100,
         label: `统计${i}`,
-        icon: 'Eye' as const
+        icon: 'Eye' as const,
       }))
 
       render(<ResourceStats stats={manyStats} />)
-      
-      manyStats.forEach((stat) => {
+
+      manyStats.forEach(stat => {
         expect(screen.getByText(stat.value.toString())).toBeInTheDocument()
         expect(screen.getByText(stat.label)).toBeInTheDocument()
       })
@@ -332,20 +345,20 @@ describe('ResourceStats Component', () => {
               key: 'views',
               value: 500,
               label: '浏览',
-              icon: 'Eye' as const
+              icon: 'Eye' as const,
             },
             {
               key: 'likes',
               value: 100,
               label: '点赞',
-              icon: 'Heart' as const
+              icon: 'Heart' as const,
             },
             {
               key: 'comments',
               value: 20,
               label: '评论',
-              icon: 'MessageSquare' as const
-            }
+              icon: 'MessageSquare' as const,
+            },
           ]}
         />
       )
@@ -365,7 +378,7 @@ describe('createStatsConfig函数', () => {
     viewCount: 1500,
     commentCount: 25,
     rating: 4.5,
-    likeCount: 120
+    likeCount: 120,
   }
 
   describe('资源类型配置', () => {
@@ -378,27 +391,27 @@ describe('createStatsConfig函数', () => {
         value: 1500,
         label: '浏览',
         icon: 'Eye',
-        interactive: true
+        interactive: true,
       })
       expect(config[1]).toMatchObject({
         key: 'comments',
         value: 25,
         label: '评论',
         icon: 'MessageSquare',
-        interactive: true
+        interactive: true,
       })
       expect(config[2]).toMatchObject({
         key: 'rating',
         value: 4.5,
         label: '评分',
         icon: 'Star',
-        interactive: false
+        interactive: false,
       })
     })
 
     it('应该正确处理resource的数值', () => {
       const config = createStatsConfig('resource', mockResource)
-      
+
       // 测试值是否正确
       expect(config[0].value).toBe(1500)
       expect(config[1].value).toBe(25)
@@ -414,17 +427,17 @@ describe('createStatsConfig函数', () => {
       expect(config[0]).toMatchObject({
         key: 'views',
         value: 1500,
-        label: '浏览'
+        label: '浏览',
       })
       expect(config[1]).toMatchObject({
         key: 'likes',
         value: 120,
-        label: '点赞'
+        label: '点赞',
       })
       expect(config[2]).toMatchObject({
         key: 'comments',
         value: 25,
-        label: '评论'
+        label: '评论',
       })
     })
   })
@@ -437,12 +450,12 @@ describe('createStatsConfig函数', () => {
       expect(config[0]).toMatchObject({
         key: 'likes',
         value: 120,
-        label: '点赞'
+        label: '点赞',
       })
       expect(config[1]).toMatchObject({
         key: 'comments',
         value: 25,
-        label: '评论'
+        label: '评论',
       })
     })
   })

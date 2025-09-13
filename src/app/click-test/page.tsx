@@ -32,7 +32,9 @@ export default function ClickTestPage() {
     <div className="container mx-auto p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">点击交互测试页面</h1>
-        <p className="text-gray-600">测试导航栏菜单和卡片的点击交互是否正常工作</p>
+        <p className="text-gray-600">
+          测试导航栏菜单和卡片的点击交互是否正常工作
+        </p>
       </div>
 
       {/* 导航测试 */}
@@ -40,29 +42,29 @@ export default function ClickTestPage() {
         <h2 className="text-xl font-semibold mb-4">导航栏测试</h2>
         <div className="bg-white rounded-lg p-4 border border-gray-200">
           <div className="space-x-4">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="text-blue-600 hover:underline font-medium"
               onClick={() => addLog('首页链接被点击')}
             >
               首页
             </Link>
-            <Link 
-              href="/resources" 
+            <Link
+              href="/resources"
               className="text-blue-600 hover:underline font-medium"
               onClick={() => addLog('资源页链接被点击')}
             >
               资源
             </Link>
-            <Link 
-              href="/posts" 
+            <Link
+              href="/posts"
               className="text-blue-600 hover:underline font-medium"
               onClick={() => addLog('文章页链接被点击')}
             >
               文章
             </Link>
-            <Link 
-              href="/vibes" 
+            <Link
+              href="/vibes"
               className="text-blue-600 hover:underline font-medium"
               onClick={() => addLog('Vibe页链接被点击')}
             >
@@ -77,8 +79,8 @@ export default function ClickTestPage() {
         <h2 className="text-xl font-semibold mb-4">卡片交互测试</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* 测试卡片1 */}
-          <BaseCard 
-            variant="hover" 
+          <BaseCard
+            variant="hover"
             className="cursor-pointer prevent-click-block"
             onClick={() => handleCardClick('React教程')}
           >
@@ -91,20 +93,18 @@ export default function ClickTestPage() {
                   精选
                 </div>
               </div>
-              
-              <h3 className="font-semibold text-gray-900">
-                React完整学习指南
-              </h3>
-              
+
+              <h3 className="font-semibold text-gray-900">React完整学习指南</h3>
+
               <p className="text-sm text-gray-600">
                 从基础入门到高级应用，全面学习React框架的各个知识点和最佳实践。
               </p>
-              
+
               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                 <span className="text-sm text-gray-500">张三</span>
-                <Button 
-                  size="sm" 
-                  onClick={(e) => handleButtonClick(e, '查看详情')}
+                <Button
+                  size="sm"
+                  onClick={e => handleButtonClick(e, '查看详情')}
                   data-no-click
                 >
                   查看详情
@@ -114,8 +114,8 @@ export default function ClickTestPage() {
           </BaseCard>
 
           {/* 测试卡片2 */}
-          <BaseCard 
-            variant="hover" 
+          <BaseCard
+            variant="hover"
             className="cursor-pointer prevent-click-block"
             onClick={() => handleCardClick('Vue指南')}
           >
@@ -125,20 +125,20 @@ export default function ClickTestPage() {
                   前端框架
                 </span>
               </div>
-              
+
               <h3 className="font-semibold text-gray-900">
                 Vue.js 3.0 实战指南
               </h3>
-              
+
               <p className="text-sm text-gray-600">
                 掌握Vue.js 3.0的核心特性，包括Composition API、响应式系统等。
               </p>
-              
+
               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                 <span className="text-sm text-gray-500">李四</span>
-                <button 
+                <button
                   className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
-                  onClick={(e) => handleButtonClick(e, 'Vue详情')}
+                  onClick={e => handleButtonClick(e, 'Vue详情')}
                   data-no-click
                 >
                   查看详情
@@ -148,8 +148,8 @@ export default function ClickTestPage() {
           </BaseCard>
 
           {/* 测试卡片3 */}
-          <BaseCard 
-            variant="hover" 
+          <BaseCard
+            variant="hover"
             className="cursor-pointer prevent-click-block"
             onClick={() => handleCardClick('TypeScript')}
           >
@@ -159,21 +159,21 @@ export default function ClickTestPage() {
                   编程语言
                 </span>
               </div>
-              
+
               <h3 className="font-semibold text-gray-900">
                 TypeScript 从入门到精通
               </h3>
-              
+
               <p className="text-sm text-gray-600">
                 学习TypeScript的类型系统、高级类型、装饰器等特性。
               </p>
-              
+
               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                 <span className="text-sm text-gray-500">王五</span>
-                <a 
+                <a
                   href="#"
                   className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault()
                     handleButtonClick(e, 'TypeScript详情')
                   }}
@@ -204,10 +204,10 @@ export default function ClickTestPage() {
         <div className="mt-2 text-sm text-gray-500">
           点击上面的链接、卡片或按钮来测试交互功能
         </div>
-        
-        <Button 
-          onClick={() => setClickLog([])} 
-          variant="outline" 
+
+        <Button
+          onClick={() => setClickLog([])}
+          variant="outline"
           size="sm"
           className="mt-4"
         >

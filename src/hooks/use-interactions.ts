@@ -2,7 +2,11 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useAuth } from './use-auth'
 import { InteractionService } from '@/lib/interaction/interaction-service'
-import { InteractionStats, Comment, Favorite } from '@/lib/interaction/interaction-types'
+import {
+  InteractionStats,
+  Comment,
+  Favorite,
+} from '@/lib/interaction/interaction-types'
 import { useRouter } from 'next/navigation'
 
 // 点赞 Hook

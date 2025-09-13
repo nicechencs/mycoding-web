@@ -24,13 +24,13 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className={inter.className}>
         {/* <PerformanceWrapper> */}
-          <AuthProvider>
-            <div className="min-h-screen flex flex-col bg-gray-50">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-          </AuthProvider>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col bg-gray-50">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </AuthProvider>
         {/* </PerformanceWrapper> */}
       </body>
     </html>
