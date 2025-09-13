@@ -302,15 +302,22 @@ export class InteractionService {
   }
 
   // 获取用户的评论列表
-  static async getUserComments(userId: string): Promise<Comment[]> {
+  static async getUserComments(
+    userId: string,
+    targetType?: 'post' | 'resource' | 'vibe'
+  ): Promise<Comment[]> {
     await delay(300)
 
     const comments = getStoredData<Comment>(STORAGE_KEYS.COMMENTS)
-    return comments
-      .filter(c => c.userId === userId)
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
+    let userComments = comments.filter(c => c.userId === userId)
+
+    if (targetType) {
+      userComments = userComments.filter(c => c.targetType === targetType)
+    }
+
+    return userComments.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
   }
 }

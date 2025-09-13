@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { siteConfig, navConfig } from '@/lib/config'
-import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 import { useNavigationHandler } from '@/hooks/use-navigation-handler'
 
@@ -48,8 +47,7 @@ export function Header() {
             <nav className="hidden md:flex gap-6">
               {navConfig.mainNav?.map(
                 (item, index) =>
-                  item.href &&
-                  !item.disabled && (
+                  item.href && (
                     <Link
                       key={index}
                       href={item.href}
@@ -135,14 +133,20 @@ export function Header() {
               )}
             </div>
           ) : (
-            /* 未登录状态 - 登录注册按钮 */
-            <div className="hidden md:flex items-center space-x-2">
-              <Button variant="ghost" asChild>
-                <Link href="/login">登录</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/register">注册</Link>
-              </Button>
+            /* 未登录状态 - 登录注册文本菜单 */
+            <div className="hidden md:flex items-center space-x-6">
+              <Link 
+                href="/login"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                登录
+              </Link>
+              <Link 
+                href="/register"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                注册
+              </Link>
             </div>
           )}
 
@@ -184,8 +188,7 @@ export function Header() {
           <nav className="container py-4 space-y-2" data-testid="mobile-nav">
             {navConfig.mainNav?.map(
               (item, index) =>
-                item.href &&
-                !item.disabled && (
+                item.href && (
                   <Link
                     key={index}
                     href={item.href}
@@ -247,17 +250,17 @@ export function Header() {
                   </button>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Link
                     href="/login"
-                    className="block py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
+                    className="block py-3 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     登录
                   </Link>
                   <Link
                     href="/register"
-                    className="block py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md px-3"
+                    className="block py-3 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors border-t border-gray-100 mt-2 pt-3"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     注册

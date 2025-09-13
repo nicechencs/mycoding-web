@@ -325,3 +325,38 @@ export function useUserFavorites(type?: 'post' | 'resource' | 'vibe') {
     refresh: fetchFavorites,
   }
 }
+
+// 用户评论列表 Hook
+export function useUserComments(type?: 'post' | 'resource' | 'vibe') {
+  const { user, isAuthenticated } = useAuth()
+  const [comments, setComments] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const fetchComments = useCallback(async () => {
+    if (!user || !isAuthenticated) {
+      setComments([])
+      return
+    }
+
+    setLoading(true)
+    try {
+      const data = await InteractionService.getUserComments(user.id, type)
+      setComments(data)
+    } catch (error) {
+      console.error('Failed to fetch user comments:', error)
+      setComments([])
+    } finally {
+      setLoading(false)
+    }
+  }, [user, isAuthenticated, type])
+
+  useEffect(() => {
+    fetchComments()
+  }, [fetchComments])
+
+  return {
+    comments,
+    loading,
+    refresh: fetchComments,
+  }
+}

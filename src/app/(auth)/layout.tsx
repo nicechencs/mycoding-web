@@ -11,24 +11,7 @@ export default function AuthLayout({
   return (
     <AuthGuard requireAuth={false}>
       <div className="min-h-screen flex">
-        {/* 左侧内容区 */}
-        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
-          <div className="mx-auto w-full max-w-sm lg:w-96">
-            {/* Logo */}
-            <div className="text-center mb-8">
-              <Link href="/" className="inline-flex items-center space-x-2">
-                <span className="text-3xl">💻</span>
-                <span className="text-2xl font-bold text-blue-600">
-                  MyCoding
-                </span>
-              </Link>
-            </div>
-
-            {children}
-          </div>
-        </div>
-
-        {/* 右侧装饰区 */}
+        {/* 左侧蓝色欢迎区域 */}
         <div className="hidden lg:block relative w-0 flex-1">
           <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
             {/* 装饰性图案 */}
@@ -101,11 +84,28 @@ export default function AuthLayout({
               <div className="absolute bottom-8 left-12 right-12">
                 <div className="border-t border-white/20 pt-6">
                   <p className="text-sm text-blue-200">
-                    "代码改变世界，学习成就未来"
+                    &ldquo;代码改变世界，学习成就未来&rdquo;
                   </p>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* 右侧表单操作区域 */}
+        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            {/* Logo */}
+            <div className="text-center mb-8">
+              <Link href="/" className="inline-flex items-center space-x-2">
+                <span className="text-3xl">💻</span>
+                <span className="text-2xl font-bold text-blue-600">
+                  MyCoding
+                </span>
+              </Link>
+            </div>
+
+            {children}
           </div>
         </div>
       </div>
