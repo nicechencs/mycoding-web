@@ -116,7 +116,7 @@ export default function SettingsPage() {
   const tabs = [
     { id: 'overview', name: '概览', icon: '📊' },
     { id: 'profile', name: '个人资料', icon: '👤' },
-    { id: 'account', name: '账户设置', icon: '⚙️' },
+    { id: 'account', name: '账号安全', icon: '🔐' },
     { id: 'notifications', name: '通知设置', icon: '🔔' },
     { id: 'privacy', name: '隐私设置', icon: '🔒' },
   ] as const
@@ -124,8 +124,8 @@ export default function SettingsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">账户设置</h1>
-        <p className="text-gray-600">管理您的账户信息和偏好设置</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">个人中心</h1>
+        <p className="text-gray-600">管理您的个人信息和偏好设置</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -483,9 +483,9 @@ export default function SettingsPage() {
             <BaseCard>
               <div className="mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  账户设置
+                  账号安全
                 </h2>
-                <p className="text-gray-600 mt-1">管理您的账户安全</p>
+                <p className="text-gray-600 mt-1">管理您的账号安全设置</p>
               </div>
 
               <div className="space-y-6">

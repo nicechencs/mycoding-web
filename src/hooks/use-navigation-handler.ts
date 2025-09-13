@@ -49,16 +49,16 @@ export function useNavigationHandler(options: NavigationHandlerOptions) {
 
   const isActiveRoute = useCallback((href: string) => {
     if (!href) return false
+    const pureHref = href.split('?')[0]
+    const current = pathname.split('?')[0]
     // 根路径只在首页时高亮
-    if (href === '/') return pathname === '/'
+    if (pureHref === '/') return current === '/'
     // 精确匹配或子路径匹配均视为激活
-    return pathname === href || pathname.startsWith(href + '/')
+    return current === pureHref || current.startsWith(pureHref + '/')
   }, [pathname])
 
   const getNavigationClassName = useCallback((href: string, baseClasses: string, activeClasses: string) => {
-    return isActiveRoute(href) 
-      ? `${baseClasses} ${activeClasses}` 
-      : `${baseClasses} text-gray-600`
+    return isActiveRoute(href) ? `${baseClasses} ${activeClasses}` : baseClasses
   }, [isActiveRoute])
 
   return {

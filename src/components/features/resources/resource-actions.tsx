@@ -28,25 +28,22 @@ export function ResourceActions({
   const {
     isLiked,
     likeCount,
-    loading: likeLoading,
+    isLoading: likeLoading,
     toggleLike,
-    canLike,
   } = useLike(resourceId, 'resource')
   const {
     isFavorited,
     favoriteCount,
-    loading: favoriteLoading,
+    isLoading: favoriteLoading,
     toggleFavorite,
-    canFavorite,
   } = useFavorite(resourceId, 'resource')
   const {
     userRating,
     averageRating,
-    ratingCount,
-    loading: ratingLoading,
-    submitRating,
-    canRate,
-  } = useRating(resourceId, 'resource')
+    totalRatings,
+    isLoading: ratingLoading,
+    rateResource,
+  } = useRating(resourceId)
 
   // 处理需要登录的操作
   const handleAuthRequired = (action: () => void) => {
@@ -64,8 +61,8 @@ export function ResourceActions({
   }
 
   const handleRatingSubmit = (rating: number) => {
-    if (canRate && !ratingLoading) {
-      submitRating(rating)
+    if (isAuthenticated && !ratingLoading) {
+      rateResource(rating)
       setShowRatingModal(false)
     }
   }
@@ -74,7 +71,7 @@ export function ResourceActions({
     <>
       <div className={`flex items-center gap-4 ${className}`}>
         {/* 点赞按钮 */}
-        {canLike ? (
+        {isAuthenticated ? (
           <button
             onClick={() => handleAuthRequired(toggleLike)}
             disabled={likeLoading}
@@ -141,7 +138,7 @@ export function ResourceActions({
         )}
 
         {/* 收藏按钮 */}
-        {canFavorite ? (
+        {isAuthenticated ? (
           <button
             onClick={() => handleAuthRequired(toggleFavorite)}
             disabled={favoriteLoading}
@@ -208,7 +205,7 @@ export function ResourceActions({
         )}
 
         {/* 评分按钮 */}
-        {canRate ? (
+        {isAuthenticated ? (
           <button
             onClick={() => setShowRatingModal(true)}
             disabled={ratingLoading}
@@ -246,11 +243,11 @@ export function ResourceActions({
         )}
 
         {/* 显示平均评分 */}
-        {ratingCount > 0 && (
+        {totalRatings > 0 && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <RatingStars rating={averageRating} size="xs" showCount={false} />
+            <RatingStars rating={averageRating ?? 0} size="xs" showCount={false} />
             <span>
-              {averageRating.toFixed(1)} ({ratingCount} 人评分)
+              {averageRating?.toFixed(1)} ({totalRatings} 人评分)
             </span>
           </div>
         )}

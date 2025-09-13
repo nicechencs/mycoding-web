@@ -21,20 +21,21 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
   // 使用评论 hook
   const {
     comments,
-    loading,
-    submitting,
-    addComment,
-    toggleCommentLike,
-    canComment,
+    isLoading,
+    isSubmitting,
+    createComment,
+    // deleteComment,
+    // refreshComments,
   } = useComments(postId, 'post')
+  const canComment = isAuthenticated
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newComment.trim() || submitting) return
+    if (!newComment.trim() || isSubmitting) return
 
     try {
-      const result = await addComment(newComment)
-      if (result?.success) {
+      const result = await createComment(newComment)
+      if (result) {
         setNewComment('')
       }
     } catch (error) {
@@ -43,11 +44,11 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
   }
 
   const handleReply = async (parentId: string) => {
-    if (!replyContent.trim() || submitting) return
+    if (!replyContent.trim() || isSubmitting) return
 
     try {
-      const result = await addComment(replyContent, parentId)
-      if (result?.success) {
+      const result = await createComment(replyContent)
+      if (result) {
         setReplyContent('')
         setReplyTo(null)
       }
@@ -57,9 +58,8 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
   }
 
   const handleCommentLike = async (commentId: string) => {
-    if (isAuthenticated) {
-      await toggleCommentLike(commentId)
-    }
+    // 点赞评论功能暂未实现
+    return
   }
 
   const handleLoginClick = () => {
@@ -163,10 +163,10 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
             />
             <button
               onClick={() => handleReply(comment.id)}
-              disabled={submitting}
+              disabled={isSubmitting}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
             >
-              {submitting ? '发送中...' : '回复'}
+              {isSubmitting ? '发送中...' : '回复'}
             </button>
             <button
               onClick={() => {
@@ -191,7 +191,7 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
     </div>
   )
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={`space-y-6 ${className}`}>
         <div className="animate-pulse">
@@ -239,13 +239,13 @@ export function PostComments({ postId, className = '' }: PostCommentsProps) {
               <div className="mt-3 flex justify-end">
                 <button
                   type="submit"
-                  disabled={!newComment.trim() || submitting}
+                  disabled={!newComment.trim() || isSubmitting}
                   className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {submitting && (
+                  {isSubmitting && (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   )}
-                  {submitting ? '发表中...' : '发表评论'}
+                  {isSubmitting ? '发表中...' : '发表评论'}
                 </button>
               </div>
             </div>

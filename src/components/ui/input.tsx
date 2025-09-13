@@ -27,7 +27,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const inputId = id || `input-${React.useId()}`
+    // Hooks must be called unconditionally and in stable order
+    const autoId = React.useId()
+    const inputId = id ?? `input-${autoId}`
 
     return (
       <div className="w-full space-y-2">

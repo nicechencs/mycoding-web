@@ -48,7 +48,7 @@ export function ResourceActions({
     <div className={cn('flex flex-wrap items-center gap-4', className)}>
       {/* 点赞按钮 */}
       <Button
-        variant={isLiked ? 'default' : 'outline'}
+        variant={isLiked ? 'primary' : 'outline'}
         size="sm"
         onClick={toggleLike}
         disabled={isLikeLoading}
@@ -60,7 +60,7 @@ export function ResourceActions({
 
       {/* 收藏按钮 */}
       <Button
-        variant={isFavorited ? 'default' : 'outline'}
+        variant={isFavorited ? 'primary' : 'outline'}
         size="sm"
         onClick={toggleFavorite}
         disabled={isFavoriteLoading}

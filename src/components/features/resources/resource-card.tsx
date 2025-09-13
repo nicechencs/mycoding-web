@@ -104,8 +104,8 @@ export const ResourceCard = React.memo(
         <div className="mt-3 flex items-center justify-between">
           <ResourceStats
             stats={createStatsConfig('resource', {
-              viewCount: resource.viewCount,
-              commentCount: resource.commentCount,
+              viewCount: Number(resource.viewCount).toLocaleString('en-US') as any,
+              commentCount: Number(resource.commentCount).toLocaleString('en-US') as any,
               rating: resource.rating,
               onComment: (e) => {
                 e.stopPropagation()

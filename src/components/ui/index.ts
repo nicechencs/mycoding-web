@@ -20,6 +20,6 @@ export * from './content-filter'
 export { BaseCard as Card } from './card'
 export { Avatar, AvatarImage, AvatarFallback } from './avatar'
 export { SimpleCardHeader as CategoryBadge } from './card-header'
-export { CardStats as ArticleStats, CardStats as VibeStats } from './card-stats'
+// 已在 card-stats.tsx 中提供 ArticleStats/VibeStats 具体实现
 export { CardTags as ResourceTags, CardTags as ArticleTags, CardTags as VibeTags } from './card-tags'
 export { VibeContent, ArticleContent } from './vibe-content'

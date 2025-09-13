@@ -36,7 +36,7 @@ export const loadingComponents = {
 } as const
 
 // 工具函数：创建动态组件
-export function createDynamicComponent<T = {}>(
+export function createDynamicComponent<T = unknown>(
   importFn: () => Promise<{ default: ComponentType<T> }>,
   options: DynamicImportOptions = {}
 ) {
@@ -70,7 +70,7 @@ export function createDynamicComponent<T = {}>(
   }
 
   return dynamic(wrappedImport, {
-    loading,
+    loading: loading as any,
     ssr,
   })
 }
@@ -157,7 +157,7 @@ export const DynamicRegisterPage = createDynamicComponent(
 // === 高级动态导入工具 ===
 
 // 条件动态导入
-export function createConditionalDynamicComponent<T = {}>(
+export function createConditionalDynamicComponent<T = unknown>(
   condition: boolean | (() => boolean),
   importFn: () => Promise<{ default: ComponentType<T> }>,
   fallback?: ComponentType<T>,
@@ -173,7 +173,7 @@ export function createConditionalDynamicComponent<T = {}>(
 }
 
 // 延迟动态导入
-export function createLazyDynamicComponent<T = {}>(
+export function createLazyDynamicComponent<T = unknown>(
   importFn: () => Promise<{ default: ComponentType<T> }>,
   triggerDelay: number = 1000,
   options: DynamicImportOptions = {}

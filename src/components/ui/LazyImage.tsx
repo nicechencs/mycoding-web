@@ -174,12 +174,12 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     } catch (error) {
       console.warn('LazyImage: Failed to load image', { src, error })
 
-      if (retryCount < config.retryCount) {
+      if (retryCount < (config.retryCount ?? 0)) {
         // 重试加载
         setTimeout(() => {
           setRetryCount(prev => prev + 1)
           handleImageLoad()
-        }, config.retryDelay)
+        }, config.retryDelay ?? 0)
       } else {
         // 尝试使用备用图片
         if (fallback && fallback !== src) {

@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { useVibeCardInteraction } from '@/hooks/use-card-interaction'
 import { formatRelativeTime } from '@/utils/date'
+import { useRouter } from 'next/navigation'
 
 interface VibeCardProps {
   vibe: Vibe
@@ -18,6 +19,7 @@ interface VibeCardProps {
 export function VibeCard({ vibe }: VibeCardProps) {
   const { user, isAuthenticated } = useAuth()
   const [showComments, setShowComments] = useState(false)
+  const router = useRouter()
 
   // 使用统一的卡片交互Hook
   const { getCardProps, handleStatsClick } = useVibeCardInteraction({
@@ -98,7 +100,6 @@ export function VibeCard({ vibe }: VibeCardProps) {
                       rootMargin: '100px',
                       fadeIn: true,
                       retryCount: 2,
-                      preloadOnHover: true,
                     }}
                     showLoadingIndicator={true}
                   />

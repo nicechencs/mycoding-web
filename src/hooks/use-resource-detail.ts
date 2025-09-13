@@ -59,11 +59,8 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
   )
 
   // 通过 slug 获取资源
-  const {
-    resource,
-    loading: resourceLoading,
-    error: resourceError,
-  } = useResourceBySlug(slug)
+  const { resource, loading: resourceLoading, error: resourceError } =
+    useResourceBySlug(slug)
 
   // 获取资源相关数据
   const resourceId = resource?.id || ''
@@ -98,10 +95,10 @@ export function useResourceDetail(slug: string): UseResourceDetailReturn {
 
   return {
     // 数据
-    resource,
+    resource: resource ?? null,
     comments: comments || [],
     relatedResources: relatedResources || [],
-    ratingDistribution,
+    ratingDistribution: ratingDistribution ?? null,
 
     // 状态
     loading,

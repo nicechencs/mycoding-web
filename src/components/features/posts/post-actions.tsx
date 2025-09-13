@@ -28,16 +28,14 @@ export function PostActions({
   const {
     isLiked,
     likeCount,
-    loading: likeLoading,
+    isLoading: likeLoading,
     toggleLike,
-    canLike,
   } = useLike(postId, 'post')
   const {
     isFavorited,
     favoriteCount,
-    loading: favoriteLoading,
+    isLoading: favoriteLoading,
     toggleFavorite,
-    canFavorite,
   } = useFavorite(postId, 'post')
 
   // 处理需要登录的操作
@@ -69,7 +67,7 @@ export function PostActions({
     <>
       <div className={`flex items-center gap-3 ${className}`}>
         {/* 点赞按钮 */}
-        {canLike ? (
+        {isAuthenticated ? (
           <button
             onClick={() => handleAuthRequired(toggleLike)}
             disabled={likeLoading}
@@ -143,7 +141,7 @@ export function PostActions({
         )}
 
         {/* 收藏按钮 */}
-        {canFavorite ? (
+        {isAuthenticated ? (
           <button
             onClick={() => handleAuthRequired(toggleFavorite)}
             disabled={favoriteLoading}

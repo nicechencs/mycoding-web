@@ -1,0 +1,818 @@
+
+./src/app/(auth)/forgot-password/page.tsx
+5:10  Error: 'Metadata' is defined but never used.  @typescript-eslint/no-unused-vars
+56:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/(main)/posts/articles/page.tsx
+4:8  Error: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+9:10  Error: 'ListSkeleton' is defined but never used.  @typescript-eslint/no-unused-vars
+17:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/(main)/posts/page.tsx
+6:24  Error: 'PageLoader' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/(main)/resources/[slug]/page.tsx
+14:10  Error: 'ResourceCard' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/(main)/resources/page.tsx
+8:10  Error: 'ListSkeleton' is defined but never used.  @typescript-eslint/no-unused-vars
+17:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+20:35  Error: Insert `,`  prettier/prettier
+
+./src/app/(main)/test-services/page.tsx
+56:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+201:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/(main)/vibes/[id]/page.tsx
+10:10  Error: 'VibeCard' is defined but never used.  @typescript-eslint/no-unused-vars
+95:21  Error: Replace `prev·=>·({·...(prev·||·{·success:·true·}),·data:·updatedComments·}),·false` with `⏎······prev·=>·({·...(prev·||·{·success:·true·}),·data:·updatedComments·}),⏎······false⏎····`  prettier/prettier
+96:17  Error: Replace `prev·=>·({·...(prev·||·{·success:·true·}),·data:·updatedVibe·}),·false` with `⏎······prev·=>·({·...(prev·||·{·success:·true·}),·data:·updatedVibe·}),⏎······false⏎····`  prettier/prettier
+
+./src/app/(main)/vibes/page.tsx
+12:10  Error: 'ListSkeleton' is defined but never used.  @typescript-eslint/no-unused-vars
+21:9  Error: 'queryParams' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+22:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+54:12  Error: Insert `⏎······`  prettier/prettier
+55:1  Error: Insert `··`  prettier/prettier
+56:7  Error: Replace `data:·[newVibe,·...((prev·&&·(prev·as·any).data)·?·(prev·as·any).data·:·(vibes·||·[]))` with `··data:·[⏎··········newVibe,⏎··········...(prev·&&·(prev·as·any).data·?·(prev·as·any).data·:·vibes·||·[]),⏎········`  prettier/prettier
+56:45  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+56:67  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+57:1  Error: Replace `····}),·false` with `······}),⏎······false⏎····`  prettier/prettier
+
+./src/app/(user)/my-comments/page.tsx
+13:11  Error: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+101:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+199:34  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+270:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+278:27  Warning: Unexpected console statement.  no-console
+288:29  Warning: Unexpected console statement.  no-console
+303:66  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+329:58  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/(user)/my-favorites/page.tsx
+100:29  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+200:36  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+223:51  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+241:53  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/(user)/settings/page.tsx
+4:10  Error: 'Metadata' is defined but never used.  @typescript-eslint/no-unused-vars
+163:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+205:75  Error: Replace `最近活动` with `⏎························最近活动⏎······················`  prettier/prettier
+221:66  Error: Replace `{activity.title}` with `⏎······························{activity.title}⏎····························`  prettier/prettier
+222:66  Error: Replace `{activity.time}` with `⏎······························{activity.time}⏎····························`  prettier/prettier
+376:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/click-test/page.tsx
+10:9  Error: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+35:38  Error: Replace `测试导航栏菜单和卡片的点击交互是否正常工作` with `⏎··········测试导航栏菜单和卡片的点击交互是否正常工作⏎········`  prettier/prettier
+43:18  Error: Delete `·`  prettier/prettier
+44:23  Error: Delete `·`  prettier/prettier
+50:18  Error: Delete `·`  prettier/prettier
+51:32  Error: Delete `·`  prettier/prettier
+57:18  Error: Delete `·`  prettier/prettier
+58:28  Error: Delete `·`  prettier/prettier
+64:18  Error: Delete `·`  prettier/prettier
+65:28  Error: Delete `·`  prettier/prettier
+80:20  Error: Delete `·`  prettier/prettier
+81:28  Error: Delete `·`  prettier/prettier
+94:1  Error: Delete `··············`  prettier/prettier
+95:59  Error: Replace `⏎················React完整学习指南⏎··············` with `React完整学习指南`  prettier/prettier
+98:1  Error: Delete `··············`  prettier/prettier
+102:1  Error: Delete `··············`  prettier/prettier
+105:24  Error: Delete `·`  prettier/prettier
+106:28  Error: Delete `·`  prettier/prettier
+107:28  Error: Replace `(e)` with `e`  prettier/prettier
+117:20  Error: Delete `·`  prettier/prettier
+118:28  Error: Delete `·`  prettier/prettier
+128:1  Error: Delete `··············`  prettier/prettier
+132:1  Error: Delete `··············`  prettier/prettier
+136:1  Error: Delete `··············`  prettier/prettier
+139:24  Error: Delete `·`  prettier/prettier
+141:28  Error: Replace `(e)` with `e`  prettier/prettier
+151:20  Error: Delete `·`  prettier/prettier
+152:28  Error: Delete `·`  prettier/prettier
+162:1  Error: Delete `··············`  prettier/prettier
+166:1  Error: Delete `··············`  prettier/prettier
+170:1  Error: Delete `··············`  prettier/prettier
+173:19  Error: Delete `·`  prettier/prettier
+176:28  Error: Replace `(e)` with `e`  prettier/prettier
+207:1  Error: Delete `········`  prettier/prettier
+208:16  Error: Delete `·`  prettier/prettier
+209:42  Error: Delete `·`  prettier/prettier
+210:28  Error: Delete `·`  prettier/prettier
+219:2  Error: Insert `⏎`  prettier/prettier
+
+./src/app/layout.tsx
+9:10  Error: 'PerformanceWrapper' is defined but never used.  @typescript-eslint/no-unused-vars
+27:9  Error: Delete `··`  prettier/prettier
+28:1  Error: Delete `··`  prettier/prettier
+29:13  Error: Delete `··`  prettier/prettier
+30:1  Error: Replace `··············` with `············`  prettier/prettier
+31:13  Error: Delete `··`  prettier/prettier
+32:11  Error: Delete `··`  prettier/prettier
+33:1  Error: Delete `··`  prettier/prettier
+
+./src/app/page.tsx
+10:3  Error: 'PageLoader' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/test-navigation/page.tsx
+13:5  Warning: Unexpected console statement.  no-console
+14:26  Error: Replace `...prev,·`${new·Date().toLocaleTimeString()}:·${message}`` with `⏎······...prev,⏎······`${new·Date().toLocaleTimeString()}:·${message}`,⏎····`  prettier/prettier
+39:12  Error: Replace ``Card·clicked,·target:·${target.tagName},·class:·${target.className}`)` with `⏎······`Card·clicked,·target:·${target.tagName},·class:·${target.className}``  prettier/prettier
+40:5  Error: Insert `)⏎`  prettier/prettier
+46:1  Error: Delete `····`  prettier/prettier
+54:1  Error: Delete `······`  prettier/prettier
+59:16  Error: Delete `·`  prettier/prettier
+60:30  Error: Delete `·`  prettier/prettier
+66:17  Error: Replace `⏎············href="/posts"·⏎············className="text-blue-600·hover:underline"⏎··········` with `href="/posts"·className="text-blue-600·hover:underline"`  prettier/prettier
+103:13  Error: Delete `·`  prettier/prettier
+111:22  Error: Replace `(e)` with `e`  prettier/prettier
+141:62  Error: Replace `{log}` with `⏎················{log}⏎··············`  prettier/prettier
+159:1  Error: Delete `··`  prettier/prettier
+161:5  Warning: Unexpected console statement.  no-console
+164:1  Error: Delete `··`  prettier/prettier
+167:5  Warning: Unexpected console statement.  no-console
+170:1  Error: Delete `··`  prettier/prettier
+186:2  Error: Insert `⏎`  prettier/prettier
+
+./src/app/test-navigation/test-router.tsx
+10:1  Error: Delete `··`  prettier/prettier
+18:1  Error: Delete `····`  prettier/prettier
+23:1  Error: Delete `····`  prettier/prettier
+26:1  Error: Delete `··`  prettier/prettier
+30:7  Warning: Unexpected console statement.  no-console
+34:7  Warning: Unexpected console statement.  no-console
+38:7  Warning: Unexpected console statement.  no-console
+42:7  Warning: Unexpected console statement.  no-console
+44:6  Error: Insert `,`  prettier/prettier
+46:1  Error: Delete `··`  prettier/prettier
+52:58  Error: Replace `{result}` with `⏎············{result}⏎··········`  prettier/prettier
+55:1  Error: Delete `······`  prettier/prettier
+70:2  Error: Insert `⏎`  prettier/prettier
+
+./src/app/test-simple/page.tsx
+8:1  Error: Delete `··`  prettier/prettier
+11:5  Warning: Unexpected console statement.  no-console
+12:5  Warning: Unexpected console statement.  no-console
+13:5  Warning: Unexpected console statement.  no-console
+14:1  Error: Delete `····`  prettier/prettier
+18:7  Warning: Unexpected console statement.  no-console
+20:7  Warning: Unexpected console statement.  no-console
+23:1  Error: Delete `··`  prettier/prettier
+26:5  Warning: Unexpected console statement.  no-console
+28:7  Warning: Unexpected console statement.  no-console
+32:1  Error: Delete `··`  prettier/prettier
+35:5  Warning: Unexpected console statement.  no-console
+37:5  Warning: Unexpected console statement.  no-console
+40:1  Error: Delete `··`  prettier/prettier
+44:1  Error: Delete `······`  prettier/prettier
+52:1  Error: Delete `········`  prettier/prettier
+59:25  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+59:36  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+62:1  Error: Delete `········`  prettier/prettier
+72:1  Error: Delete `········`  prettier/prettier
+82:1  Error: Delete `········`  prettier/prettier
+87:15  Warning: Unexpected console statement.  no-console
+96:1  Error: Delete `······`  prettier/prettier
+104:2  Error: Insert `⏎`  prettier/prettier
+
+./src/components/app/PerformanceWrapper.tsx
+13:11  Error: 'metrics' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+20:7  Warning: Unexpected console statement.  no-console
+85:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+85:62  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+96:1  Error: Delete `⏎`  prettier/prettier
+97:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/auth/AuthGuard.tsx
+29:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+35:36  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+45:36  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/auth/AuthProvider.tsx
+3:32  Error: 'useContext' is defined but never used.  @typescript-eslint/no-unused-vars
+92:9  Warning: Unexpected console statement.  no-console
+118:11  Warning: Unexpected console statement.  no-console
+177:7  Warning: Unexpected console statement.  no-console
+190:7  Warning: Unexpected console statement.  no-console
+
+./src/components/auth/LoginForm.tsx
+9:10  Error: 'AuthError' is defined but never used.  @typescript-eslint/no-unused-vars
+82:7  Warning: Unexpected console statement.  no-console
+96:7  Warning: Unexpected console statement.  no-console
+
+./src/components/auth/RegisterForm.tsx
+109:7  Warning: Unexpected console statement.  no-console
+
+./src/components/examples/card-examples.tsx
+4:3  Error: 'Card' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Error: 'CardStats' is defined but never used.  @typescript-eslint/no-unused-vars
+8:3  Error: 'CardTags' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Error: 'CategoryBadge' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/examples/color-system-demo.tsx
+4:10  Error: 'colors' is defined but never used.  @typescript-eslint/no-unused-vars
+4:18  Error: 'colorClasses' is defined but never used.  @typescript-eslint/no-unused-vars
+4:32  Error: 'semanticColors' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/features/community/article-card.tsx
+7:9  Error: Replace `·ResourceStats,·createStatsConfig·` with `⏎··ResourceStats,⏎··createStatsConfig,⏎`  prettier/prettier
+15:28  Error: Component definition is missing display name  react/display-name
+19:61  Error: Insert `,`  prettier/prettier
+95:25  Error: Delete `·`  prettier/prettier
+
+./src/components/features/home/HeroSection.tsx
+1:8  Error: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/features/posts/post-comments.tsx
+42:7  Warning: Unexpected console statement.  no-console
+46:30  Error: 'parentId' is defined but never used.  @typescript-eslint/no-unused-vars
+56:7  Warning: Unexpected console statement.  no-console
+60:36  Error: 'commentId' is defined but never used.  @typescript-eslint/no-unused-vars
+73:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+185:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/features/resources/ResourceActions.tsx
+3:23  Error: 'MessageSquare' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/features/resources/ResourceComments.tsx
+35:7  Warning: Unexpected console statement.  no-console
+
+./src/components/features/resources/rating-stars.tsx
+23:28  Error: Component definition is missing display name  react/display-name
+
+./src/components/features/resources/resource-actions.tsx
+248:25  Error: Replace `·rating={averageRating·??·0}·size="xs"·showCount={false}` with `⏎··············rating={averageRating·??·0}⏎··············size="xs"⏎··············showCount={false}⏎···········`  prettier/prettier
+
+./src/components/features/resources/resource-card.tsx
+10:9  Error: Replace `·ResourceStats,·createStatsConfig·` with `⏎··ResourceStats,⏎··createStatsConfig,⏎`  prettier/prettier
+16:29  Error: Component definition is missing display name  react/display-name
+107:68  Error: Replace `'en-US'` with `⏎················'en-US'⏎··············`  prettier/prettier
+107:80  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+108:74  Error: Replace `'en-US'` with `⏎················'en-US'⏎··············`  prettier/prettier
+108:86  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+110:26  Error: Replace `(e)` with `e`  prettier/prettier
+113:16  Error: Insert `,`  prettier/prettier
+
+./src/components/features/resources/resource-comments.tsx
+7:10  Error: 'LoginPrompt' is defined but never used.  @typescript-eslint/no-unused-vars
+49:7  Warning: Unexpected console statement.  no-console
+53:30  Error: 'parentId' is defined but never used.  @typescript-eslint/no-unused-vars
+63:7  Warning: Unexpected console statement.  no-console
+67:36  Error: 'commentId' is defined but never used.  @typescript-eslint/no-unused-vars
+80:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+210:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/features/resources/resource-rating.tsx
+16:3  Error: 'resourceId' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/features/vibes/vibe-card.tsx
+7:9  Error: Replace `·ResourceStats,·createStatsConfig·` with `⏎··ResourceStats,⏎··createStatsConfig,⏎`  prettier/prettier
+26:59  Error: Insert `,`  prettier/prettier
+137:25  Error: Delete `·`  prettier/prettier
+
+./src/components/layout/header.tsx
+13:1  Error: Delete `··`  prettier/prettier
+16:24  Error: Insert `,`  prettier/prettier
+18:1  Error: Delete `··`  prettier/prettier
+22:47  Error: Insert `,`  prettier/prettier
+30:7  Warning: Unexpected console statement.  no-console
+79:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+131:20  Error: Delete `·`  prettier/prettier
+137:20  Error: Delete `·`  prettier/prettier
+206:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/ui/LazyImage.tsx
+175:7  Warning: Unexpected console statement.  no-console
+238:6  Warning: React Hook useEffect has missing dependencies: 'handleImageLoad' and 'loadingState'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+245:6  Warning: React Hook useEffect has missing dependencies: 'config.preload', 'handleImageLoad', and 'loadingState'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+282:9  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+295:9  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/ui/LoadingSuspense.tsx
+198:5  Warning: Unexpected console statement.  no-console
+
+./src/components/ui/avatar.tsx
+16:40  Error: 'theme' is defined but never used.  @typescript-eslint/no-unused-vars
+20:22  Error: Insert `,`  prettier/prettier
+22:1  Error: Delete `····`  prettier/prettier
+24:1  Error: Delete `····`  prettier/prettier
+27:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+30:38  Error: Replace `·sizeClasses[size·as·keyof·typeof·sizeClasses]·` with `⏎············sizeClasses[size·as·keyof·typeof·sizeClasses]`  prettier/prettier
+31:60  Error: Delete `·`  prettier/prettier
+32:62  Error: Delete `·`  prettier/prettier
+57:5  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+97:42  Error: Replace `HTMLButtonElement,·FloatingAvatarProps>(⏎··` with `⏎··HTMLButtonElement,⏎··FloatingAvatarProps⏎>(`  prettier/prettier
+99:3  Error: Delete `··`  prettier/prettier
+100:1  Error: Delete `··`  prettier/prettier
+101:5  Error: Delete `··`  prettier/prettier
+102:1  Error: Replace `········` with `······`  prettier/prettier
+103:7  Error: Delete `··`  prettier/prettier
+104:1  Error: Replace `··········'bg-blue-500·text-white·hover:bg-blue-600·focus:ring-blue-500':` with `········'bg-blue-500·text-white·hover:bg-blue-600·focus:ring-blue-500':⏎·········`  prettier/prettier
+105:9  Error: Replace `··'bg-slate-500·text-white·hover:bg-slate-600·focus:ring-slate-500':` with `'bg-slate-500·text-white·hover:bg-slate-600·focus:ring-slate-500':⏎·········`  prettier/prettier
+106:7  Error: Delete `··`  prettier/prettier
+107:1  Error: Delete `··`  prettier/prettier
+108:5  Error: Delete `··`  prettier/prettier
+109:1  Error: Delete `··`  prettier/prettier
+110:5  Error: Delete `··`  prettier/prettier
+111:1  Error: Delete `··`  prettier/prettier
+112:5  Error: Delete `··`  prettier/prettier
+113:1  Error: Delete `··`  prettier/prettier
+114:1  Error: Replace `··)⏎` with `)`  prettier/prettier
+
+./src/components/ui/button.tsx
+49:57  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/ui/card-actions.tsx
+28:28  Error: Replace `·"inline-flex·items-center·px-3·py-1.5·text-sm·font-medium·rounded·transition-colors"` with `⏎····'inline-flex·items-center·px-3·py-1.5·text-sm·font-medium·rounded·transition-colors'`  prettier/prettier
+29:1  Error: Delete `··`  prettier/prettier
+33:16  Error: Replace `"bg-blue-600·text-white·hover:bg-blue-700"` with `'bg-blue-600·text-white·hover:bg-blue-700'`  prettier/prettier
+35:16  Error: Replace `"bg-gray-100·text-gray-700·hover:bg-gray-200"` with `'bg-gray-100·text-gray-700·hover:bg-gray-200'`  prettier/prettier
+37:16  Error: Replace `"text-blue-600·hover:text-blue-700·hover:bg-blue-50"` with `'text-blue-600·hover:text-blue-700·hover:bg-blue-50'`  prettier/prettier
+84:14  Error: Replace `⏎········type="button"⏎········onClick={primaryAction.onClick}⏎········className={classes}⏎······` with `·type="button"·onClick={primaryAction.onClick}·className={classes}`  prettier/prettier
+111:24  Error: Replace `·"p-2·text-gray-400·hover:text-gray-600·transition-colors"` with `⏎··········'p-2·text-gray-400·hover:text-gray-600·transition-colors'`  prettier/prettier
+113:15  Error: Replace `·className="w-4·h-4"·fill="none"·stroke="currentColor"·viewBox="0·0·24·24"` with `⏎············className="w-4·h-4"⏎············fill="none"⏎············stroke="currentColor"⏎············viewBox="0·0·24·24"⏎··········`  prettier/prettier
+137:18  Error: Replace `·key={index}·href={action.href}·className={classes}·title={action.label}` with `⏎··············key={index}⏎··············href={action.href}⏎··············className={classes}⏎··············title={action.label}⏎············`  prettier/prettier
+155:1  Error: Delete `······`  prettier/prettier
+
+./src/components/ui/card-content.tsx
+85:36  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+338:41  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/ui/card-footer.tsx
+17:1  Error: Delete `··`  prettier/prettier
+19:48  Error: Delete `·`  prettier/prettier
+20:23  Error: Delete `·`  prettier/prettier
+21:24  Error: Replace `·` with `,`  prettier/prettier
+24:48  Error: Delete `·`  prettier/prettier
+25:24  Error: Delete `·`  prettier/prettier
+26:21  Error: Replace `·` with `,`  prettier/prettier
+31:24  Error: Delete `·`  prettier/prettier
+32:21  Error: Insert `,`  prettier/prettier
+37:29  Error: Delete `·`  prettier/prettier
+38:13  Error: Delete `·`  prettier/prettier
+39:13  Error: Delete `·`  prettier/prettier
+42:15  Error: Replace `·` with `,`  prettier/prettier
+44:22  Error: Replace `·updatedAt·&&·` with `⏎····updatedAt·&&`  prettier/prettier
+46:5  Error: Replace `(updatedAt.getTime()·-·createdAt.getTime())·>·(1000·*·60·*·60)` with `updatedAt.getTime()·-·createdAt.getTime()·>·1000·*·60·*·60`  prettier/prettier
+49:9  Error: Replace `·className={cn('flex·items-center·justify-between·text-xs·text-gray-500',·className)}` with `⏎······className={cn(⏎········'flex·items-center·justify-between·text-xs·text-gray-500',⏎········className⏎······)}⏎····`  prettier/prettier
+52:15  Error: Replace `⏎··········创建于·{formatDate(createdAt)}⏎········` with `创建于·{formatDate(createdAt)}`  prettier/prettier
+58:19  Error: Replace `⏎··············更新于·{formatDate(updatedAt)}⏎············` with `更新于·{formatDate(updatedAt)}`  prettier/prettier
+64:52  Error: Replace `⏎········{rightContent}⏎······` with `{rightContent}`  prettier/prettier
+69:2  Error: Insert `⏎`  prettier/prettier
+
+./src/components/ui/card-stats.tsx
+101:3  Error: 'label' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ui/content-filter.tsx
+4:22  Error: 'Category' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ui/index.ts
+24:9  Error: Replace `·CardTags·as·ResourceTags,·CardTags·as·ArticleTags,·CardTags·as·VibeTags·` with `⏎··CardTags·as·ResourceTags,⏎··CardTags·as·ArticleTags,⏎··CardTags·as·VibeTags,⏎`  prettier/prettier
+
+./src/components/ui/login-prompt.tsx
+4:8  Error: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ui/markdown.tsx
+105:37  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+167:44  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/ui/resource-stats.tsx
+23:9  Error: Replace `·className="w-4·h-4"·fill="none"·stroke="currentColor"·viewBox="0·0·24·24"` with `⏎······className="w-4·h-4"⏎······fill="none"⏎······stroke="currentColor"⏎······viewBox="0·0·24·24"⏎····`  prettier/prettier
+39:9  Error: Replace `·className="w-4·h-4"·fill="none"·stroke="currentColor"·viewBox="0·0·24·24"` with `⏎······className="w-4·h-4"⏎······fill="none"⏎······stroke="currentColor"⏎······viewBox="0·0·24·24"⏎····`  prettier/prettier
+49:9  Error: Replace `·className="w-4·h-4"·fill="none"·stroke="currentColor"·viewBox="0·0·24·24"` with `⏎······className="w-4·h-4"⏎······fill="none"⏎······stroke="currentColor"⏎······viewBox="0·0·24·24"⏎····`  prettier/prettier
+62:4  Error: Insert `,`  prettier/prettier
+68:14  Error: Delete `·`  prettier/prettier
+71:14  Error: Insert `,`  prettier/prettier
+87:21  Error: Insert `,`  prettier/prettier
+89:23  Error: Replace `"flex·items-center·text-gray-500"` with `'flex·items-center·text-gray-500'`  prettier/prettier
+90:1  Error: Delete `··`  prettier/prettier
+94:26  Error: Insert `,`  prettier/prettier
+129:12  Error: Insert `,`  prettier/prettier
+139:25  Error: Insert `⏎·····`  prettier/prettier
+140:25  Error: Insert `⏎·····`  prettier/prettier
+141:7  Error: Insert `··`  prettier/prettier
+142:7  Error: Replace `:·(Number.isFinite(numericValue)·?·String(numericValue)·:·String(value·??·0)` with `··:·Number.isFinite(numericValue)⏎··········?·String(numericValue)⏎··········:·String(value·??·0`  prettier/prettier
+147:37  Error: Replace `{emoji·??·EmojiIcons[key·as·keyof·typeof·EmojiIcons]·??·''}` with `⏎············{emoji·??·EmojiIcons[key·as·keyof·typeof·EmojiIcons]·??·''}⏎··········`  prettier/prettier
+160:19  Error: Replace `(⏎··········<span·className="ml-1">{label}</span>⏎········)` with `<span·className="ml-1">{label}</span>`  prettier/prettier
+210:11  Error: Replace `·className="flex·items-center·gap-6"·style={{·display:·'none'·}}·aria-hidden="true"` with `⏎········className="flex·items-center·gap-6"⏎········style={{·display:·'none'·}}⏎········aria-hidden="true"⏎·····`  prettier/prettier
+217:7  Error: 'formatNumber' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+224:7  Error: 'formatRating' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+263:20  Error: Delete `·`  prettier/prettier
+266:35  Error: Replace `⏎··type:·'vibe',⏎··data:·VibeStatsData··⏎` with `type:·'vibe',·data:·VibeStatsData`  prettier/prettier
+282:22  Error: Insert `,`  prettier/prettier
+301:10  Error: Insert `,`  prettier/prettier
+322:10  Error: Insert `,`  prettier/prettier
+359:10  Error: Insert `,`  prettier/prettier
+373:54  Error: Insert `⏎···`  prettier/prettier
+374:1  Error: Delete `··`  prettier/prettier
+376:14  Error: Delete `··`  prettier/prettier
+378:56  Error: Insert `⏎···`  prettier/prettier
+379:1  Error: Delete `··`  prettier/prettier
+383:80  Error: Insert `,`  prettier/prettier
+
+./src/components/ui/vibe-content.tsx
+12:30  Error: Delete `·`  prettier/prettier
+13:11  Error: Delete `·`  prettier/prettier
+14:15  Error: Delete `·`  prettier/prettier
+16:16  Error: Replace `·` with `,`  prettier/prettier
+21:1  Error: Delete `····`  prettier/prettier
+27:20  Error: Replace `·key={index}·className="text-blue-600·hover:text-blue-700·cursor-pointer·font-medium"` with `⏎················key={index}⏎················className="text-blue-600·hover:text-blue-700·cursor-pointer·font-medium"⏎··············`  prettier/prettier
+45:1  Error: Delete `······`  prettier/prettier
+52:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+52:19  Error: Delete `·`  prettier/prettier
+53:39  Error: Delete `·`  prettier/prettier
+54:33  Error: Delete `·`  prettier/prettier
+63:21  Error: Replace `·key={index}·className="relative·aspect-square·rounded-lg·overflow-hidden"` with `⏎··················key={index}⏎··················className="relative·aspect-square·rounded-lg·overflow-hidden"⏎················`  prettier/prettier
+64:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+64:23  Error: Delete `·`  prettier/prettier
+65:32  Error: Delete `·`  prettier/prettier
+77:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+77:21  Error: Delete `·`  prettier/prettier
+78:41  Error: Delete `·`  prettier/prettier
+86:23  Error: Replace `·key={index·+·1}·className="relative·aspect-square·rounded-lg·overflow-hidden"` with `⏎····················key={index·+·1}⏎····················className="relative·aspect-square·rounded-lg·overflow-hidden"⏎··················`  prettier/prettier
+87:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+87:25  Error: Delete `·`  prettier/prettier
+88:34  Error: Delete `·`  prettier/prettier
+101:21  Error: Replace `·key={index}·className="relative·aspect-square·rounded-lg·overflow-hidden"` with `⏎··················key={index}⏎··················className="relative·aspect-square·rounded-lg·overflow-hidden"⏎················`  prettier/prettier
+102:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+102:23  Error: Delete `·`  prettier/prettier
+103:32  Error: Delete `·`  prettier/prettier
+134:33  Error: Replace `·title,·excerpt,·slug,·className·` with `⏎··title,⏎··excerpt,⏎··slug,⏎··className,⏎`  prettier/prettier
+134:50  Error: 'slug' is defined but never used.  @typescript-eslint/no-unused-vars
+145:2  Error: Insert `⏎`  prettier/prettier
+
+./src/hooks/index.ts
+92:9  Error: Delete `·`  prettier/prettier
+95:29  Error: Delete `·`  prettier/prettier
+99:16  Error: Insert `,`  prettier/prettier
+121:7  Warning: Unexpected console statement.  no-console
+140:7  Warning: Unexpected console statement.  no-console
+149:29  Error: 'vibesModule' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+159:7  Warning: Unexpected console statement.  no-console
+171:7  Warning: Unexpected console statement.  no-console
+
+./src/hooks/use-articles.ts
+3:10  Error: 'Article' is defined but never used.  @typescript-eslint/no-unused-vars
+3:19  Error: 'Comment' is defined but never used.  @typescript-eslint/no-unused-vars
+6:3  Error: 'ApiResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Error: 'PaginatedResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/hooks/use-card-interaction.ts
+24:1  Error: Delete `··`  prettier/prettier
+29:1  Error: Delete `··`  prettier/prettier
+35:1  Error: Delete `··`  prettier/prettier
+39:21  Error: Replace `item:·BaseCardItem,·event:·React.MouseEvent` with `⏎····item:·BaseCardItem,⏎····event:·React.MouseEvent⏎··`  prettier/prettier
+40:1  Error: Delete `··`  prettier/prettier
+45:1  Error: Delete `··`  prettier/prettier
+54:13  Error: Replace `(item)` with `item`  prettier/prettier
+55:12  Error: Replace `(item)` with `item`  prettier/prettier
+56:9  Error: Replace `(item)·=>·`/vibes/${item.id}`` with `item·=>·`/vibes/${item.id}`,`  prettier/prettier
+62:13  Error: Delete `·`  prettier/prettier
+63:8  Error: Delete `······`  prettier/prettier
+68:20  Error: Insert `,`  prettier/prettier
+73:3  Error: Delete `·`  prettier/prettier
+84:1  Error: Delete `··`  prettier/prettier
+91:27  Error: Insert `,`  prettier/prettier
+97:42  Error: Insert `⏎····`  prettier/prettier
+98:1  Error: Insert `··`  prettier/prettier
+99:7  Error: Insert `··`  prettier/prettier
+100:1  Error: Insert `··`  prettier/prettier
+101:7  Error: Insert `··`  prettier/prettier
+102:1  Error: Insert `··`  prettier/prettier
+103:9  Error: Insert `··`  prettier/prettier
+104:1  Error: Insert `··`  prettier/prettier
+104:11  Warning: Unexpected console statement.  no-console
+105:9  Error: Insert `··`  prettier/prettier
+106:1  Error: Replace `········` with `··········`  prettier/prettier
+107:7  Error: Insert `··`  prettier/prettier
+108:1  Error: Replace `····` with `······`  prettier/prettier
+109:1  Error: Replace `··},·[preventClickSelectors,·enableDebugLog]` with `····},⏎····[preventClickSelectors,·enableDebugLog]⏎··`  prettier/prettier
+114:37  Error: Insert `⏎····`  prettier/prettier
+115:1  Error: Replace `····` with `······`  prettier/prettier
+116:1  Error: Insert `··`  prettier/prettier
+117:5  Error: Replace `}⏎····⏎` with `··}⏎⏎··`  prettier/prettier
+120:5  Error: Insert `··`  prettier/prettier
+121:1  Error: Replace `······` with `········`  prettier/prettier
+122:5  Error: Replace `}⏎····⏎` with `··}⏎⏎··`  prettier/prettier
+125:1  Error: Replace `··},·[cardType,·customRouteGenerator]` with `····},⏎····[cardType,·customRouteGenerator]⏎··`  prettier/prettier
+130:38  Error: Insert `⏎····`  prettier/prettier
+131:5  Error: Insert `··`  prettier/prettier
+132:1  Error: Replace `······` with `········`  prettier/prettier
+132:7  Warning: Unexpected console statement.  no-console
+133:9  Error: Insert `··`  prettier/prettier
+134:1  Error: Insert `··`  prettier/prettier
+135:1  Error: Insert `··`  prettier/prettier
+136:11  Error: Replace `type:·cardType` with `··type:·cardType,`  prettier/prettier
+137:1  Error: Replace `········` with `··········`  prettier/prettier
+138:1  Error: Insert `··`  prettier/prettier
+139:1  Error: Replace `········` with `··········`  prettier/prettier
+140:9  Error: Replace `timestamp:·new·Date().toISOString()` with `··timestamp:·new·Date().toISOString(),`  prettier/prettier
+141:1  Error: Insert `··`  prettier/prettier
+142:1  Error: Insert `··`  prettier/prettier
+143:3  Error: Replace `},·[cardType,·enableDebugLog]` with `··},⏎····[cardType,·enableDebugLog]⏎··`  prettier/prettier
+148:39  Error: Insert `⏎····`  prettier/prettier
+149:1  Error: Insert `··`  prettier/prettier
+150:7  Error: Insert `··`  prettier/prettier
+151:1  Error: Replace `······⏎` with `⏎··`  prettier/prettier
+153:7  Error: Insert `··`  prettier/prettier
+154:9  Error: Insert `··`  prettier/prettier
+155:7  Error: Insert `··`  prettier/prettier
+157:1  Error: Insert `··`  prettier/prettier
+158:7  Error: Insert `··`  prettier/prettier
+159:1  Error: Insert `··`  prettier/prettier
+160:9  Error: Insert `··`  prettier/prettier
+161:1  Error: Insert `··`  prettier/prettier
+162:11  Error: Insert `··`  prettier/prettier
+163:1  Error: Insert `··`  prettier/prettier
+164:7  Error: Insert `··`  prettier/prettier
+166:1  Error: Replace `······` with `········`  prettier/prettier
+167:1  Error: Insert `··`  prettier/prettier
+168:1  Error: Insert `··`  prettier/prettier
+169:1  Error: Replace `········⏎` with `⏎··`  prettier/prettier
+171:1  Error: Replace `········logInteraction(item,·route,·event)` with `··········logInteraction(item,·route,·event)⏎`  prettier/prettier
+172:9  Error: Delete `⏎······`  prettier/prettier
+174:1  Error: Insert `··`  prettier/prettier
+175:1  Error: Replace `········⏎` with `⏎··`  prettier/prettier
+177:1  Error: Insert `··`  prettier/prettier
+178:11  Error: Insert `··`  prettier/prettier
+179:9  Error: Replace `}⏎········⏎` with `··}⏎··`  prettier/prettier
+182:1  Error: Replace `········` with `··········`  prettier/prettier
+183:11  Error: Replace `console.error(`Card·navigation·failed·for·${cardType}:`,·error,·item)` with `··console.error(⏎··············`Card·navigation·failed·for·${cardType}:`,⏎··············error,⏎··············item`  prettier/prettier
+183:11  Warning: Unexpected console statement.  no-console
+184:9  Error: Replace `}` with `····)`  prettier/prettier
+185:1  Error: Replace `········` with `··········}`  prettier/prettier
+186:1  Error: Insert `⏎··`  prettier/prettier
+187:1  Error: Insert `··`  prettier/prettier
+188:1  Error: Insert `··`  prettier/prettier
+189:5  Error: Insert `··`  prettier/prettier
+190:1  Error: Replace `··},` with `····},⏎···`  prettier/prettier
+191:5  Error: Replace `shouldPreventClick,·⏎····beforeNavigate,·⏎····generateRoute,·⏎····logInteraction,·⏎····navigate,·` with `··shouldPreventClick,⏎······beforeNavigate,⏎······generateRoute,⏎······logInteraction,⏎······navigate,`  prettier/prettier
+196:5  Error: Replace `afterNavigate,·` with `··afterNavigate,`  prettier/prettier
+197:1  Error: Replace `····cardType,·⏎····enableDebugLog` with `······cardType,⏎······enableDebugLog,`  prettier/prettier
+199:1  Error: Replace `··]` with `····]⏎··`  prettier/prettier
+205:41  Error: Insert `⏎····`  prettier/prettier
+206:1  Error: Insert `··`  prettier/prettier
+207:1  Error: Insert `··`  prettier/prettier
+208:7  Error: Insert `··`  prettier/prettier
+209:1  Error: Replace `······⏎` with `⏎··`  prettier/prettier
+211:9  Error: Insert `··`  prettier/prettier
+212:1  Error: Insert `··`  prettier/prettier
+213:9  Error: Insert `··`  prettier/prettier
+214:1  Error: Insert `··`  prettier/prettier
+215:7  Error: Insert `··`  prettier/prettier
+216:1  Error: Insert `··`  prettier/prettier
+217:3  Error: Replace `},·[handleCardClick]` with `··},⏎····[handleCardClick]⏎··`  prettier/prettier
+222:36  Error: Insert `⏎····`  prettier/prettier
+223:5  Error: Insert `··`  prettier/prettier
+224:1  Error: Insert `··`  prettier/prettier
+225:1  Error: Replace `······` with `········`  prettier/prettier
+226:7  Error: Insert `··`  prettier/prettier
+227:1  Error: Replace `······` with `········`  prettier/prettier
+228:1  Error: Insert `··`  prettier/prettier
+229:1  Error: Replace `······'data-card-id':·item.id` with `········'data-card-id':·item.id,`  prettier/prettier
+230:1  Error: Insert `··`  prettier/prettier
+231:1  Error: Replace `··},·[handleCardClick,·cardType]` with `····},⏎····[handleCardClick,·cardType]⏎··`  prettier/prettier
+236:40  Error: Insert `⏎····`  prettier/prettier
+237:1  Error: Replace `····item:·T,·⏎····statType:·string,·` with `······item:·T,⏎······statType:·string,`  prettier/prettier
+239:5  Error: Insert `··`  prettier/prettier
+240:1  Error: Insert `··`  prettier/prettier
+241:5  Error: Insert `··`  prettier/prettier
+242:1  Error: Insert `··`  prettier/prettier
+243:1  Error: Replace `······⏎` with `⏎··`  prettier/prettier
+245:1  Error: Insert `··`  prettier/prettier
+246:7  Error: Insert `··`  prettier/prettier
+247:1  Error: Insert `··`  prettier/prettier
+248:9  Error: Insert `··`  prettier/prettier
+249:1  Error: Replace `········` with `··········`  prettier/prettier
+250:9  Error: Insert `··`  prettier/prettier
+251:7  Error: Replace `}⏎······⏎` with `··}⏎⏎··`  prettier/prettier
+254:1  Error: Insert `··`  prettier/prettier
+254:9  Warning: Unexpected console statement.  no-console
+255:11  Error: Insert `··`  prettier/prettier
+256:1  Error: Replace `··········` with `············`  prettier/prettier
+257:11  Error: Insert `··`  prettier/prettier
+258:1  Error: Replace `··········timestamp:·new·Date().toISOString()` with `············timestamp:·new·Date().toISOString(),`  prettier/prettier
+259:1  Error: Insert `··`  prettier/prettier
+260:7  Error: Insert `··`  prettier/prettier
+261:1  Error: Insert `··`  prettier/prettier
+262:3  Error: Replace `},·[generateRoute,·navigate,·cardType,·enableDebugLog]` with `··},⏎····[generateRoute,·navigate,·cardType,·enableDebugLog]⏎··`  prettier/prettier
+269:1  Error: Delete `····`  prettier/prettier
+274:1  Error: Delete `····`  prettier/prettier
+276:19  Error: Insert `,`  prettier/prettier
+292:15  Error: Insert `,`  prettier/prettier
+296:14  Error: Delete `··`  prettier/prettier
+303:15  Error: Insert `,`  prettier/prettier
+314:15  Error: Insert `,`  prettier/prettier
+321:15  Error: Replace `⏎··UseCardInteractionOptions,·⏎··BaseCardItem,·⏎··CardType·⏎}` with `UseCardInteractionOptions,·BaseCardItem,·CardType·}⏎`  prettier/prettier
+
+./src/hooks/use-categories.ts
+98:3  Error: 'customColors' is defined but never used.  @typescript-eslint/no-unused-vars
+107:3  Error: 'customColors' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/hooks/use-filter.ts
+26:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+61:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+100:66  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/hooks/use-interactions.ts
+5:9  Error: Replace `·InteractionStats,·Comment,·Favorite·` with `⏎··InteractionStats,⏎··Comment,⏎··Favorite,⏎`  prettier/prettier
+27:16  Warning: Unexpected console statement.  no-console
+48:7  Warning: Unexpected console statement.  no-console
+81:16  Warning: Unexpected console statement.  no-console
+101:7  Warning: Unexpected console statement.  no-console
+133:7  Warning: Unexpected console statement.  no-console
+164:9  Warning: Unexpected console statement.  no-console
+187:9  Warning: Unexpected console statement.  no-console
+221:16  Warning: Unexpected console statement.  no-console
+250:9  Warning: Unexpected console statement.  no-console
+286:16  Warning: Unexpected console statement.  no-console
+311:7  Warning: Unexpected console statement.  no-console
+346:7  Warning: Unexpected console statement.  no-console
+
+./src/hooks/use-lazy-image.ts
+320:9  Warning: Unexpected console statement.  no-console
+350:11  Warning: Unexpected console statement.  no-console
+374:9  Warning: Unexpected console statement.  no-console
+
+./src/hooks/use-like.ts
+98:6  Warning: React Hook useCallback has missing dependencies: 'setIsLiked' and 'setLikeCount'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/hooks/use-navigation-handler.ts
+22:40  Error: Insert `⏎····`  prettier/prettier
+23:5  Error: Insert `··`  prettier/prettier
+24:5  Error: Replace `console.log(`${platform.charAt(0).toUpperCase()·+·platform.slice(1)}·navigation·clicked:`,` with `··console.log(⏎········`${platform.charAt(0).toUpperCase()·+·platform.slice(1)}·navigation·clicked:`,⏎·······`  prettier/prettier
+24:5  Warning: Unexpected console statement.  no-console
+25:1  Error: Insert `····`  prettier/prettier
+26:7  Error: Insert `····`  prettier/prettier
+27:1  Error: Insert `····`  prettier/prettier
+28:1  Error: Replace `······` with `··········`  prettier/prettier
+29:5  Error: Replace `})` with `····}`  prettier/prettier
+30:1  Error: Replace `····` with `······)`  prettier/prettier
+31:1  Error: Insert `⏎··`  prettier/prettier
+32:1  Error: Replace `····` with `······`  prettier/prettier
+33:7  Error: Insert `··`  prettier/prettier
+33:7  Warning: Unexpected console statement.  no-console
+34:1  Error: Insert `··`  prettier/prettier
+35:9  Error: Insert `··`  prettier/prettier
+36:9  Error: Insert `··`  prettier/prettier
+37:1  Error: Replace `········` with `··········`  prettier/prettier
+38:7  Error: Insert `··`  prettier/prettier
+39:1  Error: Insert `··`  prettier/prettier
+40:1  Error: Replace `····⏎` with `⏎··`  prettier/prettier
+42:1  Error: Replace `····` with `······`  prettier/prettier
+43:7  Error: Insert `··`  prettier/prettier
+44:1  Error: Replace `····` with `······`  prettier/prettier
+45:1  Error: Replace `····⏎` with `⏎··`  prettier/prettier
+47:5  Error: Insert `··`  prettier/prettier
+48:3  Error: Replace `},·[platform,·pathname,·onNavigate]` with `··},⏎····[platform,·pathname,·onNavigate]⏎··`  prettier/prettier
+50:37  Error: Insert `⏎····`  prettier/prettier
+51:1  Error: Insert `··`  prettier/prettier
+52:1  Error: Insert `··`  prettier/prettier
+53:5  Error: Insert `··`  prettier/prettier
+54:5  Error: Insert `··`  prettier/prettier
+55:1  Error: Replace `····` with `······`  prettier/prettier
+56:5  Error: Insert `··`  prettier/prettier
+57:1  Error: Insert `··`  prettier/prettier
+58:3  Error: Replace `},·[pathname]` with `··},⏎····[pathname]⏎··`  prettier/prettier
+60:46  Error: Insert `⏎····`  prettier/prettier
+61:5  Error: Replace `return·isActiveRoute(href)·?·`${baseClasses}·${activeClasses}`` with `··return·isActiveRoute(href)⏎········?·`${baseClasses}·${activeClasses}`⏎·······`  prettier/prettier
+62:3  Error: Replace `},·[isActiveRoute]` with `··},⏎····[isActiveRoute]⏎··`  prettier/prettier
+68:26  Error: Insert `,`  prettier/prettier
+
+./src/hooks/use-performance.ts
+68:30  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+70:9  Warning: Unexpected console statement.  no-console
+125:40  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+138:38  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+173:40  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+252:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+254:26  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+371:9  Warning: Unexpected console statement.  no-console
+
+./src/hooks/use-resource-card.ts
+16:39  Error: Insert `⏎····`  prettier/prettier
+16:40  Error: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+17:5  Error: Insert `··`  prettier/prettier
+18:1  Error: Insert `··`  prettier/prettier
+19:1  Error: Replace `··},·[navigate,·resource.slug]` with `····},⏎····[navigate,·resource.slug]⏎··`  prettier/prettier
+25:41  Error: Insert `⏎····`  prettier/prettier
+26:1  Error: Replace `····` with `······`  prettier/prettier
+27:1  Error: Insert `··`  prettier/prettier
+28:1  Error: Replace `··},·[navigate,·resource.slug]` with `····},⏎····[navigate,·resource.slug]⏎··`  prettier/prettier
+34:2  Error: Insert `⏎`  prettier/prettier
+
+./src/hooks/use-resource-detail.ts
+56:3  Warning: Unexpected console statement.  no-console
+62:10  Error: Replace `·resource,·loading:·resourceLoading,·error:·resourceError·}·=⏎···` with `⏎····resource,⏎····loading:·resourceLoading,⏎····error:·resourceError,⏎··}·=`  prettier/prettier
+
+./src/hooks/use-resources.ts
+4:3  Error: 'Resource' is defined but never used.  @typescript-eslint/no-unused-vars
+5:3  Error: 'ResourceComment' is defined but never used.  @typescript-eslint/no-unused-vars
+6:3  Error: 'ResourceRating' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Error: 'ResourceRatingDistribution' is defined but never used.  @typescript-eslint/no-unused-vars
+11:3  Error: 'ApiResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+12:3  Error: 'PaginatedResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/hooks/use-users.ts
+5:3  Error: 'UserStats' is defined but never used.  @typescript-eslint/no-unused-vars
+8:10  Error: 'User' is defined but never used.  @typescript-eslint/no-unused-vars
+9:23  Error: 'ApiResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+356:13  Error: 'followCache' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+379:13  Error: 'followCache' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/hooks/use-vibes.ts
+3:10  Error: 'Vibe' is defined but never used.  @typescript-eslint/no-unused-vars
+3:16  Error: 'VibeComment' is defined but never used.  @typescript-eslint/no-unused-vars
+6:3  Error: 'ApiResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Error: 'PaginatedResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/auth/auth-service.ts
+65:37  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+68:9  Error: Replace `parts.length·!==·3·||·!(parts[0].startsWith('mock')·||·parts[0].startsWith('refresh'))` with `⏎······parts.length·!==·3·||⏎······!(parts[0].startsWith('mock')·||·parts[0].startsWith('refresh'))⏎····`  prettier/prettier
+94:13  Error: 'password' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+138:13  Error: 'password' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+166:13  Error: 'password' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+189:13  Error: 'password' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/auth/token-manager.ts
+20:7  Warning: Unexpected console statement.  no-console
+30:7  Warning: Unexpected console statement.  no-console
+41:7  Warning: Unexpected console statement.  no-console
+54:7  Warning: Unexpected console statement.  no-console
+67:7  Warning: Unexpected console statement.  no-console
+79:7  Warning: Unexpected console statement.  no-console
+
+./src/lib/taxonomy/hooks/useTags.ts
+42:9  Warning: Unexpected console statement.  no-console
+47:9  Warning: Unexpected console statement.  no-console
+54:11  Warning: Unexpected console statement.  no-console
+
+./src/lib/taxonomy/manager.ts
+28:25  Warning: Unexpected empty constructor.  @typescript-eslint/no-empty-function
+
+./src/lib/utils/dynamic-imports.ts
+15:27  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+73:25  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+188:71  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+209:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+213:5  Warning: Unexpected console statement.  no-console
+219:59  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+223:7  Warning: Unexpected console statement.  no-console
+286:5  Warning: Unexpected console statement.  no-console
+
+./src/lib/utils.ts
+39:46  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+39:56  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/services/articles.service.ts
+9:3  Error: 'mockArticleComments' is defined but never used.  @typescript-eslint/no-unused-vars
+362:11  Error: 'articles' is never reassigned. Use 'const' instead.  prefer-const
+420:61  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+421:61  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/services/base/api-client.ts
+31:45  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+59:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+70:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+217:62  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+269:9  Warning: Unexpected console statement.  no-console
+286:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+288:7  Warning: Unexpected console statement.  no-console
+
+./src/services/base/cache-manager.ts
+8:45  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+117:11  Error: 'now' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+156:37  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+190:61  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/services/base/types.ts
+10:34  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+47:28  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+48:18  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+56:27  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+57:10  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+64:13  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:37  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/services/resources.service.ts
+15:3  Error: 'mockResourceComments' is defined but never used.  @typescript-eslint/no-unused-vars
+16:3  Error: 'mockResourceRatings' is defined but never used.  @typescript-eslint/no-unused-vars
+55:48  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+477:11  Error: 'resources' is never reassigned. Use 'const' instead.  prefer-const
+533:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+536:47  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+542:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+550:49  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/services/users.service.ts
+363:11  Error: 'users' is never reassigned. Use 'const' instead.  prefer-const
+
+./src/services/vibes.service.ts
+9:3  Error: 'mockVibeComments' is defined but never used.  @typescript-eslint/no-unused-vars
+322:11  Error: 'vibes' is never reassigned. Use 'const' instead.  prefer-const
+386:11  Error: 'vibes' is never reassigned. Use 'const' instead.  prefer-const
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules

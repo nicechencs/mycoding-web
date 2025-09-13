@@ -7,12 +7,18 @@
 // === 基础服务层 ===
 export { ApiClient, defaultApiClient, isDevelopment } from './base/api-client'
 export { CacheManager, globalCache } from './base/cache-manager'
+// 引入到本地作用域，供下方 ServiceManager 使用
+import { globalCache as _globalCache } from './base/cache-manager'
 export * from './base/types'
 
 // === 具体服务实现 ===
 export { ArticlesService, articlesService } from './articles.service'
 export { ResourcesService, resourcesService } from './resources.service'
 export { VibesService, vibesService } from './vibes.service'
+// 引入到本地作用域，供下方 ServiceManager 使用
+import { articlesService as _articlesService } from './articles.service'
+import { resourcesService as _resourcesService } from './resources.service'
+import { vibesService as _vibesService } from './vibes.service'
 export {
   UsersService,
   usersService,
@@ -20,6 +26,8 @@ export {
   type UserStats,
   type UserPreferences,
 } from './users.service'
+// 引入到本地作用域，供下方 ServiceManager 使用
+import { usersService as _usersService } from './users.service'
 
 // === 服务接口导出 ===
 export type { IArticlesService } from './articles.service'
@@ -30,37 +38,37 @@ export type { IUsersService } from './users.service'
 // === 统一服务管理器 ===
 export class ServiceManager {
   static get articles() {
-    return articlesService
+    return _articlesService
   }
   static get resources() {
-    return resourcesService
+    return _resourcesService
   }
   static get vibes() {
-    return vibesService
+    return _vibesService
   }
   static get users() {
-    return usersService
+    return _usersService
   }
 
   /**
    * 获取所有服务的缓存统计信息
    */
   static getCacheStats() {
-    return globalCache.getStats()
+    return _globalCache.getStats()
   }
 
   /**
    * 清除所有服务缓存
    */
   static clearAllCache() {
-    globalCache.clear()
+    _globalCache.clear()
   }
 
   /**
    * 清理过期缓存
    */
   static cleanupCache() {
-    return globalCache.cleanup()
+    return _globalCache.cleanup()
   }
 }
 

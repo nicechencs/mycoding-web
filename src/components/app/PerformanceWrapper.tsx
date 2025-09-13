@@ -28,9 +28,15 @@ export function PerformanceWrapper({ children }: PerformanceWrapperProps) {
     // 预加载关键资源
     if (typeof window !== 'undefined') {
       // 延迟预加载非关键组件
-      requestIdleCallback(() => {
-        DynamicImportManager.preloadHomeComponents()
-      })
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(() => {
+          DynamicImportManager.preloadHomeComponents()
+        })
+      } else {
+        setTimeout(() => {
+          DynamicImportManager.preloadHomeComponents()
+        }, 1)
+      }
 
       // 监听用户交互，预加载可能需要的组件
       const handleFirstInteraction = () => {
@@ -74,23 +80,9 @@ export function PerformanceWrapper({ children }: PerformanceWrapperProps) {
   return <>{children}</>
 }
 
-// 使用 requestIdleCallback 的polyfill
-declare global {
-  interface Window {
-    requestIdleCallback?: (
-      callback: (deadline: {
-        timeRemaining: () => number
-        didTimeout: boolean
-      }) => void,
-      options?: { timeout?: number }
-    ) => number
-    cancelIdleCallback?: (id: number) => void
-  }
-}
-
 // requestIdleCallback polyfill for browsers that don't support it
 if (typeof window !== 'undefined' && !window.requestIdleCallback) {
-  window.requestIdleCallback = function (callback, options = {}) {
+  ;(window as any).requestIdleCallback = function (callback: any) {
     const startTime = Date.now()
     return setTimeout(() => {
       callback({
@@ -102,7 +94,7 @@ if (typeof window !== 'undefined' && !window.requestIdleCallback) {
     }, 1) as unknown as number
   }
 
-  window.cancelIdleCallback = function (id) {
+  ;(window as any).cancelIdleCallback = function (id: number) {
     clearTimeout(id)
   }
 }

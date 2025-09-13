@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useAuth } from './use-auth'
 import { InteractionService } from '@/lib/interaction/interaction-service'
-import { InteractionStats, Comment } from '@/lib/interaction/interaction-types'
+import { InteractionStats, Comment, Favorite } from '@/lib/interaction/interaction-types'
 import { useRouter } from 'next/navigation'
 
 // 点赞 Hook
@@ -294,7 +294,7 @@ export function useInteractionStats(
 // 用户收藏列表 Hook
 export function useUserFavorites(type?: 'post' | 'resource' | 'vibe') {
   const { user, isAuthenticated } = useAuth()
-  const [favorites, setFavorites] = useState([])
+  const [favorites, setFavorites] = useState<Favorite[]>([])
   const [loading, setLoading] = useState(false)
 
   const fetchFavorites = useCallback(async () => {
@@ -329,7 +329,7 @@ export function useUserFavorites(type?: 'post' | 'resource' | 'vibe') {
 // 用户评论列表 Hook
 export function useUserComments(type?: 'post' | 'resource' | 'vibe') {
   const { user, isAuthenticated } = useAuth()
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(false)
 
   const fetchComments = useCallback(async () => {

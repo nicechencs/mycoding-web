@@ -1,0 +1,427 @@
+PASS __tests__/hooks/use-navigation-handler.test.ts
+PASS __tests__/hooks/use-resource-card.test.ts
+PASS __tests__/components/ResourceStats.test.tsx
+FAIL __tests__/components/AuthProvider.test.tsx
+  ● Console
+
+    console.error
+      Auth initialization failed: Error: Unauthorized
+          at Object.<anonymous> (/Users/chencs/Project/2025/MyCoding/mycoding-web/__tests__/components/AuthProvider.test.tsx:203:9)
+          at Promise.finally.completed (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)
+          at _callCircusTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)
+          at _runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:946:3)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+          at runAndTransformResultsToJestFormat (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)
+          at jestAdapter (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      90 |         }
+      91 |       } catch (error) {
+    > 92 |         console.error('Auth initialization failed:', error)
+         |                 ^
+      93 |         TokenManager.clearTokens()
+      94 |         dispatch({ type: 'SET_USER', payload: null })
+      95 |       }
+
+      at error (src/components/auth/AuthProvider.tsx:92:17)
+
+    console.error
+      Logout error: Error: Logout failed
+          at Object.<anonymous> (/Users/chencs/Project/2025/MyCoding/mycoding-web/__tests__/components/AuthProvider.test.tsx:403:50)
+          at Promise.finally.completed (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)
+          at _callCircusTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)
+          at _runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:946:3)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+          at runAndTransformResultsToJestFormat (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)
+          at jestAdapter (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      175 |       dispatch({ type: 'LOGOUT' })
+      176 |     } catch (error) {
+    > 177 |       console.error('Logout error:', error)
+          |               ^
+      178 |       // 即使服务端注销失败，也要清除本地状态
+      179 |       TokenManager.clearTokens()
+      180 |       dispatch({ type: 'LOGOUT' })
+
+      at error (src/components/auth/AuthProvider.tsx:177:15)
+
+    console.error
+      Token refresh failed: Error: Refresh failed
+          at Object.<anonymous> (/Users/chencs/Project/2025/MyCoding/mycoding-web/__tests__/components/AuthProvider.test.tsx:507:9)
+          at Promise.finally.completed (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)
+          at _callCircusTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)
+          at _runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:946:3)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+          at runAndTransformResultsToJestFormat (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)
+          at jestAdapter (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/chencs/Project/2025/MyCoding/mycoding-web/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      116 |           setupTokenRefresh() // 设置下一次刷新
+      117 |         } catch (error) {
+    > 118 |           console.error('Token refresh failed:', error)
+          |                   ^
+      119 |           logout()
+      120 |         }
+      121 |       }, refreshTime)
+
+      at error (src/components/auth/AuthProvider.tsx:118:19)
+
+    console.error
+      Warning: An update to AuthProvider inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at children (/Users/chencs/Project/2025/MyCoding/mycoding-web/src/components/auth/AuthProvider.tsx:76:32)
+
+      173 |     try {
+      174 |       await AuthService.logout()
+    > 175 |       dispatch({ type: 'LOGOUT' })
+          |       ^
+      176 |     } catch (error) {
+      177 |       console.error('Logout error:', error)
+      178 |       // 即使服务端注销失败，也要清除本地状态
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchReducerAction (node_modules/react-dom/cjs/react-dom.development.js:16633:7)
+      at dispatch (src/components/auth/AuthProvider.tsx:175:7)
+
+  ● AuthProvider Component › 初始化状态 › 应该渲染loading状态
+
+    expect(element).toHaveTextContent()
+
+    Expected element to have text content:
+      Loading
+    Received:
+      Not Authenticated
+
+      155 |       )
+      156 |
+    > 157 |       expect(screen.getByTestId('auth-status')).toHaveTextContent('Loading')
+          |                                                 ^
+      158 |     })
+      159 |
+      160 |     it('当没有有效token时应该设置为未认证状态', async () => {
+
+      at Object.toHaveTextContent (__tests__/components/AuthProvider.test.tsx:157:49)
+
+  ● AuthProvider Component › 登录功能 › 登录失败应该设置错误状态
+
+    Invalid credentials
+
+      260 |
+      261 |     it('登录失败应该设置错误状态', async () => {
+    > 262 |       const loginError = new Error('Invalid credentials')
+          |                          ^
+      263 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      264 |       MockedAuthService.login.mockRejectedValue(loginError)
+      265 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:262:26)
+
+  ● AuthProvider Component › 登录功能 › 登录失败应该设置错误状态
+
+    Invalid credentials
+
+      260 |
+      261 |     it('登录失败应该设置错误状态', async () => {
+    > 262 |       const loginError = new Error('Invalid credentials')
+          |                          ^
+      263 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      264 |       MockedAuthService.login.mockRejectedValue(loginError)
+      265 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:262:26)
+
+  ● AuthProvider Component › 登录功能 › 登录失败应该设置错误状态
+
+    Invalid credentials
+
+      260 |
+      261 |     it('登录失败应该设置错误状态', async () => {
+    > 262 |       const loginError = new Error('Invalid credentials')
+          |                          ^
+      263 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      264 |       MockedAuthService.login.mockRejectedValue(loginError)
+      265 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:262:26)
+
+  ● AuthProvider Component › 注册功能 › 注册失败应该设置错误状态
+
+    Email already exists
+
+      331 |
+      332 |     it('注册失败应该设置错误状态', async () => {
+    > 333 |       const registerError = new Error('Email already exists')
+          |                             ^
+      334 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      335 |       MockedAuthService.register.mockRejectedValue(registerError)
+      336 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:333:29)
+
+  ● AuthProvider Component › 注册功能 › 注册失败应该设置错误状态
+
+    Email already exists
+
+      331 |
+      332 |     it('注册失败应该设置错误状态', async () => {
+    > 333 |       const registerError = new Error('Email already exists')
+          |                             ^
+      334 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      335 |       MockedAuthService.register.mockRejectedValue(registerError)
+      336 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:333:29)
+
+  ● AuthProvider Component › 注册功能 › 注册失败应该设置错误状态
+
+    Email already exists
+
+      331 |
+      332 |     it('注册失败应该设置错误状态', async () => {
+    > 333 |       const registerError = new Error('Email already exists')
+          |                             ^
+      334 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+      335 |       MockedAuthService.register.mockRejectedValue(registerError)
+      336 |
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:333:29)
+
+  ● AuthProvider Component › 错误处理 › clearError应该清除错误状态
+
+    Login failed
+
+      433 |     it('clearError应该清除错误状态', async () => {
+      434 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+    > 435 |       MockedAuthService.login.mockRejectedValue(new Error('Login failed'))
+          |                                                 ^
+      436 |
+      437 |       render(
+      438 |         <AuthProvider>
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:435:49)
+
+  ● AuthProvider Component › 错误处理 › clearError应该清除错误状态
+
+    Login failed
+
+      433 |     it('clearError应该清除错误状态', async () => {
+      434 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+    > 435 |       MockedAuthService.login.mockRejectedValue(new Error('Login failed'))
+          |                                                 ^
+      436 |
+      437 |       render(
+      438 |         <AuthProvider>
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:435:49)
+
+  ● AuthProvider Component › 错误处理 › clearError应该清除错误状态
+
+    Login failed
+
+      433 |     it('clearError应该清除错误状态', async () => {
+      434 |       MockedTokenManager.hasValidToken.mockReturnValue(false)
+    > 435 |       MockedAuthService.login.mockRejectedValue(new Error('Login failed'))
+          |                                                 ^
+      436 |
+      437 |       render(
+      438 |         <AuthProvider>
+
+      at Object.<anonymous> (__tests__/components/AuthProvider.test.tsx:435:49)
+
+FAIL __tests__/components/Header.test.tsx
+  ● Header Component › 已登录状态 › 点击用户菜单应该显示下拉菜单
+
+    TestingLibraryElementError: Unable to find an element with the text: 设置. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex gap-6 md:gap-10"[39m
+            [36m>[39m
+              [36m<a[39m
+                [33mclass[39m=[32m"flex items-center space-x-2"[39m
+                [33mhref[39m=[32m"/"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"text-2xl"[39m
+                [36m>[39m
+                  [0m💻[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"inline-block font-bold text-xl text-blue-600"[39m
+                [36m>[39m
+                  [0mMyCoding[0m
+                [36m</span>[39m
+              [36m</a>[39m
+              [36m<nav[39m
+                [33mclass[39m=[32m"hidden md:flex gap-6"[39m
+              [36m>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center text-sm font-medium transition-colors hover:text-blue-600 text-blue-600 font-semibold"[39m
+                  [33mhref[39m=[32m"/"[39m
+                [36m>[39m
+                  [0m首页[0m
+                [36m</a>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center text-sm font-medium transition-colors hover:text-blue-600"[39m
+                  [33mhref[39m=[32m"/resources"[39m
+                [36m>[39m
+                  [0m资源[0m
+                [36m</a>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center text-sm font-medium transition-colors hover:text-blue-600"[39m
+                  [33mhref[39m=[32m"/posts"[39m
+                [36m>[39m
+                  [0m文章[0m
+                [36m</a>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center text-sm font-medium transition-colors hover:text-blue-600"[39m
+                  [33mhref[39m=[32m"/vibes"[39m
+                [36m>[39m
+                  [0m动态[0m
+                [36m</a>[39m
+              [36m</nav>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center space-x-4"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"relative"[39m
+                [33mdata-testid[39m=[32m"user-menu"[39m
+              [36m>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"text-sm font-medium text-blue-600"[39m
+                    [36m>[39m
+                      [0mT[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"hidden md:block text-sm font-medium text-gray-700"[39m
+                  [36m>[39m
+                    [0mTest User[0m
+                  [36m</span>[39m
+                  [36m<svg[39m
+                    [33mclass[39m=[32m"w-4 h-4 text-gray-400"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M19 9l-7 7-7-7"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</button>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50"[39m
+                [36m>[39m
+                  [36m<a[39m
+                    [33mclass[39m=[32m"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"[39m
+                    [33mhref[39m=[32m"/settings"[39m
+                  [36m>[39m
+                    [0m个人中心[0m
+                  [36m</a>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"border-t border-gray-100 my-1"[39m
+                  [36m/>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"[39m
+                  [36m>[39m
+                    [0m退出登录[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33maria-label[39m=[32m"切换菜单"[39m
+                [33mclass[39m=[32m"md:hidden p-2"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mclass[39m=[32m"h-6 w-6"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M4 6h16M4 12h16M4 18h16"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</header>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      147 |       // 下拉菜单应该可见
+      148 |       expect(screen.getByText('个人中心')).toBeInTheDocument()
+    > 149 |       expect(screen.getByText('设置')).toBeInTheDocument()
+          |                     ^
+      150 |       expect(screen.getByText('退出登录')).toBeInTheDocument()
+      151 |     })
+      152 |
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.getByText (__tests__/components/Header.test.tsx:149:21)
+
+PASS __tests__/components/ResourceCard.test.tsx
+PASS tests/integration/api.test.ts (9.845 s)
+
+Test Suites: 2 failed, 5 passed, 7 total
+Tests:       5 failed, 108 passed, 113 total
+Snapshots:   0 total
+Time:        10.235 s
+Ran all test suites.

@@ -20,10 +20,10 @@ interface CardActionsProps {
   className?: string
 }
 
-export function CardActions({ 
-  primaryAction, 
-  secondaryActions = [], 
-  className 
+export function CardActions({
+  primaryAction,
+  secondaryActions = [],
+  className,
 }: CardActionsProps) {
   const buttonBaseClasses = "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded transition-colors"
   
@@ -38,53 +38,69 @@ export function CardActions({
     }
   }
 
-  // 提取ActionComponent类型判断逻辑
-  const getActionComponent = (action: { href?: string; external?: boolean }) => {
-    if (!action.href) return 'button'
-    return action.external ? 'a' : Link
-  }
-
-  // 提取action属性构造逻辑
-  const getActionProps = (action: { href?: string; external?: boolean; onClick?: () => void }) => {
-    if (action.href) {
-      return {
-        href: action.href,
-        ...(action.external && { target: '_blank', rel: 'noopener noreferrer' })
-      }
-    }
-    return {
-      onClick: action.onClick,
-      type: 'button' as const
-    }
-  }
-
   // 渲染主要操作按钮
   const renderPrimaryAction = () => {
     if (!primaryAction) return null
 
-    const ActionComponent = getActionComponent(primaryAction)
-    const actionProps = getActionProps(primaryAction)
+    const classes = cn(
+      buttonBaseClasses,
+      getVariantClasses(primaryAction.variant)
+    )
+
+    if (primaryAction.href) {
+      if (primaryAction.external) {
+        return (
+          <a
+            href={primaryAction.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes}
+          >
+            {primaryAction.label}
+            <svg
+              className="w-3 h-3 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </a>
+        )
+      }
+      return (
+        <Link href={primaryAction.href} className={classes}>
+          {primaryAction.label}
+        </Link>
+      )
+    }
 
     return (
-      <ActionComponent
-        {...actionProps}
-        className={cn(
-          buttonBaseClasses,
-          getVariantClasses(primaryAction.variant)
-        )}
+      <button
+        type="button"
+        onClick={primaryAction.onClick}
+        className={classes}
       >
         {primaryAction.label}
-        {primaryAction.external && (
-          <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        )}
-        {!primaryAction.external && !primaryAction.href && (
-          <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        )}
-      </ActionComponent>
+        <svg
+          className="w-3 h-3 ml-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
     )
   }
 
@@ -92,29 +108,48 @@ export function CardActions({
     <div className={cn('flex items-center space-x-2', className)}>
       {/* 次要操作按钮 */}
       {secondaryActions.map((action, index) => {
-        const ActionComponent = getActionComponent({ 
-          href: action.href, 
-          external: action.href?.startsWith('http') 
-        })
-        const actionProps = getActionProps({ 
-          href: action.href, 
-          external: action.href?.startsWith('http'),
-          onClick: action.onClick
-        })
+        const classes = "p-2 text-gray-400 hover:text-gray-600 transition-colors"
+        const content = action.icon || (
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+            />
+          </svg>
+        )
+
+        if (action.href) {
+          const external = action.href.startsWith('http')
+          return external ? (
+            <a
+              key={index}
+              href={action.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes}
+              title={action.label}
+            >
+              {content}
+            </a>
+          ) : (
+            <Link key={index} href={action.href} className={classes} title={action.label}>
+              {content}
+            </Link>
+          )
+        }
 
         return (
-          <ActionComponent
+          <button
             key={index}
-            {...actionProps}
-            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            type="button"
+            onClick={action.onClick}
+            className={classes}
             title={action.label}
           >
-            {action.icon || (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            )}
-          </ActionComponent>
+            {content}
+          </button>
         )
       })}
       

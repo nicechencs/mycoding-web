@@ -28,9 +28,8 @@ export function VibeActions({
   const {
     isLiked,
     likeCount,
-    loading: likeLoading,
+    isLoading: likeLoading,
     toggleLike,
-    canLike,
   } = useLike(vibeId, 'vibe')
 
   // 处理需要登录的操作
@@ -74,7 +73,7 @@ export function VibeActions({
     <>
       <div className={`flex items-center gap-2 ${className}`}>
         {/* 点赞按钮 */}
-        {canLike ? (
+        {isAuthenticated ? (
           <button
             onClick={() => handleAuthRequired(toggleLike)}
             disabled={likeLoading}
