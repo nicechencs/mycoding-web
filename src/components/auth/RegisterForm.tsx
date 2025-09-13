@@ -103,7 +103,7 @@ export function RegisterForm() {
 
     try {
       await register(formData)
-      router.push('/dashboard')
+      router.push('/settings')
     } catch (error) {
       // 错误已在AuthProvider中处理
       console.error('Registration failed:', error)

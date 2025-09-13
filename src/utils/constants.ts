@@ -5,7 +5,7 @@ export const ROUTES = {
   HOME: '/',
   ABOUT: '/about',
   CONTACT: '/contact',
-  DASHBOARD: '/dashboard',
+  SETTINGS: '/settings',
 } as const
 
 export const API_ENDPOINTS = {

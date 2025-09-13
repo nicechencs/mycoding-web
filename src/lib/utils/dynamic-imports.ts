@@ -111,10 +111,6 @@ export const DynamicVibeDetailPage = createDynamicComponent(
 )
 
 // 用户相关页面
-export const DynamicDashboardPage = createDynamicComponent(
-  () => import('@/app/(user)/dashboard/page'),
-  { loading: loadingComponents.page }
-)
 
 export const DynamicSettingsPage = createDynamicComponent(
   () => import('@/app/(user)/settings/page'),
@@ -266,7 +262,6 @@ export class DynamicImportManager {
     if (typeof window === 'undefined') return
 
     const userComponents = [
-      () => import('@/app/(user)/dashboard/page'),
       () => import('@/app/(user)/settings/page'),
       () => import('@/app/(user)/my-favorites/page'),
     ]

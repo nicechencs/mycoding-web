@@ -32,7 +32,7 @@ export function AuthGuard({
 
       // 需要特定角色但角色不匹配
       if (requireRole && user?.role !== requireRole) {
-        router.push('/dashboard' as any)
+        router.push('/settings' as any)
         return
       }
 
@@ -42,7 +42,7 @@ export function AuthGuard({
         isAuthenticated &&
         window.location.pathname === '/login'
       ) {
-        router.push('/dashboard' as any)
+        router.push('/settings' as any)
         return
       }
     }

@@ -137,7 +137,7 @@ export class HookManager {
     try {
       await Promise.allSettled(promises)
     } catch (error) {
-      console.warn('Failed to preload some dashboard data:', error)
+      console.warn('Failed to preload some settings data:', error)
     }
   }
 

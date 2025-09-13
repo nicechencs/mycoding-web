@@ -13,22 +13,23 @@ export default function AuthLayout({
       <div className="min-h-screen flex">
         {/* 左侧蓝色欢迎区域 */}
         <div className="hidden lg:block relative w-0 flex-1">
-          <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
+          <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600">
             {/* 装饰性图案 */}
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
             {/* 内容 */}
-            <div className="relative h-full flex flex-col justify-center px-12 text-white">
-              <div className="max-w-md">
+            <div className="relative h-full flex flex-col justify-center px-12 text-white text-right">
+              <div className="max-w-md ml-auto">
                 <h2 className="text-4xl font-bold mb-6">欢迎来到 MyCoding</h2>
-                <p className="text-xl text-blue-100 mb-8">
+                <p className="text-xl text-blue-50 mb-8">
                   您的编程学习和资源分享平台，与开发者社区一起成长
                 </p>
 
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="flex items-center justify-end space-x-3">
+                    <span className="text-blue-50">丰富的编程资源和文章</span>
+                    <div className="flex-shrink-0 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
                       <svg
                         className="w-4 h-4"
                         fill="currentColor"
@@ -41,11 +42,11 @@ export default function AuthLayout({
                         />
                       </svg>
                     </div>
-                    <span className="text-blue-100">丰富的编程资源和文章</span>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="flex items-center justify-end space-x-3">
+                    <span className="text-blue-50">活跃的开发者社区</span>
+                    <div className="flex-shrink-0 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
                       <svg
                         className="w-4 h-4"
                         fill="currentColor"
@@ -58,11 +59,11 @@ export default function AuthLayout({
                         />
                       </svg>
                     </div>
-                    <span className="text-blue-100">活跃的开发者社区</span>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="flex items-center justify-end space-x-3">
+                    <span className="text-blue-50">个人学习进度跟踪</span>
+                    <div className="flex-shrink-0 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
                       <svg
                         className="w-4 h-4"
                         fill="currentColor"
@@ -75,15 +76,14 @@ export default function AuthLayout({
                         />
                       </svg>
                     </div>
-                    <span className="text-blue-100">个人学习进度跟踪</span>
                   </div>
                 </div>
               </div>
 
               {/* 底部装饰 */}
-              <div className="absolute bottom-8 left-12 right-12">
-                <div className="border-t border-white/20 pt-6">
-                  <p className="text-sm text-blue-200">
+              <div className="absolute bottom-8 left-12 right-12 text-right">
+                <div className="border-t border-white/15 pt-6">
+                  <p className="text-sm text-blue-100">
                     &ldquo;代码改变世界，学习成就未来&rdquo;
                   </p>
                 </div>

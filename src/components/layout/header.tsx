@@ -109,18 +109,11 @@ export function Header() {
               {userMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
                   <Link
-                    href="/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setUserMenuOpen(false)}
-                  >
-                    个人中心
-                  </Link>
-                  <Link
                     href="/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onClick={() => setUserMenuOpen(false)}
                   >
-                    设置
+                    个人中心
                   </Link>
                   <div className="border-t border-gray-100 my-1"></div>
                   <button
@@ -226,18 +219,11 @@ export function Header() {
                     </span>
                   </div>
                   <Link
-                    href="/dashboard"
-                    className="block py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    个人中心
-                  </Link>
-                  <Link
                     href="/settings"
                     className="block py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    设置
+                    个人中心
                   </Link>
                   <button
                     onClick={() => {
