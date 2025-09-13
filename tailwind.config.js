@@ -25,6 +25,9 @@ module.exports = {
         warning: 'var(--warning)',
         error: 'var(--error)',
         info: 'var(--info)',
+        // UI状态色系
+        ring: 'var(--ring)',
+        'ring-offset-background': 'var(--ring-offset-background)',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],

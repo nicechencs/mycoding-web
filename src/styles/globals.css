@@ -21,6 +21,10 @@
     --warning: #f59e0b;
     --error: #ef4444;
     --info: #3b82f6;
+
+    /* UI状态变量 */
+    --ring: 59 130 246; /* blue-500 */
+    --ring-offset-background: #ffffff;
   }
 
   .dark {
@@ -31,6 +35,10 @@
     --primary: #3b82f6;
     --primary-light: #1e3a8a;
     --primary-dark: #60a5fa;
+
+    /* 暗色模式UI状态变量 */
+    --ring: 59 130 246; /* blue-500 */
+    --ring-offset-background: #1f2937; /* gray-800 */
   }
 
   * {
