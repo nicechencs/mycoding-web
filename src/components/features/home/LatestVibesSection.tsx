@@ -1,14 +1,20 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLatestVibes } from '@/hooks/use-vibes'
 import { Avatar } from '@/components/ui/avatar'
+import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { ListSkeleton } from '@/components/ui/LoadingSuspense'
 
 export default function LatestVibesSection() {
   const { vibes, loading, error } = useLatestVibes(3)
   const router = useRouter()
+  const [showProfile, setShowProfile] = useState(false)
+  const [profileUserId, setProfileUserId] = useState<string | undefined>(
+    undefined
+  )
 
   const handleCardClick = (vibeId: string, e: React.MouseEvent) => {
     const target = e.target as HTMLElement
@@ -117,14 +123,32 @@ export default function LatestVibesSection() {
               onClick={e => handleCardClick(vibe.id, e)}
             >
               <div className="flex items-start space-x-3">
-                <Avatar size="md" theme="primary">
-                  {vibe.author.name.charAt(0)}
-                </Avatar>
+                <div
+                  role="button"
+                  aria-label="查看作者资料"
+                  onClick={e => {
+                    e.stopPropagation()
+                    setProfileUserId(vibe.author.id)
+                    setShowProfile(true)
+                  }}
+                  className="focus:outline-none rounded-full"
+                >
+                  <Avatar size="md" theme="primary">
+                    {vibe.author.name.charAt(0)}
+                  </Avatar>
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-2">
-                    <span className="font-medium text-gray-900">
+                    <button
+                      className="font-medium text-gray-900 hover:text-blue-600"
+                      onClick={e => {
+                        e.stopPropagation()
+                        setProfileUserId(vibe.author.id)
+                        setShowProfile(true)
+                      }}
+                    >
                       {vibe.author.name}
-                    </span>
+                    </button>
                     <span className="text-sm text-gray-500">
                       {vibe.createdAt.toLocaleDateString('zh-CN')}{' '}
                       {vibe.createdAt.toLocaleTimeString('zh-CN', {
@@ -157,6 +181,12 @@ export default function LatestVibesSection() {
             </div>
           ))}
         </div>
+        {/* 个人资料预览 */}
+        <ProfilePreviewModal
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
+          userId={profileUserId}
+        />
       </div>
     </section>
   )

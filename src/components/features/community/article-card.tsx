@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Article } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
+import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import {
   ResourceStats,
   createStatsConfig,
@@ -17,6 +18,7 @@ interface ArticleCardProps {
 
 export const ArticleCard = React.memo(
   ({ article }: ArticleCardProps) => {
+    const [showProfile, setShowProfile] = useState(false)
     // 使用统一的卡片交互Hook
     const { getCardProps, handleStatsClick } = useArticleCardInteraction({
       enableDebugLog: process.env.NODE_ENV === 'development',
@@ -33,7 +35,8 @@ export const ArticleCard = React.memo(
       // isLiked: article.isLiked
     })
 
-    return (
+  return (
+    <>
       <div
         {...getCardProps(article)}
         className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group transform hover:-translate-y-1 relative"
@@ -46,13 +49,30 @@ export const ArticleCard = React.memo(
         )}
         {/* Header */}
         <div className="flex items-center space-x-3 mb-4">
-          <Avatar size="md" theme="secondary">
-            {article.author.name.charAt(0)}
-          </Avatar>
+          {/* 点击头像/名字显示公开信息 */}
+          <div
+            role="button"
+            aria-label="查看作者资料"
+            onClick={e => {
+              e.stopPropagation()
+              setShowProfile(true)
+            }}
+            className="focus:outline-none rounded-full"
+          >
+            <Avatar size="md" theme="secondary">
+              {article.author.name.charAt(0)}
+            </Avatar>
+          </div>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-gray-900">
+            <button
+              className="font-medium text-gray-900 hover:text-blue-600"
+              onClick={e => {
+                e.stopPropagation()
+                setShowProfile(true)
+              }}
+            >
               {article.author.name}
-            </div>
+            </button>
             <div className="text-sm text-gray-500">
               {article.createdAt.toLocaleDateString('zh-CN')}
             </div>
@@ -131,7 +151,14 @@ export const ArticleCard = React.memo(
           )}
         </div>
       </div>
-    )
+      {/* 个人资料预览 */}
+      <ProfilePreviewModal
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+        userId={article.author.id}
+      />
+    </>
+  )
   },
   (prevProps, nextProps) => {
     // 自定义比较函数：只在关键属性变化时重新渲染

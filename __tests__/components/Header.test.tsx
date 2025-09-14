@@ -23,6 +23,31 @@ jest.mock('@/lib/config', () => ({
   },
 }))
 
+// Mock user profile hook used by profile preview modal
+jest.mock('@/hooks/use-users', () => ({
+  useCurrentUserProfile: jest.fn().mockReturnValue({
+    user: {
+      id: '1',
+      name: 'Test User',
+      email: 'test@example.com',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      avatar: null,
+    },
+    stats: {
+      articlesCount: 3,
+      resourcesCount: 5,
+      vibesCount: 8,
+      followersCount: 10,
+      followingCount: 6,
+      totalLikes: 42,
+      totalViews: 1000,
+    },
+    loading: false,
+    error: null,
+  }),
+}))
+
 jest.mock('@/components/ui/button', () => ({
   Button: ({ children, asChild, variant, ...props }: any) => {
     const Component = asChild ? 'span' : 'button'
@@ -125,18 +150,14 @@ describe('Header Component', () => {
     it('应该显示用户菜单按钮', () => {
       render(<Header />)
 
-      const userMenuButton = screen.getByRole('button', {
-        name: /test user/i,
-      })
+      const userMenuButton = screen.getByTestId('user-menu-button')
       expect(userMenuButton).toBeInTheDocument()
     })
 
     it('点击用户菜单应该显示下拉菜单', () => {
       render(<Header />)
 
-      const userMenuButton = screen.getByRole('button', {
-        name: /test user/i,
-      })
+      const userMenuButton = screen.getByTestId('user-menu-button')
 
       // 初始状态下拉菜单不可见
       expect(screen.queryByText('个人中心')).not.toBeInTheDocument()
@@ -150,13 +171,13 @@ describe('Header Component', () => {
       expect(screen.getByText('退出登录')).toBeInTheDocument()
     })
 
+    
+
     it('点击退出登录应该调用logout函数', async () => {
       render(<Header />)
 
-      // 打开用户菜单
-      const userMenuButton = screen.getByRole('button', {
-        name: /test user/i,
-      })
+      // 打开用户菜单（点击下拉箭头按钮）
+      const userMenuButton = screen.getByTestId('user-menu-button')
       fireEvent.click(userMenuButton)
 
       // 点击退出登录

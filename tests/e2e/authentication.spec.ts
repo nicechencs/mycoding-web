@@ -241,6 +241,27 @@ test.describe('认证系统 E2E 测试', () => {
       await expect(page.getByText('个人中心')).not.toBeVisible()
     })
 
+    test('个人主页预览（头像）', async ({ page }) => {
+      // 点击头像按钮，弹出个人主页信息预览
+      await page.getByLabel('查看个人主页').click()
+
+      await expect(page.getByText('访问个人中心')).toBeVisible()
+      await expect(page.getByText('关闭')).toBeVisible()
+
+      // 关闭预览
+      await page.getByText('关闭').click()
+    })
+
+    test('个人主页预览（用户名）', async ({ page }) => {
+      // 点击用户名按钮，弹出个人主页信息预览
+      await page.getByTestId('user-name-button').click()
+
+      await expect(page.getByText('访问个人中心')).toBeVisible()
+
+      // 关闭预览
+      await page.getByText('关闭').click()
+    })
+
     test('个人中心页面访问', async ({ page }) => {
       // 打开用户菜单
       await page.getByTestId('user-menu-button').click()

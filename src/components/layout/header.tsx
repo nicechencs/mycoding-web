@@ -5,10 +5,12 @@ import { useState } from 'react'
 import { siteConfig, navConfig } from '@/lib/config'
 import { useAuth } from '@/hooks/use-auth'
 import { useNavigationHandler } from '@/hooks/use-navigation-handler'
+ 
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  
   const { isAuthenticated, user, logout } = useAuth()
 
   // 桌面端导航处理
@@ -74,6 +76,7 @@ export function Header() {
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 data-testid="user-menu-button"
+                aria-label="打开用户菜单"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                   {user?.avatar ? (
@@ -126,6 +129,7 @@ export function Header() {
                   </button>
                 </div>
               )}
+              
             </div>
           ) : (
             /* 未登录状态 - 登录注册文本菜单 */

@@ -1,14 +1,20 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useFeaturedArticles } from '@/hooks/use-articles'
 import { Avatar } from '@/components/ui/avatar'
+import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { ListSkeleton } from '@/components/ui/LoadingSuspense'
 
 export default function LatestArticlesSection() {
   const { articles, loading, error } = useFeaturedArticles(3)
   const router = useRouter()
+  const [showProfile, setShowProfile] = useState(false)
+  const [profileUserId, setProfileUserId] = useState<string | undefined>(
+    undefined
+  )
 
   const handleCardClick = (slug: string, e: React.MouseEvent) => {
     const target = e.target as HTMLElement
@@ -118,13 +124,31 @@ export default function LatestArticlesSection() {
               onClick={e => handleCardClick(article.slug, e)}
             >
               <div className="flex items-center space-x-3 mb-3">
-                <Avatar size="sm" theme="secondary">
-                  {article.author.name.charAt(0)}
-                </Avatar>
+                <div
+                  role="button"
+                  aria-label="查看作者资料"
+                  onClick={e => {
+                    e.stopPropagation()
+                    setProfileUserId(article.author.id)
+                    setShowProfile(true)
+                  }}
+                  className="focus:outline-none rounded-full"
+                >
+                  <Avatar size="sm" theme="secondary">
+                    {article.author.name.charAt(0)}
+                  </Avatar>
+                </div>
                 <div>
-                  <div className="font-medium text-gray-900">
+                  <button
+                    className="font-medium text-gray-900 hover:text-blue-600"
+                    onClick={e => {
+                      e.stopPropagation()
+                      setProfileUserId(article.author.id)
+                      setShowProfile(true)
+                    }}
+                  >
                     {article.author.name}
-                  </div>
+                  </button>
                   <div className="text-xs text-gray-500">
                     {article.createdAt.toLocaleDateString('zh-CN')}
                   </div>
@@ -151,7 +175,15 @@ export default function LatestArticlesSection() {
             </div>
           ))}
         </div>
+        {/* 个人资料预览 */}
+        <ProfilePreviewModal
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
+          userId={profileUserId}
+        />
       </div>
     </section>
   )
 }
+
+//

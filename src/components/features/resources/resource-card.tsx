@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Resource } from '@/types/resource'
 import { Avatar } from '@/components/ui/avatar'
 import { RatingStars } from './rating-stars'
+import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { getCategoryClasses } from '@/lib/utils/category'
 import { Markdown } from '@/components/ui/markdown'
 import { useResourceCard } from '@/hooks/use-resource-card'
@@ -19,12 +20,14 @@ interface ResourceCardProps {
 export const ResourceCard = React.memo(
   ({ resource }: ResourceCardProps) => {
     const { handleCardClick, handleActionClick } = useResourceCard(resource)
+    const [showProfile, setShowProfile] = useState(false)
 
     return (
-      <div
-        className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
-        onClick={handleCardClick}
-      >
+      <>
+        <div
+          className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer transform hover:-translate-y-1 relative"
+          onClick={handleCardClick}
+        >
         {/* 精选书签 */}
         {resource.featured && (
           <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-md transform rotate-12 z-10">
@@ -77,10 +80,28 @@ export const ResourceCard = React.memo(
 
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-2">
-            <Avatar size="xs" theme="tertiary">
-              {resource.author.charAt(0)}
-            </Avatar>
-            <span className="text-sm text-gray-600">{resource.author}</span>
+            <div
+              role="button"
+              aria-label="查看作者资料"
+              onClick={e => {
+                e.stopPropagation()
+                setShowProfile(true)
+              }}
+              className="focus:outline-none rounded-full"
+            >
+              <Avatar size="xs" theme="tertiary">
+                {resource.author.charAt(0)}
+              </Avatar>
+            </div>
+            <button
+              className="text-sm text-gray-600 hover:text-blue-600"
+              onClick={e => {
+                e.stopPropagation()
+                setShowProfile(true)
+              }}
+            >
+              {resource.author}
+            </button>
           </div>
 
           <button
@@ -129,6 +150,13 @@ export const ResourceCard = React.memo(
           </span>
         </div>
       </div>
+      {/* 个人资料预览（资源作者名称仅字符串，无ID） */}
+      <ProfilePreviewModal
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+        name={resource.author}
+      />
+      </>
     )
   },
   // 简化的memo比较：只比较resource对象的引用

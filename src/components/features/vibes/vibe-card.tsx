@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Vibe } from '@/types'
 import { Avatar } from '@/components/ui/avatar'
+import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { LazyImage } from '@/components/ui/LazyImage'
 import {
   ResourceStats,
@@ -22,6 +23,7 @@ interface VibeCardProps {
 export function VibeCard({ vibe }: VibeCardProps) {
   const { user, isAuthenticated } = useAuth()
   const [showComments, setShowComments] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const router = useRouter()
 
   // 使用统一的卡片交互Hook
@@ -40,20 +42,37 @@ export function VibeCard({ vibe }: VibeCardProps) {
   })
 
   return (
-    <div
-      {...getCardProps(vibe)}
-      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
-    >
+    <>
+      <div
+        {...getCardProps(vibe)}
+        className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+      >
       {/* Header */}
       <div className="flex items-start space-x-3 mb-4">
-        <Avatar size="lg" theme="primary">
-          {vibe.author.name.charAt(0)}
-        </Avatar>
+        <div
+          role="button"
+          aria-label="查看作者资料"
+          onClick={e => {
+            e.stopPropagation()
+            setShowProfile(true)
+          }}
+          className="focus:outline-none rounded-full"
+        >
+          <Avatar size="lg" theme="primary">
+            {vibe.author.name.charAt(0)}
+          </Avatar>
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
-            <span className="font-medium text-gray-900">
+            <button
+              className="font-medium text-gray-900 hover:text-blue-600"
+              onClick={e => {
+                e.stopPropagation()
+                setShowProfile(true)
+              }}
+            >
               {vibe.author.name}
-            </span>
+            </button>
             <span className="text-sm text-gray-500">
               {formatRelativeTime(vibe.createdAt)}
             </span>
@@ -216,5 +235,12 @@ export function VibeCard({ vibe }: VibeCardProps) {
         </div>
       )}
     </div>
+    {/* 个人资料预览 */}
+    <ProfilePreviewModal
+      isOpen={showProfile}
+      onClose={() => setShowProfile(false)}
+      userId={vibe.author.id}
+    />
+    </>
   )
 }
