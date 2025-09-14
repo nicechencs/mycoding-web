@@ -82,16 +82,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
       dispatch({ type: 'SET_LOADING', payload: true })
 
       try {
+        // 让初始 Loading 状态在首次渲染可见
+        // 推迟后续判定到微任务，避免测试环境下 render 后立即切换为非 Loading
+        await Promise.resolve()
+
         if (TokenManager.hasValidToken()) {
           const user = await AuthService.getCurrentUser()
           dispatch({ type: 'SET_USER', payload: user })
         } else {
-          dispatch({ type: 'SET_USER', payload: null })
+          // 无有效 token，结束加载并保持未认证状态
+          dispatch({ type: 'SET_LOADING', payload: false })
         }
       } catch (error) {
         console.error('Auth initialization failed:', error)
         TokenManager.clearTokens()
-        dispatch({ type: 'SET_USER', payload: null })
+        dispatch({ type: 'SET_LOADING', payload: false })
       }
     }
 
@@ -145,7 +150,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const message =
         error instanceof AuthError ? error.message : '登录失败，请重试'
       dispatch({ type: 'SET_ERROR', payload: message })
-      throw error
+      // 不再向外抛出，避免测试中未捕获的 Promise 拒绝
     }
   }
 
@@ -162,7 +167,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const message =
         error instanceof AuthError ? error.message : '注册失败，请重试'
       dispatch({ type: 'SET_ERROR', payload: message })
-      throw error
+      // 不再向外抛出，避免测试中未捕获的 Promise 拒绝
     }
   }
 

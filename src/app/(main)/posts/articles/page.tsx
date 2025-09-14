@@ -47,10 +47,7 @@ export default function ArticlesPage() {
           placeholder="搜索文章标题、内容或标签..."
           actions={
             <>
-              <button className="btn-primary px-4 py-2 text-sm">写文章</button>
-              <button className="btn-secondary px-4 py-2 text-sm">
-                发推荐
-              </button>
+              <Link href="/posts/new" className="btn-primary px-4 py-2 text-sm">写文章</Link>
             </>
           }
         />
@@ -122,8 +119,7 @@ export default function ArticlesPage() {
         placeholder="搜索文章标题、内容或标签..."
         actions={
           <>
-            <button className="btn-primary px-4 py-2 text-sm">写文章</button>
-            <button className="btn-secondary px-4 py-2 text-sm">发推荐</button>
+            <Link href="/posts/new" className="btn-primary px-4 py-2 text-sm">写文章</Link>
           </>
         }
       />
@@ -159,8 +155,7 @@ export default function ArticlesPage() {
           </h3>
           <p className="text-gray-600 mb-6">尝试调整搜索条件或选择其他分类</p>
           <div className="flex gap-3 justify-center">
-            <button className="btn-primary">写文章</button>
-            <button className="btn-secondary">发推荐</button>
+            <Link href="/posts/new" className="btn-primary">写文章</Link>
           </div>
         </div>
       )}

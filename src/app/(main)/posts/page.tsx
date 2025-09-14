@@ -36,12 +36,12 @@ export default function PostsPage() {
           >
             浏览文章
           </Link>
-          <button className="btn-secondary px-8 py-3 text-base font-semibold">
+          <Link
+            href="/posts/new"
+            className="btn-secondary px-8 py-3 text-base font-semibold"
+          >
             写文章
-          </button>
-          <button className="btn-secondary px-8 py-3 text-base font-semibold">
-            发布推荐
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -148,12 +148,12 @@ export default function PostsPage() {
           </div>
 
           <div className="flex gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+            <Link
+              href="/posts/new"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-block"
+            >
               写文章
-            </button>
-            <button className="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors">
-              发布推荐
-            </button>
+            </Link>
           </div>
         </div>
       </section>

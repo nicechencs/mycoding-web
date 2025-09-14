@@ -75,6 +75,7 @@ export interface Article {
   author: User
   category: string
   tags: string[]
+  coverImage?: string
   viewCount: number
   likeCount: number
   commentCount: number

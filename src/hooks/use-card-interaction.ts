@@ -68,7 +68,6 @@ const DEFAULT_PREVENT_SELECTORS = [
   'textarea',
   'select',
   '[data-no-click]',
-  '[role="button"]',
 ]
 
 /**

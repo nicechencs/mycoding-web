@@ -2,6 +2,7 @@ import { ApiClient, defaultApiClient, isDevelopment } from './base/api-client'
 import { globalCache, CacheManager } from './base/cache-manager'
 import { ApiResponse, QueryParams, PaginatedResponse } from './base/types'
 import { Article, Comment } from '@/types'
+import { CreateArticleRequest, UpdateArticleRequest, ArticleDraft } from '@/types/article'
 
 // Mock数据导入（开发模式使用）
 import {
@@ -14,6 +15,9 @@ import {
   getArticleComments,
   getRelatedArticles,
 } from '@/lib/mock/articles'
+
+// Mock草稿存储（开发模式使用）
+const mockDrafts: ArticleDraft[] = []
 
 /**
  * 文章服务接口
@@ -39,6 +43,13 @@ export interface IArticlesService {
     query: string,
     params?: QueryParams
   ): Promise<ApiResponse<Article[]>>
+  createArticle(data: CreateArticleRequest): Promise<ApiResponse<Article>>
+  updateArticle(
+    id: string,
+    data: UpdateArticleRequest
+  ): Promise<ApiResponse<Article>>
+  deleteArticle(id: string): Promise<ApiResponse<void>>
+  getDrafts(): Promise<ApiResponse<ArticleDraft[]>>
 }
 
 /**
@@ -386,6 +397,165 @@ export class ArticlesService implements IArticlesService {
       })
 
       this.cache.set(cacheKey, response)
+      return response
+    }
+  }
+
+  /**
+   * 创建文章
+   */
+  async createArticle(
+    data: CreateArticleRequest
+  ): Promise<ApiResponse<Article>> {
+    if (isDevelopment()) {
+      // 生成URL友好的slug（处理中文）
+      const generateSlug = (title: string): string => {
+        const timestamp = Date.now().toString(36)
+        const randomStr = Math.random().toString(36).substring(2, 5)
+        return `article-${timestamp}-${randomStr}`
+      }
+
+      // 获取当前用户信息（从localStorage模拟）
+      const currentUser = {
+        id: 'user-1',
+        name: localStorage.getItem('userName') || 'Test User',
+        email: localStorage.getItem('userEmail') || 'test@example.com',
+        avatar: localStorage.getItem('userAvatar') || undefined,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+
+      // 模拟创建文章
+      const newArticle: Article = {
+        id: `article-${Date.now()}`,
+        title: data.title,
+        content: data.content,
+        excerpt: data.excerpt,
+        slug: generateSlug(data.title),
+        author: currentUser,
+        category: data.category,
+        tags: data.tags,
+        coverImage: data.coverImage,
+        viewCount: 0,
+        likeCount: 0,
+        commentCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        featured: false
+      }
+
+      if (data.isDraft) {
+        // 保存为草稿
+        const draft: ArticleDraft = {
+          ...newArticle,
+          isDraft: true
+        }
+        mockDrafts.push(draft)
+      } else {
+        // 发布文章
+        mockArticles.unshift(newArticle)
+      }
+
+      // 清除相关缓存
+      this.cache.clear()
+
+      return {
+        success: true,
+        data: newArticle,
+        message: data.isDraft ? '草稿保存成功' : '文章发布成功'
+      }
+    } else {
+      const response = await this.apiClient.post<Article>('/articles', data)
+      if (response.success) {
+        this.cache.clear()
+      }
+      return response
+    }
+  }
+
+  /**
+   * 更新文章
+   */
+  async updateArticle(
+    id: string,
+    data: UpdateArticleRequest
+  ): Promise<ApiResponse<Article>> {
+    if (isDevelopment()) {
+      const articleIndex = mockArticles.findIndex(a => a.id === id)
+      if (articleIndex === -1) {
+        return {
+          success: false,
+          error: '文章不存在'
+        }
+      }
+
+      const updatedArticle = {
+        ...mockArticles[articleIndex],
+        ...data,
+        updatedAt: new Date()
+      }
+
+      mockArticles[articleIndex] = updatedArticle
+
+      // 清除相关缓存
+      this.cache.clear()
+
+      return {
+        success: true,
+        data: updatedArticle,
+        message: '文章更新成功'
+      }
+    } else {
+      const response = await this.apiClient.put<Article>(`/articles/${id}`, data)
+      if (response.success) {
+        this.cache.clear()
+      }
+      return response
+    }
+  }
+
+  /**
+   * 删除文章
+   */
+  async deleteArticle(id: string): Promise<ApiResponse<void>> {
+    if (isDevelopment()) {
+      const articleIndex = mockArticles.findIndex(a => a.id === id)
+      if (articleIndex === -1) {
+        return {
+          success: false,
+          error: '文章不存在'
+        }
+      }
+
+      mockArticles.splice(articleIndex, 1)
+
+      // 清除相关缓存
+      this.cache.clear()
+
+      return {
+        success: true,
+        message: '文章删除成功'
+      }
+    } else {
+      const response = await this.apiClient.delete<void>(`/articles/${id}`)
+      if (response.success) {
+        this.cache.clear()
+      }
+      return response
+    }
+  }
+
+  /**
+   * 获取草稿列表
+   */
+  async getDrafts(): Promise<ApiResponse<ArticleDraft[]>> {
+    if (isDevelopment()) {
+      return {
+        success: true,
+        data: mockDrafts,
+      }
+    } else {
+      const response = await this.apiClient.get<ArticleDraft[]>('/articles/drafts')
       return response
     }
   }
