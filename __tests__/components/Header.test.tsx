@@ -144,9 +144,9 @@ describe('Header Component', () => {
       // 点击用户菜单
       fireEvent.click(userMenuButton)
 
-      // 下拉菜单应该可见
+      // 下拉菜单应该可见；不应包含“设置”
       expect(screen.getByText('个人中心')).toBeInTheDocument()
-      expect(screen.getByText('设置')).toBeInTheDocument()
+      expect(screen.queryByText('设置')).not.toBeInTheDocument()
       expect(screen.getByText('退出登录')).toBeInTheDocument()
     })
 

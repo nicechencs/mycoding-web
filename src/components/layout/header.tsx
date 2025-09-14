@@ -73,6 +73,7 @@ export function Header() {
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                data-testid="user-menu-button"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                   {user?.avatar ? (
@@ -115,13 +116,7 @@ export function Header() {
                   >
                     个人中心
                   </Link>
-                  <Link
-                    href="/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setUserMenuOpen(false)}
-                  >
-                    设置
-                  </Link>
+                  
                   <div className="border-t border-gray-100 my-1"></div>
                   <button
                     onClick={handleLogout}

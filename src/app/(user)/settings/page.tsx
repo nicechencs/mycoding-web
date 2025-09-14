@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Metadata } from 'next'
 import Link from 'next/link'
 import { useUser } from '@/hooks/use-user'
 import { BaseCard } from '@/components/ui/card'
@@ -197,168 +196,34 @@ export default function SettingsPage() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* 最近活动 */}
-                <div className="lg:col-span-2">
-                  <BaseCard>
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        最近活动
-                      </h2>
-                      <Link
-                        href="/my-favorites"
-                        className="text-sm text-blue-600 hover:text-blue-500"
-                      >
-                        查看全部
-                      </Link>
-                    </div>
-                    <div className="space-y-4">
-                      {recentActivities.map((activity, index) => (
-                        <div
-                          key={index}
-                          className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50"
-                        >
-                          <span className="text-xl">{activity.icon}</span>
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-900">
-                              {activity.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {activity.time}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </BaseCard>
+              {/* 最近活动 */}
+              <BaseCard>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    最近活动
+                  </h2>
+                  <Link
+                    href="/my-favorites"
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
+                    查看全部
+                  </Link>
                 </div>
-
-                {/* 快捷操作 */}
-                <div>
-                  <BaseCard>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                      快捷操作
-                    </h2>
-                    <div className="space-y-3">
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                        asChild
-                      >
-                        <Link href="/posts">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 4v16m8-8H4"
-                            />
-                          </svg>
-                          写文章
-                        </Link>
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                        asChild
-                      >
-                        <Link href="/resources">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                          </svg>
-                          探索资源
-                        </Link>
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                        asChild
-                      >
-                        <Link href="/vibes">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h4a1 1 0 011 1v1a1 1 0 01-1 1h-1v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7H3a1 1 0 01-1-1V5a1 1 0 011-1h4z"
-                            />
-                          </svg>
-                          分享动态
-                        </Link>
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                        asChild
-                      >
-                        <Link href="/my-favorites">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                            />
-                          </svg>
-                          我的收藏
-                        </Link>
-                      </Button>
-                    </div>
-                  </BaseCard>
-
-                  {/* 学习进度 */}
-                  <BaseCard className="mt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      本周学习
-                    </h3>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">学习目标</span>
-                          <span className="text-gray-900">3/5 天</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full"
-                            style={{ width: '60%' }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        继续保持，距离本周目标还差2天！
+                <div className="space-y-4">
+                  {recentActivities.map((activity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50"
+                    >
+                      <span className="text-xl">{activity.icon}</span>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-900">{activity.title}</p>
+                        <p className="text-xs text-gray-500">{activity.time}</p>
                       </div>
                     </div>
-                  </BaseCard>
+                  ))}
                 </div>
-              </div>
+              </BaseCard>
             </div>
           )}
 

@@ -231,9 +231,9 @@ test.describe('认证系统 E2E 测试', () => {
       // 点击用户菜单按钮
       await userMenuButton.click()
 
-      // 下拉菜单应该可见
+      // 下拉菜单应该可见；不应包含“设置”
       await expect(page.getByText('个人中心')).toBeVisible()
-      await expect(page.getByText('设置')).toBeVisible()
+      await expect(page.getByText('设置')).not.toBeVisible()
       await expect(page.getByText('退出登录')).toBeVisible()
 
       // 再次点击应该关闭菜单
@@ -248,25 +248,25 @@ test.describe('认证系统 E2E 测试', () => {
       // 点击个人中心
       await page.getByText('个人中心').click()
 
-      // 应该跳转到个人中心页面
-      await expect(page).toHaveURL('/dashboard')
+      // 应该跳转到设置页面（个人中心）
+      await expect(page).toHaveURL('/settings')
 
       // 检查个人中心页面内容
-      await expect(page.getByText('个人信息')).toBeVisible()
+      await expect(page.getByText('个人中心')).toBeVisible()
     })
 
-    test('设置页面访问', async ({ page }) => {
+    test('设置页面访问（通过个人中心）', async ({ page }) => {
       // 打开用户菜单
       await page.getByTestId('user-menu-button').click()
 
-      // 点击设置
-      await page.getByText('设置').click()
+      // 点击个人中心（替代原“设置”入口）
+      await page.getByText('个人中心').click()
 
       // 应该跳转到设置页面
       await expect(page).toHaveURL('/settings')
 
       // 检查设置页面内容
-      await expect(page.getByText('账户设置')).toBeVisible()
+      await expect(page.getByText('个人中心')).toBeVisible()
     })
 
     test('用户注销流程', async ({ page }) => {
