@@ -10,6 +10,7 @@ import { formatRelativeTime } from '@/utils/date'
 import { Comment } from '@/lib/interaction/interaction-types'
 import { useToast } from '@/components/ui/toast'
 import { CommentItem } from './comment-item'
+import { ResourceRatingStats } from './resource-rating-stats'
 import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
 
 interface ResourceCommentsProps {
@@ -49,7 +50,7 @@ export const ResourceComments = React.memo(function ResourceComments({
     if (!newComment.trim() || isSubmitting) return
 
     try {
-      const result = await createComment(newComment)
+      const result = await createComment(newComment, showRating && rating > 0 ? rating : undefined)
       if (result) {
         setNewComment('')
         setRating(0)
@@ -68,7 +69,7 @@ export const ResourceComments = React.memo(function ResourceComments({
         message: '请稍后重试'
       })
     }
-  }, [newComment, isSubmitting, createComment, showToast])
+  }, [newComment, isSubmitting, createComment, showToast, showRating, rating])
 
   const handleReply = useCallback(async (parentId: string) => {
     if (!replyContent.trim() || isSubmitting) return
@@ -132,9 +133,12 @@ export const ResourceComments = React.memo(function ResourceComments({
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">
-          评论 ({comments.length})
+          评论 ({pagination.total || comments.length})
         </h3>
       </div>
+
+      {/* 评分统计 */}
+      <ResourceRatingStats resourceId={resourceId} />
 
       {/* 评论输入区域 */}
       {canComment ? (

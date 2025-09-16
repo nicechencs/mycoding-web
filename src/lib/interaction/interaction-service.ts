@@ -125,6 +125,7 @@ export class InteractionService {
       targetType: data.targetType,
       content: data.content,
       likes: 0,
+      rating: data.rating, // 添加评分支持
       createdAt: new Date(),
       updatedAt: new Date(),
     }
@@ -152,10 +153,13 @@ export class InteractionService {
     await delay(300)
 
     const { page = 1, pageSize = 10 } = options || {}
-    
+
     const allComments = getStoredData<Comment>(STORAGE_KEYS.COMMENTS)
     const filteredComments = allComments
-      .filter(c => c.targetId === targetId && c.targetType === targetType && !c.parentId) // 只获取顶级评论，回复单独处理
+      .filter(
+        c =>
+          c.targetId === targetId && c.targetType === targetType && !c.parentId
+      ) // 只获取顶级评论，回复单独处理
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -170,11 +174,14 @@ export class InteractionService {
     const commentsWithReplies = comments.map(comment => {
       const replies = allComments
         .filter(c => c.parentId === comment.id)
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-      
+        .sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        )
+
       return {
         ...comment,
-        replies: replies.length > 0 ? replies : undefined
+        replies: replies.length > 0 ? replies : undefined,
       }
     })
 
@@ -183,7 +190,7 @@ export class InteractionService {
       total,
       hasMore: endIndex < total,
       page,
-      pageSize
+      pageSize,
     }
   }
 
@@ -446,5 +453,52 @@ export class InteractionService {
     })
 
     return result
+  }
+
+  // 获取资源的评分统计（基于评论中的评分）
+  static async getResourceRatingFromComments(resourceId: string): Promise<{
+    averageRating: number
+    totalRatings: number
+    ratingDistribution: { [key: number]: number }
+  }> {
+    await delay(100)
+
+    const comments = getStoredData<Comment>(STORAGE_KEYS.COMMENTS)
+    const resourceComments = comments.filter(
+      c =>
+        c.targetId === resourceId &&
+        c.targetType === 'resource' &&
+        c.rating &&
+        c.rating > 0
+    )
+
+    if (resourceComments.length === 0) {
+      return {
+        averageRating: 0,
+        totalRatings: 0,
+        ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      }
+    }
+
+    const ratings = resourceComments.map(c => c.rating!).filter(r => r > 0)
+    const totalRatings = ratings.length
+    const averageRating =
+      totalRatings > 0
+        ? ratings.reduce((sum, r) => sum + r, 0) / totalRatings
+        : 0
+
+    // 计算评分分布
+    const ratingDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+    ratings.forEach(rating => {
+      if (rating >= 1 && rating <= 5) {
+        ratingDistribution[rating as keyof typeof ratingDistribution]++
+      }
+    })
+
+    return {
+      averageRating: Math.round(averageRating * 10) / 10, // 保留一位小数
+      totalRatings,
+      ratingDistribution,
+    }
   }
 }

@@ -184,9 +184,9 @@ export function useComments(
     }
   }, [targetId, fetchComments])
 
-  // 发布评论
+  // 发布评论（支持评分）
   const createComment = useCallback(
-    async (content: string) => {
+    async (content: string, rating?: number) => {
       if (!isAuthenticated || !user) {
         router.push('/login')
         return
@@ -195,7 +195,7 @@ export function useComments(
       setIsSubmitting(true)
       try {
         const newComment = await InteractionService.createComment(
-          { targetId, targetType, content },
+          { targetId, targetType, content, rating },
           user.id,
           user.name,
           user.avatar
@@ -452,5 +452,39 @@ export function useUserComments(type?: 'post' | 'resource' | 'vibe') {
     comments,
     loading,
     refresh: fetchComments,
+  }
+}
+
+// 资源评分统计 Hook
+export function useResourceRating(resourceId: string) {
+  const [ratingStats, setRatingStats] = useState({
+    averageRating: 0,
+    totalRatings: 0,
+    ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+  })
+  const [loading, setLoading] = useState(false)
+
+  const fetchRatingStats = useCallback(async () => {
+    if (!resourceId) return
+    
+    setLoading(true)
+    try {
+      const stats = await InteractionService.getResourceRatingFromComments(resourceId)
+      setRatingStats(stats)
+    } catch (error) {
+      console.error('Failed to fetch rating stats:', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [resourceId])
+
+  useEffect(() => {
+    fetchRatingStats()
+  }, [fetchRatingStats])
+
+  return {
+    ratingStats,
+    loading,
+    refresh: fetchRatingStats,
   }
 }

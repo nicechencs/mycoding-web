@@ -8,7 +8,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { Comment } from '@/lib/interaction/interaction-types'
 import { useToast } from '@/components/ui/toast'
-import { CommentItem } from './comment-item'
+import { CommentItem } from '@/components/features/resources/comment-item'
 import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
 
 interface PostCommentsProps {
