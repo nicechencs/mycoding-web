@@ -116,33 +116,71 @@ export function useFavorite(
   }
 }
 
-// 评论 Hook
+// 评论 Hook（支持分页）
 export function useComments(
   targetId: string,
-  targetType: 'post' | 'resource' | 'vibe'
+  targetType: 'post' | 'resource' | 'vibe',
+  options?: {
+    pageSize?: number
+  }
 ) {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [comments, setComments] = useState<Comment[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [pagination, setPagination] = useState({
+    page: 1,
+    total: 0,
+    hasMore: false,
+    pageSize: options?.pageSize || 10
+  })
 
   // 获取评论列表
-  const fetchComments = useCallback(async () => {
-    setIsLoading(true)
+  const fetchComments = useCallback(async (page = 1, append = false) => {
+    if (page === 1) {
+      setIsLoading(true)
+    } else {
+      setIsLoadingMore(true)
+    }
+    
     try {
-      const data = await InteractionService.getComments(targetId, targetType)
-      setComments(data)
+      const data = await InteractionService.getComments(targetId, targetType, {
+        page,
+        pageSize: pagination.pageSize
+      })
+      
+      if (append) {
+        setComments(prev => [...prev, ...data.comments])
+      } else {
+        setComments(data.comments)
+      }
+      
+      setPagination({
+        page: data.page,
+        total: data.total,
+        hasMore: data.hasMore,
+        pageSize: data.pageSize
+      })
     } catch (error) {
       console.error('Failed to fetch comments:', error)
     } finally {
       setIsLoading(false)
+      setIsLoadingMore(false)
     }
-  }, [targetId, targetType])
+  }, [targetId, targetType, pagination.pageSize])
+
+  // 加载更多评论
+  const loadMoreComments = useCallback(() => {
+    if (pagination.hasMore && !isLoadingMore) {
+      fetchComments(pagination.page + 1, true)
+    }
+  }, [fetchComments, pagination.hasMore, pagination.page, isLoadingMore])
 
   useEffect(() => {
     if (targetId) {
-      fetchComments()
+      fetchComments(1, false)
     }
   }, [targetId, fetchComments])
 
@@ -197,10 +235,13 @@ export function useComments(
   return {
     comments,
     isLoading,
+    isLoadingMore,
     isSubmitting,
+    pagination,
     createComment,
     deleteComment,
-    refreshComments: fetchComments,
+    loadMoreComments,
+    refreshComments: () => fetchComments(1, false),
   }
 }
 

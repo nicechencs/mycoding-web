@@ -1,41 +1,50 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback, useMemo } from 'react'
+import React from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useComments, useCommentLike } from '@/hooks/use-interactions'
 import { Avatar } from '@/components/ui/avatar'
 import { LoginPrompt, LoginPromptInline } from '@/components/ui/login-prompt'
 import { formatRelativeTime } from '@/utils/date'
 import { Comment } from '@/lib/interaction/interaction-types'
+import { useToast } from '@/components/ui/toast'
+import { CommentItem } from './comment-item'
+import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
 
 interface ResourceCommentsProps {
   resourceId: string
   className?: string
 }
 
-export function ResourceComments({
+export const ResourceComments = React.memo(function ResourceComments({
   resourceId,
   className = '',
 }: ResourceCommentsProps) {
   const { user, isAuthenticated } = useAuth()
+  const { showToast } = useToast()
   const [newComment, setNewComment] = useState('')
   const [replyTo, setReplyTo] = useState<string | null>(null)
   const [replyContent, setReplyContent] = useState('')
   const [showRating, setShowRating] = useState(false)
   const [rating, setRating] = useState(0)
 
-  // 使用评论 hook
+  // 使用评论 hook（支持分页）
   const {
     comments,
     isLoading,
+    isLoadingMore,
     isSubmitting,
+    pagination,
     createComment,
+    loadMoreComments,
     // deleteComment,
     // refreshComments,
-  } = useComments(resourceId, 'resource')
-  const canComment = isAuthenticated
+  } = useComments(resourceId, 'resource', { pageSize: 10 })
+  
+  const canComment = useMemo(() => isAuthenticated, [isAuthenticated])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newComment.trim() || isSubmitting) return
 
@@ -45,13 +54,23 @@ export function ResourceComments({
         setNewComment('')
         setRating(0)
         setShowRating(false)
+        showToast({
+          type: 'success',
+          title: '评论发表成功',
+          message: '感谢您的分享！'
+        })
       }
     } catch (error) {
       console.error('Submit comment error:', error)
+      showToast({
+        type: 'error',
+        title: '评论发表失败',
+        message: '请稍后重试'
+      })
     }
-  }
+  }, [newComment, isSubmitting, createComment, showToast])
 
-  const handleReply = async (parentId: string) => {
+  const handleReply = useCallback(async (parentId: string) => {
     if (!replyContent.trim() || isSubmitting) return
 
     try {
@@ -59,186 +78,52 @@ export function ResourceComments({
       if (result) {
         setReplyContent('')
         setReplyTo(null)
+        showToast({
+          type: 'success',
+          title: '回复发表成功'
+        })
       }
     } catch (error) {
       console.error('Submit reply error:', error)
+      showToast({
+        type: 'error',
+        title: '回复发表失败',
+        message: '请稍后重试'
+      })
     }
-  }
+  }, [replyContent, isSubmitting, createComment, showToast])
+
+  const handleLoadMore = useCallback(() => {
+    if (pagination.hasMore && !isLoadingMore) {
+      loadMoreComments()
+    }
+  }, [pagination.hasMore, isLoadingMore, loadMoreComments])
 
   // 移除这个函数，我们将在组件中使用hook
 
-  const handleLoginClick = () => {
+  const handleLoginClick = useCallback(() => {
     window.location.href = '/login'
-  }
+  }, [])
 
-  const CommentItem = ({
-    comment,
-    isReply = false,
-  }: {
-    comment: Comment
-    isReply?: boolean
-  }) => {
-    const commentLike = useCommentLike(comment.id)
+  const handleReplyToComment = useCallback((commentId: string) => {
+    setReplyTo(commentId)
+  }, [])
 
-    return (
-      <div className={cn('flex gap-3', isReply && 'ml-12')}>
-        <Avatar size="sm" theme="secondary">
-          {comment.userName.charAt(0)}
-        </Avatar>
+  const handleReplyCancel = useCallback(() => {
+    setReplyTo(null)
+    setReplyContent('')
+  }, [])
 
-        <div className="flex-1">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="font-medium text-gray-900">
-                  {comment.userName}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {formatRelativeTime(comment.createdAt)}
-                </span>
-                {comment.rating && (
-                  <div className="flex items-center text-yellow-500">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        className={cn(
-                          'w-3 h-3',
-                          i < comment.rating! ? 'fill-current' : 'fill-gray-300'
-                        )}
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <p className="text-gray-700 text-sm leading-relaxed">
-              {comment.content}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 mt-2 text-sm">
-            {isAuthenticated ? (
-              <button
-                onClick={commentLike.toggleLike}
-                disabled={commentLike.isLoading}
-                className={cn(
-                  'flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors disabled:opacity-50',
-                  commentLike.isLiked && 'text-red-500'
-                )}
-              >
-                <svg
-                  className={cn(
-                    'w-4 h-4',
-                    commentLike.isLiked && 'fill-current'
-                  )}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-                <span>{commentLike.likeCount}</span>
-              </button>
-            ) : (
-              <div className="flex items-center gap-1 text-gray-400">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-                <span>{commentLike.likeCount}</span>
-              </div>
-            )}
-
-            {!isReply && isAuthenticated && (
-              <button
-                onClick={() => setReplyTo(comment.id)}
-                className="text-gray-500 hover:text-blue-500 transition-colors"
-              >
-                回复
-              </button>
-            )}
-
-            {!isReply && !isAuthenticated && (
-              <span className="text-gray-400 text-sm">登录后可回复</span>
-            )}
-          </div>
-
-          {replyTo === comment.id && (
-            <div className="mt-3 flex gap-2">
-              <input
-                type="text"
-                value={replyContent}
-                onChange={e => setReplyContent(e.target.value)}
-                placeholder="写下你的回复..."
-                className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                autoFocus
-              />
-              <button
-                onClick={() => handleReply(comment.id)}
-                disabled={isSubmitting}
-                className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
-              >
-                {isSubmitting ? '发送中...' : '回复'}
-              </button>
-              <button
-                onClick={() => {
-                  setReplyTo(null)
-                  setReplyContent('')
-                }}
-                className="px-4 py-2 text-gray-500 text-sm hover:text-gray-700"
-              >
-                取消
-              </button>
-            </div>
-          )}
-
-          {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-4 space-y-3">
-              {comment.replies.map((reply: Comment) => (
-                <CommentItem key={reply.id} comment={reply} isReply />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
+  const handleReplyContentChange = useCallback((content: string) => {
+    setReplyContent(content)
+  }, [])
 
   if (isLoading) {
     return (
       <div className={`space-y-6 ${className}`}>
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
-          <div className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="flex gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                  <div className="h-16 bg-gray-200 rounded"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CommentHeaderSkeleton />
+        <CommentInputSkeleton />
+        <CommentSkeleton count={3} showReplies={true} />
       </div>
     )
   }
@@ -342,14 +227,51 @@ export function ResourceComments({
             </p>
           </div>
         ) : (
-          comments.map(comment => (
-            <CommentItem key={comment.id} comment={comment} />
-          ))
+          <>
+            {comments.map(comment => (
+              <CommentItem 
+                key={comment.id} 
+                comment={comment}
+                onReply={handleReplyToComment}
+                replyTo={replyTo}
+                replyContent={replyContent}
+                onReplyContentChange={handleReplyContentChange}
+                onReplySubmit={handleReply}
+                onReplyCancel={handleReplyCancel}
+                isSubmitting={isSubmitting}
+              />
+            ))}
+            
+            {/* 加载更多按钮 */}
+            {pagination.hasMore && (
+              <div className="pt-6 border-t border-gray-100">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="w-full px-4 py-3 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      加载中...
+                    </>
+                  ) : (
+                    <>
+                      查看更多评论
+                      <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">
+                        剩余 {pagination.total - comments.length} 条
+                      </span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   )
-}
+})
 
 function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ')

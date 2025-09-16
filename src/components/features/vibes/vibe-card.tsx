@@ -17,6 +17,7 @@ import { formatRelativeTime } from '@/utils/date'
 import { useRouter } from 'next/navigation'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { useComments } from '@/hooks/use-interactions'
+import { useToast } from '@/components/ui/toast'
 
 interface VibeCardProps {
   vibe: Vibe
@@ -24,6 +25,7 @@ interface VibeCardProps {
 
 export function VibeCard({ vibe }: VibeCardProps) {
   const { user, isAuthenticated } = useAuth()
+  const { showToast } = useToast()
   const [showComments, setShowComments] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const [newComment, setNewComment] = useState('')
@@ -51,8 +53,17 @@ export function VibeCard({ vibe }: VibeCardProps) {
       try {
         await createComment(newComment.trim())
         setNewComment('')
+        showToast({
+          type: 'success',
+          title: '评论发表成功'
+        })
       } catch (error) {
         console.error('提交评论失败:', error)
+        showToast({
+          type: 'error',
+          title: '评论发表失败',
+          message: '请稍后重试'
+        })
       }
     }
   }

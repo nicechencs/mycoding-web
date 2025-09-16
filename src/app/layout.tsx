@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/header'
 // import { HeaderSimple } from '@/components/layout/header-simple'
 import { Footer } from '@/components/layout/footer'
 import { PerformanceWrapper } from '@/components/app/PerformanceWrapper'
+import { ToastProvider } from '@/components/ui/toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,11 +26,13 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* <PerformanceWrapper> */}
         <AuthProvider>
-          <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <ToastProvider>
+            <div className="min-h-screen flex flex-col bg-gray-50">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </ToastProvider>
         </AuthProvider>
         {/* </PerformanceWrapper> */}
       </body>

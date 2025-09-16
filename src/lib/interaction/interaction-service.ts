@@ -134,20 +134,57 @@ export class InteractionService {
     return newComment
   }
 
-  // 获取评论列表
+  // 获取评论列表（支持分页）
   static async getComments(
     targetId: string,
-    targetType: 'post' | 'resource' | 'vibe'
-  ): Promise<Comment[]> {
+    targetType: 'post' | 'resource' | 'vibe',
+    options?: {
+      page?: number
+      pageSize?: number
+    }
+  ): Promise<{
+    comments: Comment[]
+    total: number
+    hasMore: boolean
+    page: number
+    pageSize: number
+  }> {
     await delay(300)
 
-    const comments = getStoredData<Comment>(STORAGE_KEYS.COMMENTS)
-    return comments
-      .filter(c => c.targetId === targetId && c.targetType === targetType)
+    const { page = 1, pageSize = 10 } = options || {}
+    
+    const allComments = getStoredData<Comment>(STORAGE_KEYS.COMMENTS)
+    const filteredComments = allComments
+      .filter(c => c.targetId === targetId && c.targetType === targetType && !c.parentId) // 只获取顶级评论，回复单独处理
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
+
+    const total = filteredComments.length
+    const startIndex = (page - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const comments = filteredComments.slice(startIndex, endIndex)
+
+    // 为每个评论添加回复
+    const commentsWithReplies = comments.map(comment => {
+      const replies = allComments
+        .filter(c => c.parentId === comment.id)
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      
+      return {
+        ...comment,
+        replies: replies.length > 0 ? replies : undefined
+      }
+    })
+
+    return {
+      comments: commentsWithReplies,
+      total,
+      hasMore: endIndex < total,
+      page,
+      pageSize
+    }
   }
 
   // 删除评论
