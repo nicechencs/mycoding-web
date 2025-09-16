@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useMemo } from 'react'
 import Link from 'next/link'
@@ -97,19 +97,39 @@ export function ProfilePreviewModal({
                 </p>
               )}
               {joinedAt && (
-                <p className="text-xs text-gray-500 mt-1">加入时间：{joinedAt}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  加入时间：{joinedAt}
+                </p>
               )}
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4 mt-6">
             {[
-              { label: '文章', value: (profile as any)?.stats?.articlesCount ?? '—' },
-              { label: '资源', value: (profile as any)?.stats?.resourcesCount ?? '—' },
-              { label: '动态', value: (profile as any)?.stats?.vibesCount ?? '—' },
-              { label: '获赞', value: (profile as any)?.stats?.totalLikes ?? '—' },
-              { label: '粉丝', value: (profile as any)?.stats?.followersCount ?? '—' },
-              { label: '关注', value: (profile as any)?.stats?.followingCount ?? '—' },
+              {
+                label: '文章',
+                value: (profile as any)?.stats?.articlesCount ?? '—',
+              },
+              {
+                label: '资源',
+                value: (profile as any)?.stats?.resourcesCount ?? '—',
+              },
+              {
+                label: '动态',
+                value: (profile as any)?.stats?.vibesCount ?? '—',
+              },
+              {
+                label: '获赞',
+                value: (profile as any)?.stats?.totalLikes ?? '—',
+              },
+              {
+                label: '粉丝',
+                value: (profile as any)?.stats?.followersCount ?? '—',
+              },
+              {
+                label: '关注',
+                value: (profile as any)?.stats?.followingCount ?? '—',
+              },
             ].map((item, idx) => (
               <div key={idx} className="text-center">
                 <div className="text-xl font-semibold text-gray-900">

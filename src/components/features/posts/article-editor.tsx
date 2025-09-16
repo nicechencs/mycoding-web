@@ -15,7 +15,7 @@ export function ArticleEditor({
   initialData,
   onSave,
   onCancel,
-  saving = false
+  saving = false,
 }: ArticleEditorProps) {
   const [formData, setFormData] = useState<ArticleFormData>({
     title: '',
@@ -24,11 +24,13 @@ export function ArticleEditor({
     category: '',
     tags: [],
     coverImage: '',
-    ...initialData
+    ...initialData,
   })
 
   const [tagInput, setTagInput] = useState('')
-  const [errors, setErrors] = useState<Partial<Record<keyof ArticleFormData, string>>>({})
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ArticleFormData, string>>
+  >({})
   const [showPreview, setShowPreview] = useState(false)
 
   // 获取文章分类
@@ -67,14 +69,17 @@ export function ArticleEditor({
   // 处理发布
   const handlePublish = async () => {
     if (!validateForm()) return
-    
+
     // 自动生成摘要（如果未填写）
     const excerpt = formData.excerpt || formData.content.slice(0, 150) + '...'
-    
-    await onSave({
-      ...formData,
-      excerpt
-    }, false)
+
+    await onSave(
+      {
+        ...formData,
+        excerpt,
+      },
+      false
+    )
   }
 
   // 处理保存草稿
@@ -84,7 +89,7 @@ export function ArticleEditor({
       setErrors({ title: '请输入文章标题' })
       return
     }
-    
+
     await onSave(formData, true)
   }
 
@@ -92,26 +97,26 @@ export function ArticleEditor({
   const handleAddTag = () => {
     const tag = tagInput.trim()
     if (!tag) return
-    
+
     // 标签验证
     if (tag.length > 20) {
       setErrors({ ...errors, tags: '单个标签不能超过20个字符' })
       return
     }
-    
+
     if (formData.tags.includes(tag)) {
       setErrors({ ...errors, tags: '该标签已存在' })
       return
     }
-    
+
     if (formData.tags.length >= 5) {
       setErrors({ ...errors, tags: '标签数量不能超过5个' })
       return
     }
-    
+
     setFormData({
       ...formData,
-      tags: [...formData.tags, tag]
+      tags: [...formData.tags, tag],
     })
     setTagInput('')
     setErrors({ ...errors, tags: undefined })
@@ -121,7 +126,7 @@ export function ArticleEditor({
   const handleRemoveTag = (tagToRemove: string) => {
     setFormData({
       ...formData,
-      tags: formData.tags.filter(tag => tag !== tagToRemove)
+      tags: formData.tags.filter(tag => tag !== tagToRemove),
     })
   }
 
@@ -155,7 +160,7 @@ export function ArticleEditor({
             type="text"
             placeholder="输入文章标题..."
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={e => setFormData({ ...formData, title: e.target.value })}
             className={`w-full text-3xl font-bold border-0 border-b-2 ${
               errors.title ? 'border-red-300' : 'border-gray-200'
             } focus:border-blue-500 focus:outline-none pb-2`}
@@ -180,7 +185,9 @@ export function ArticleEditor({
           </label>
           <select
             value={formData.category}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            onChange={e =>
+              setFormData({ ...formData, category: e.target.value })
+            }
             className={`w-full px-3 py-2 border ${
               errors.category ? 'border-red-300' : 'border-gray-300'
             } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
@@ -207,7 +214,9 @@ export function ArticleEditor({
               type="text"
               placeholder="输入图片URL"
               value={formData.coverImage}
-              onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+              onChange={e =>
+                setFormData({ ...formData, coverImage: e.target.value })
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formData.coverImage && (
@@ -216,8 +225,9 @@ export function ArticleEditor({
                   src={formData.coverImage}
                   alt="封面预览"
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect width="100" height="100" fill="%23ddd"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%23999"%3E图片加载失败%3C/text%3E%3C/svg%3E'
+                  onError={e => {
+                    e.currentTarget.src =
+                      'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect width="100" height="100" fill="%23ddd"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%23999"%3E图片加载失败%3C/text%3E%3C/svg%3E'
                   }}
                 />
                 <button
@@ -250,14 +260,18 @@ export function ArticleEditor({
             <div className="w-full h-96 px-3 py-2 border border-gray-300 rounded-md overflow-y-auto bg-gray-50">
               <div className="prose prose-sm max-w-none">
                 <h3 className="text-lg font-medium mb-2">预览</h3>
-                <div className="whitespace-pre-wrap">{formData.content || '（暂无内容）'}</div>
+                <div className="whitespace-pre-wrap">
+                  {formData.content || '（暂无内容）'}
+                </div>
               </div>
             </div>
           ) : (
             <textarea
               placeholder="开始写作..."
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={e =>
+                setFormData({ ...formData, content: e.target.value })
+              }
               className={`w-full h-96 px-3 py-2 border ${
                 errors.content ? 'border-red-300' : 'border-gray-300'
               } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none`}
@@ -271,9 +285,7 @@ export function ArticleEditor({
               {formData.content.length} 字符
               {formData.content.length < 50 && ' （至少需要50个字符）'}
             </p>
-            <div className="text-sm text-gray-500">
-              支持 Markdown 格式
-            </div>
+            <div className="text-sm text-gray-500">支持 Markdown 格式</div>
           </div>
         </div>
 
@@ -285,7 +297,9 @@ export function ArticleEditor({
           <textarea
             placeholder="简要描述文章内容..."
             value={formData.excerpt}
-            onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+            onChange={e =>
+              setFormData({ ...formData, excerpt: e.target.value })
+            }
             className="w-full h-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             maxLength={200}
           />
@@ -304,8 +318,8 @@ export function ArticleEditor({
               type="text"
               placeholder="输入标签后按回车添加（最多20个字符）"
               value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyPress={(e) => {
+              onChange={e => setTagInput(e.target.value)}
+              onKeyPress={e => {
                 if (e.key === 'Enter') {
                   e.preventDefault()
                   handleAddTag()

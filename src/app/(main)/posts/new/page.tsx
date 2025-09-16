@@ -32,9 +32,9 @@ export default function NewArticlePage() {
     try {
       const response = await articlesService.createArticle({
         ...data,
-        isDraft
+        isDraft,
       })
-      
+
       if (response.success && response.data) {
         // 保存成功后跳转
         if (isDraft) {

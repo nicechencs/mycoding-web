@@ -13,26 +13,38 @@ const sizeClasses = {
   wide: 'max-w-7xl', // 1280px - 宽屏展示
 }
 
-export function PageContainer({ children, className, size = 'default' }: PageContainerProps) {
+export function PageContainer({
+  children,
+  className,
+  size = 'default',
+}: PageContainerProps) {
   return (
-    <div className={cn(
-      'w-full mx-auto px-4 sm:px-6 lg:px-8 py-8',
-      sizeClasses[size],
-      className
-    )}>
+    <div
+      className={cn(
+        'w-full mx-auto px-4 sm:px-6 lg:px-8 py-8',
+        sizeClasses[size],
+        className
+      )}
+    >
       {children}
     </div>
   )
 }
 
 // 导出预设的容器组件
-export const PageContainerNarrow = ({ children, className }: Omit<PageContainerProps, 'size'>) => (
+export const PageContainerNarrow = ({
+  children,
+  className,
+}: Omit<PageContainerProps, 'size'>) => (
   <PageContainer size="narrow" className={className}>
     {children}
   </PageContainer>
 )
 
-export const PageContainerWide = ({ children, className }: Omit<PageContainerProps, 'size'>) => (
+export const PageContainerWide = ({
+  children,
+  className,
+}: Omit<PageContainerProps, 'size'>) => (
   <PageContainer size="wide" className={className}>
     {children}
   </PageContainer>

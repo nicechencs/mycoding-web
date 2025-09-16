@@ -2,7 +2,11 @@ import { ApiClient, defaultApiClient, isDevelopment } from './base/api-client'
 import { globalCache, CacheManager } from './base/cache-manager'
 import { ApiResponse, QueryParams, PaginatedResponse } from './base/types'
 import { Article, Comment } from '@/types'
-import { CreateArticleRequest, UpdateArticleRequest, ArticleDraft } from '@/types/article'
+import {
+  CreateArticleRequest,
+  UpdateArticleRequest,
+  ArticleDraft,
+} from '@/types/article'
 
 // Mock数据导入（开发模式使用）
 import {
@@ -422,7 +426,7 @@ export class ArticlesService implements IArticlesService {
         email: localStorage.getItem('userEmail') || 'test@example.com',
         avatar: localStorage.getItem('userAvatar') || undefined,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
 
       // 模拟创建文章
@@ -441,14 +445,14 @@ export class ArticlesService implements IArticlesService {
         commentCount: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
-        featured: false
+        featured: false,
       }
 
       if (data.isDraft) {
         // 保存为草稿
         const draft: ArticleDraft = {
           ...newArticle,
-          isDraft: true
+          isDraft: true,
         }
         mockDrafts.push(draft)
       } else {
@@ -462,7 +466,7 @@ export class ArticlesService implements IArticlesService {
       return {
         success: true,
         data: newArticle,
-        message: data.isDraft ? '草稿保存成功' : '文章发布成功'
+        message: data.isDraft ? '草稿保存成功' : '文章发布成功',
       }
     } else {
       const response = await this.apiClient.post<Article>('/articles', data)
@@ -485,14 +489,14 @@ export class ArticlesService implements IArticlesService {
       if (articleIndex === -1) {
         return {
           success: false,
-          error: '文章不存在'
+          error: '文章不存在',
         }
       }
 
       const updatedArticle = {
         ...mockArticles[articleIndex],
         ...data,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
 
       mockArticles[articleIndex] = updatedArticle
@@ -503,10 +507,13 @@ export class ArticlesService implements IArticlesService {
       return {
         success: true,
         data: updatedArticle,
-        message: '文章更新成功'
+        message: '文章更新成功',
       }
     } else {
-      const response = await this.apiClient.put<Article>(`/articles/${id}`, data)
+      const response = await this.apiClient.put<Article>(
+        `/articles/${id}`,
+        data
+      )
       if (response.success) {
         this.cache.clear()
       }
@@ -523,7 +530,7 @@ export class ArticlesService implements IArticlesService {
       if (articleIndex === -1) {
         return {
           success: false,
-          error: '文章不存在'
+          error: '文章不存在',
         }
       }
 
@@ -534,7 +541,7 @@ export class ArticlesService implements IArticlesService {
 
       return {
         success: true,
-        message: '文章删除成功'
+        message: '文章删除成功',
       }
     } else {
       const response = await this.apiClient.delete<void>(`/articles/${id}`)
@@ -555,7 +562,8 @@ export class ArticlesService implements IArticlesService {
         data: mockDrafts,
       }
     } else {
-      const response = await this.apiClient.get<ArticleDraft[]>('/articles/drafts')
+      const response =
+        await this.apiClient.get<ArticleDraft[]>('/articles/drafts')
       return response
     }
   }

@@ -204,6 +204,55 @@ export function useComments(
   }
 }
 
+// 评论点赞 Hook
+export function useCommentLike(commentId: string) {
+  const { user, isAuthenticated } = useAuth()
+  const router = useRouter()
+  const [isLiked, setIsLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // 获取初始状态
+  useEffect(() => {
+    if (commentId) {
+      InteractionService.getCommentLikeStats(commentId, user?.id)
+        .then(stats => {
+          setIsLiked(stats.isLiked)
+          setLikeCount(stats.likeCount)
+        })
+        .catch(console.error)
+    }
+  }, [commentId, user?.id])
+
+  const toggleLike = useCallback(async () => {
+    if (!isAuthenticated || !user) {
+      router.push('/login')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const newLikedState = await InteractionService.toggleCommentLike(
+        commentId,
+        user.id
+      )
+      setIsLiked(newLikedState)
+      setLikeCount(prev => (newLikedState ? prev + 1 : prev - 1))
+    } catch (error) {
+      console.error('Failed to toggle comment like:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [isAuthenticated, user, commentId, router])
+
+  return {
+    isLiked,
+    likeCount,
+    isLoading,
+    toggleLike,
+  }
+}
+
 // 评分 Hook (仅用于资源)
 export function useRating(targetId: string) {
   const { user, isAuthenticated } = useAuth()

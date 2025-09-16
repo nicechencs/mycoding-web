@@ -5,12 +5,11 @@ import { useState } from 'react'
 import { siteConfig, navConfig } from '@/lib/config'
 import { useAuth } from '@/hooks/use-auth'
 import { useNavigationHandler } from '@/hooks/use-navigation-handler'
- 
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  
+
   const { isAuthenticated, user, logout } = useAuth()
 
   // 桌面端导航处理
@@ -119,7 +118,7 @@ export function Header() {
                   >
                     个人中心
                   </Link>
-                  
+
                   <div className="border-t border-gray-100 my-1"></div>
                   <button
                     onClick={handleLogout}
@@ -129,7 +128,6 @@ export function Header() {
                   </button>
                 </div>
               )}
-              
             </div>
           ) : (
             /* 未登录状态 - 登录注册文本菜单 */

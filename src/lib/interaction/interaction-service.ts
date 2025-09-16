@@ -14,6 +14,7 @@ const STORAGE_KEYS = {
   FAVORITES: 'mycoding_favorites',
   COMMENTS: 'mycoding_comments',
   RATINGS: 'mycoding_ratings',
+  COMMENT_LIKES: 'mycoding_comment_likes',
 }
 
 // 模拟延迟
@@ -319,5 +320,94 @@ export class InteractionService {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
+  }
+
+  // 评论点赞/取消点赞
+  static async toggleCommentLike(
+    commentId: string,
+    userId: string
+  ): Promise<boolean> {
+    await delay(200)
+
+    const commentLikes = getStoredData<{
+      id: string
+      commentId: string
+      userId: string
+      createdAt: string
+    }>(STORAGE_KEYS.COMMENT_LIKES)
+
+    const existingIndex = commentLikes.findIndex(
+      cl => cl.commentId === commentId && cl.userId === userId
+    )
+
+    if (existingIndex >= 0) {
+      // 取消点赞
+      commentLikes.splice(existingIndex, 1)
+      saveData(STORAGE_KEYS.COMMENT_LIKES, commentLikes)
+      return false
+    } else {
+      // 点赞
+      const newLike = {
+        id: Date.now().toString(),
+        commentId,
+        userId,
+        createdAt: new Date().toISOString(),
+      }
+      commentLikes.push(newLike)
+      saveData(STORAGE_KEYS.COMMENT_LIKES, commentLikes)
+      return true
+    }
+  }
+
+  // 获取评论的点赞数和用户是否已点赞
+  static async getCommentLikeStats(
+    commentId: string,
+    userId?: string
+  ): Promise<{ likeCount: number; isLiked: boolean }> {
+    await delay(100)
+
+    const commentLikes = getStoredData<{
+      id: string
+      commentId: string
+      userId: string
+      createdAt: string
+    }>(STORAGE_KEYS.COMMENT_LIKES)
+
+    const likes = commentLikes.filter(cl => cl.commentId === commentId)
+    const isLiked = userId ? likes.some(l => l.userId === userId) : false
+
+    return {
+      likeCount: likes.length,
+      isLiked,
+    }
+  }
+
+  // 批量获取多个评论的点赞统计
+  static async getBatchCommentLikeStats(
+    commentIds: string[],
+    userId?: string
+  ): Promise<Record<string, { likeCount: number; isLiked: boolean }>> {
+    await delay(150)
+
+    const commentLikes = getStoredData<{
+      id: string
+      commentId: string
+      userId: string
+      createdAt: string
+    }>(STORAGE_KEYS.COMMENT_LIKES)
+
+    const result: Record<string, { likeCount: number; isLiked: boolean }> = {}
+
+    commentIds.forEach(commentId => {
+      const likes = commentLikes.filter(cl => cl.commentId === commentId)
+      const isLiked = userId ? likes.some(l => l.userId === userId) : false
+
+      result[commentId] = {
+        likeCount: likes.length,
+        isLiked,
+      }
+    })
+
+    return result
   }
 }

@@ -194,15 +194,31 @@ export default function SettingsPage() {
                           <span className="text-3xl">{stat.icon}</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className={`text-2xl font-bold ${stat.color} mb-1`}>
+                          <div
+                            className={`text-2xl font-bold ${stat.color} mb-1`}
+                          >
                             {stat.value}
                           </div>
-                          <div className="text-base font-medium text-gray-900">{stat.label}</div>
-                          <div className="text-sm text-gray-500 mt-1 line-clamp-2">{stat.description}</div>
+                          <div className="text-base font-medium text-gray-900">
+                            {stat.label}
+                          </div>
+                          <div className="text-sm text-gray-500 mt-1 line-clamp-2">
+                            {stat.description}
+                          </div>
                         </div>
                         <div className="flex-shrink-0 ml-2">
-                          <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          <svg
+                            className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
                           </svg>
                         </div>
                       </div>
@@ -233,7 +249,9 @@ export default function SettingsPage() {
                           <p className="text-sm text-gray-900 hover:text-blue-600 transition-colors">
                             {activity.title}
                           </p>
-                          <p className="text-xs text-gray-500">{activity.time}</p>
+                          <p className="text-xs text-gray-500">
+                            {activity.time}
+                          </p>
                         </div>
                       </div>
                     </Link>
