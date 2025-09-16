@@ -6,6 +6,7 @@ import { useComments, useCommentLike } from '@/hooks/use-interactions'
 import { Avatar } from '@/components/ui/avatar'
 import { LoginPrompt, LoginPromptInline } from '@/components/ui/login-prompt'
 import { formatRelativeTime } from '@/utils/date'
+import { Comment } from '@/lib/interaction/interaction-types'
 
 interface ResourceCommentsProps {
   resourceId: string
@@ -74,7 +75,7 @@ export function ResourceComments({
     comment,
     isReply = false,
   }: {
-    comment: any
+    comment: Comment
     isReply?: boolean
   }) => {
     const commentLike = useCommentLike(comment.id)
@@ -211,7 +212,7 @@ export function ResourceComments({
 
           {comment.replies && comment.replies.length > 0 && (
             <div className="mt-4 space-y-3">
-              {comment.replies.map((reply: any) => (
+              {comment.replies.map((reply: Comment) => (
                 <CommentItem key={reply.id} comment={reply} isReply />
               ))}
             </div>

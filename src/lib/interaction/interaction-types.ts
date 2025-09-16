@@ -27,6 +27,9 @@ export interface Comment {
   likes: number
   createdAt: Date
   updatedAt: Date
+  rating?: number // 1-5，仅资源评论可能有评分
+  replies?: Comment[] // 支持回复
+  parentId?: string // 回复的父评论ID
 }
 
 export interface Rating {
