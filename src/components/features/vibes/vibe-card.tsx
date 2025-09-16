@@ -15,6 +15,7 @@ import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { useVibeCardInteraction } from '@/hooks/use-card-interaction'
 import { formatRelativeTime } from '@/utils/date'
 import { useRouter } from 'next/navigation'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 interface VibeCardProps {
   vibe: Vibe
@@ -91,9 +92,10 @@ export function VibeCard({ vibe }: VibeCardProps) {
 
       {/* Content */}
       <div className="mb-4">
-        <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-          {vibe.content}
-        </p>
+        <MarkdownRenderer 
+          content={vibe.content} 
+          className="text-gray-800 leading-relaxed"
+        />
       </div>
 
       {/* Images */}
@@ -135,6 +137,29 @@ export function VibeCard({ vibe }: VibeCardProps) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Code Blocks */}
+      {vibe.codeBlocks && vibe.codeBlocks.length > 0 && (
+        <div className="mb-4 space-y-2">
+          {vibe.codeBlocks.map((block, index) => (
+            <div key={index} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs text-gray-400 font-mono">{block.language}</span>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    navigator.clipboard.writeText(block.code)
+                  }}
+                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                >
+                  复制代码
+                </button>
+              </div>
+              <pre className="font-mono text-sm whitespace-pre-wrap">{block.code}</pre>
+            </div>
+          ))}
         </div>
       )}
 

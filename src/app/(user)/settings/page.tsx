@@ -41,6 +41,8 @@ export default function SettingsPage() {
       icon: '📚',
       color: 'text-blue-600',
       bg: 'bg-blue-50',
+      href: '/my-favorites',
+      description: '查看您收藏的所有学习资源',
     },
     {
       label: '发表文章',
@@ -48,6 +50,8 @@ export default function SettingsPage() {
       icon: '📝',
       color: 'text-green-600',
       bg: 'bg-green-50',
+      href: '/posts/articles',
+      description: '管理您发布的文章内容',
     },
     {
       label: '获得点赞',
@@ -55,13 +59,8 @@ export default function SettingsPage() {
       icon: '👍',
       color: 'text-red-600',
       bg: 'bg-red-50',
-    },
-    {
-      label: '学习天数',
-      value: '45',
-      icon: '🎯',
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
+      href: '/my-favorites',
+      description: '查看获得赞赏的内容',
     },
   ]
 
@@ -72,24 +71,28 @@ export default function SettingsPage() {
       title: '收藏了《React 性能优化指南》',
       time: '2小时前',
       icon: '📚',
+      href: '/resources/react-performance-guide',
     },
     {
       type: 'comment',
       title: '评论了《Vue 3 新特性详解》',
       time: '5小时前',
       icon: '💬',
+      href: '/posts/articles/vue3-features',
     },
     {
       type: 'like',
       title: '点赞了《JavaScript 设计模式》',
       time: '1天前',
       icon: '👍',
+      href: '/posts/articles/js-design-patterns',
     },
     {
       type: 'article',
       title: '发表了《TypeScript 实战总结》',
       time: '3天前',
       icon: '📝',
+      href: '/posts/articles/typescript-practice',
     },
   ]
 
@@ -121,7 +124,7 @@ export default function SettingsPage() {
   ] as const
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">个人中心</h1>
         <p className="text-gray-600">管理您的个人信息和偏好设置</p>
@@ -180,19 +183,31 @@ export default function SettingsPage() {
               </BaseCard>
 
               {/* 统计卡片 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {stats.map((stat, index) => (
-                  <BaseCard key={index} className="text-center">
-                    <div
-                      className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${stat.bg} mb-3`}
-                    >
-                      <span className="text-2xl">{stat.icon}</span>
-                    </div>
-                    <div className={`text-3xl font-bold ${stat.color} mb-1`}>
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
-                  </BaseCard>
+                  <Link key={index} href={stat.href} className="h-full">
+                    <BaseCard className="h-full hover:shadow-lg transition-all duration-200 cursor-pointer group">
+                      <div className="flex items-center space-x-4 h-full p-2">
+                        <div
+                          className={`flex-shrink-0 w-16 h-16 rounded-lg ${stat.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}
+                        >
+                          <span className="text-3xl">{stat.icon}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-2xl font-bold ${stat.color} mb-1`}>
+                            {stat.value}
+                          </div>
+                          <div className="text-base font-medium text-gray-900">{stat.label}</div>
+                          <div className="text-sm text-gray-500 mt-1 line-clamp-2">{stat.description}</div>
+                        </div>
+                        <div className="flex-shrink-0 ml-2">
+                          <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </BaseCard>
+                  </Link>
                 ))}
               </div>
 
@@ -211,16 +226,17 @@ export default function SettingsPage() {
                 </div>
                 <div className="space-y-4">
                   {recentActivities.map((activity, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50"
-                    >
-                      <span className="text-xl">{activity.icon}</span>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-900">{activity.title}</p>
-                        <p className="text-xs text-gray-500">{activity.time}</p>
+                    <Link key={index} href={activity.href}>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
+                        <span className="text-xl">{activity.icon}</span>
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-900 hover:text-blue-600 transition-colors">
+                            {activity.title}
+                          </p>
+                          <p className="text-xs text-gray-500">{activity.time}</p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </BaseCard>

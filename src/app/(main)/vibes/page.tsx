@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useLatestVibes } from '@/hooks/use-vibes'
 import { VibeCard } from '@/components/features/vibes/vibe-card'
@@ -9,7 +9,8 @@ import { Avatar, FloatingAvatar } from '@/components/ui/avatar'
 import { QuickFilterBar } from '@/components/ui/content-filter'
 import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { useTags } from '@/lib/taxonomy'
-import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
+import { PageLoader } from '@/components/ui/LoadingSuspense'
+import { PageContainer } from '@/components/ui/page-container'
 
 export default function VibesPage() {
   const { user, isAuthenticated } = useAuth()
@@ -17,18 +18,14 @@ export default function VibesPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const { trendingTags } = useTags('vibes')
 
-  // 构建查询参数
-  const queryParams = useMemo(() => {
-    const params: any = {}
-    if (selectedCategory !== 'all') {
-      params.category = selectedCategory
-    }
-    return params
-  }, [selectedCategory])
-
   const { vibes, loading, error, mutate } = useLatestVibes(20)
 
-  const handleNewVibe = (content: string, tags: string[]) => {
+  const handleNewVibe = (
+    content: string,
+    tags: string[],
+    images?: string[],
+    codeBlocks?: { language: string; code: string }[]
+  ) => {
     if (!user) return
 
     const newVibe = {
@@ -43,6 +40,8 @@ export default function VibesPage() {
         updatedAt: new Date(),
       },
       tags,
+      images: images || [],
+      codeBlocks: codeBlocks || [],
       likeCount: 0,
       commentCount: 0,
       shareCount: 0,
@@ -70,7 +69,7 @@ export default function VibesPage() {
 
   if (loading) {
     return (
-      <div className="container py-8">
+      <PageContainer>
         {/* Header */}
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
@@ -80,13 +79,13 @@ export default function VibesPage() {
         </div>
 
         <PageLoader text="正在加载动态..." />
-      </div>
+      </PageContainer>
     )
   }
 
   if (error) {
     return (
-      <div className="container py-8">
+      <PageContainer>
         {/* Header */}
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
@@ -122,12 +121,12 @@ export default function VibesPage() {
             重新加载
           </button>
         </div>
-      </div>
+      </PageContainer>
     )
   }
 
   return (
-    <div className="container py-8">
+    <PageContainer>
       {/* Header */}
       <div className="text-center space-y-4 mb-12">
         <h1 className="text-4xl font-bold text-gray-900">Vibe 动态</h1>
@@ -247,6 +246,6 @@ export default function VibesPage() {
       >
         ✨
       </FloatingAvatar>
-    </div>
+    </PageContainer>
   )
 }

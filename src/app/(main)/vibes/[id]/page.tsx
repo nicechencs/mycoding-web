@@ -11,6 +11,8 @@ import { VibeCard } from '@/components/features/vibes/vibe-card'
 import { useLike } from '@/hooks/use-like'
 import { formatRelativeTime } from '@/utils/date'
 import { PageLoader } from '@/components/ui/LoadingSuspense'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
+import { LazyImage } from '@/components/ui/LazyImage'
 
 interface Props {
   params: { id: string }
@@ -32,9 +34,7 @@ export default function VibeDetailPage({ params }: Props) {
   if (loading) {
     return (
       <div className="container py-8">
-        <div className="max-w-2xl mx-auto">
-          <PageLoader text="正在加载动态详情..." />
-        </div>
+        <PageLoader text="正在加载动态详情..." />
       </div>
     )
   }
@@ -45,7 +45,7 @@ export default function VibeDetailPage({ params }: Props) {
     }
     return (
       <div className="container py-8">
-        <div className="max-w-2xl mx-auto text-center py-16">
+        <div className="text-center py-16">
           <div className="text-red-500 mb-4">
             <svg
               className="w-16 h-16 mx-auto"
@@ -118,7 +118,7 @@ export default function VibeDetailPage({ params }: Props) {
 
   return (
     <div className="container py-8">
-      <div className="max-w-4xl mx-auto">
+      <div>
         {/* 返回按钮 */}
         <div className="mb-6">
           <button
@@ -179,9 +179,10 @@ export default function VibeDetailPage({ params }: Props) {
 
               {/* 内容 */}
               <div className="mb-6">
-                <p className="text-gray-800 leading-relaxed text-lg whitespace-pre-wrap">
-                  {vibe.content}
-                </p>
+                <MarkdownRenderer 
+                  content={vibe.content} 
+                  className="text-gray-800 leading-relaxed text-lg"
+                />
               </div>
 
               {/* 图片 */}
@@ -201,14 +202,52 @@ export default function VibeDetailPage({ params }: Props) {
                         key={index}
                         className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer"
                       >
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-500 text-sm">
-                            图片 {index + 1}
-                          </span>
-                        </div>
+                        {typeof image === 'string' ? (
+                          <LazyImage
+                            src={image}
+                            alt={`${vibe.author.name} 分享的图片 ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            options={{
+                              rootMargin: '100px',
+                              fadeIn: true,
+                              retryCount: 2,
+                            }}
+                            showLoadingIndicator={true}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500 text-sm">
+                              图片 {index + 1}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* 代码块 */}
+              {vibe.codeBlocks && vibe.codeBlocks.length > 0 && (
+                <div className="mb-6 space-y-3">
+                  {vibe.codeBlocks.map((block, index) => (
+                    <div key={index} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs text-gray-400 font-mono">{block.language}</span>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            navigator.clipboard.writeText(block.code)
+                            alert('代码已复制到剪贴板')
+                          }}
+                          className="text-xs text-gray-400 hover:text-white transition-colors"
+                        >
+                          复制代码
+                        </button>
+                      </div>
+                      <pre className="font-mono text-sm whitespace-pre-wrap">{block.code}</pre>
+                    </div>
+                  ))}
                 </div>
               )}
 

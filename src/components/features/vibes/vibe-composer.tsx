@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { Avatar } from '@/components/ui/avatar'
 import { LoginPrompt } from '@/components/ui/login-prompt'
 
 interface VibeComposerProps {
-  onSubmit: (content: string, tags: string[]) => void
+  onSubmit: (content: string, tags: string[], images?: string[], codeBlocks?: { language: string; code: string }[]) => void
   onCancel: () => void
 }
 
@@ -15,6 +15,15 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState('')
+  const [uploadedImages, setUploadedImages] = useState<string[]>([])
+  const [codeBlocks, setCodeBlocks] = useState<{ language: string; code: string }[]>([])
+  const [showCodeModal, setShowCodeModal] = useState(false)
+  const [codeLanguage, setCodeLanguage] = useState('javascript')
+  const [codeContent, setCodeContent] = useState('')
+  const [showLinkModal, setShowLinkModal] = useState(false)
+  const [linkUrl, setLinkUrl] = useState('')
+  const [linkText, setLinkText] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // 如果未登录，显示登录提示
   if (!isAuthenticated || !user) {
@@ -45,11 +54,57 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
   ]
 
   const handleSubmit = () => {
-    if (content.trim()) {
-      onSubmit(content.trim(), tags)
+    if (content.trim() || uploadedImages.length > 0 || codeBlocks.length > 0) {
+      onSubmit(content.trim(), tags, uploadedImages, codeBlocks)
       setContent('')
       setTags([])
       setTagInput('')
+      setUploadedImages([])
+      setCodeBlocks([])
+    }
+  }
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader()
+          reader.onload = (event) => {
+            if (event.target?.result && uploadedImages.length < 9) {
+              setUploadedImages(prev => [...prev, event.target?.result as string])
+            }
+          }
+          reader.readAsDataURL(file)
+        }
+      })
+    }
+  }
+
+  const removeImage = (index: number) => {
+    setUploadedImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleCodeSubmit = () => {
+    if (codeContent.trim()) {
+      setCodeBlocks(prev => [...prev, { language: codeLanguage, code: codeContent.trim() }])
+      setCodeContent('')
+      setShowCodeModal(false)
+      setCodeLanguage('javascript')
+    }
+  }
+
+  const removeCodeBlock = (index: number) => {
+    setCodeBlocks(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleLinkSubmit = () => {
+    if (linkUrl.trim() && linkText.trim()) {
+      const linkMarkdown = `[${linkText}](${linkUrl})`
+      setContent(prev => prev + (prev ? ' ' : '') + linkMarkdown)
+      setLinkUrl('')
+      setLinkText('')
+      setShowLinkModal(false)
     }
   }
 
@@ -101,6 +156,53 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
           )}
         </div>
       </div>
+
+      {/* Uploaded Images Preview */}
+      {uploadedImages.length > 0 && (
+        <div className="mb-4">
+          <div className="grid grid-cols-3 gap-2">
+            {uploadedImages.map((image, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={image}
+                  alt={`上传的图片 ${index + 1}`}
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+                <button
+                  onClick={() => removeImage(index)}
+                  className="absolute top-1 right-1 p-1 bg-black bg-opacity-50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Code Blocks Preview */}
+      {codeBlocks.length > 0 && (
+        <div className="mb-4 space-y-2">
+          {codeBlocks.map((block, index) => (
+            <div key={index} className="relative group">
+              <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-sm overflow-x-auto">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-gray-400">{block.language}</span>
+                  <button
+                    onClick={() => removeCodeBlock(index)}
+                    className="text-red-400 hover:text-red-300 text-xs"
+                  >
+                    删除
+                  </button>
+                </div>
+                <pre className="whitespace-pre-wrap">{block.code}</pre>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Tags Section */}
       <div className="mb-4">
@@ -187,7 +289,19 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <div className="flex items-center space-x-4">
-          <button className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadedImages.length >= 9}
+            className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -201,10 +315,13 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <span className="text-sm">添加图片</span>
+            <span className="text-sm">添加图片 {uploadedImages.length > 0 && `(${uploadedImages.length}/9)`}</span>
           </button>
 
-          <button className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <button 
+            onClick={() => setShowCodeModal(true)}
+            className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors"
+          >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -221,7 +338,10 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
             <span className="text-sm">代码片段</span>
           </button>
 
-          <button className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <button 
+            onClick={() => setShowLinkModal(true)}
+            className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors"
+          >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -232,10 +352,10 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m0 0V3a1 1 0 011 1v11a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1V4z"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101m4.899.758a4 4 0 11-5.656 5.656"
               />
             </svg>
-            <span className="text-sm">链接</span>
+            <span className="text-sm">插入链接</span>
           </button>
         </div>
 
@@ -248,13 +368,125 @@ export function VibeComposer({ onSubmit, onCancel }: VibeComposerProps) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={!content.trim()}
+            disabled={!content.trim() && uploadedImages.length === 0 && codeBlocks.length === 0}
             className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             发布动态
           </button>
         </div>
       </div>
+
+      {/* Code Modal */}
+      {showCodeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4">插入代码片段</h3>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">编程语言</label>
+              <select
+                value={codeLanguage}
+                onChange={e => setCodeLanguage(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+                <option value="go">Go</option>
+                <option value="rust">Rust</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="sql">SQL</option>
+                <option value="bash">Bash</option>
+                <option value="json">JSON</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">代码内容</label>
+              <textarea
+                value={codeContent}
+                onChange={e => setCodeContent(e.target.value)}
+                placeholder="粘贴或输入您的代码..."
+                className="w-full h-64 px-3 py-2 border border-gray-200 rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowCodeModal(false)
+                  setCodeContent('')
+                  setCodeLanguage('javascript')
+                }}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleCodeSubmit}
+                disabled={!codeContent.trim()}
+                className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                插入代码
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Link Modal */}
+      {showLinkModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">插入链接</h3>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">链接文本</label>
+              <input
+                type="text"
+                value={linkText}
+                onChange={e => setLinkText(e.target.value)}
+                placeholder="例如：查看文档"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">链接地址</label>
+              <input
+                type="url"
+                value={linkUrl}
+                onChange={e => setLinkUrl(e.target.value)}
+                placeholder="https://example.com"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowLinkModal(false)
+                  setLinkUrl('')
+                  setLinkText('')
+                }}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleLinkSubmit}
+                disabled={!linkUrl.trim() || !linkText.trim()}
+                className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                插入链接
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

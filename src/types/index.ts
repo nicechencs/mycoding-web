@@ -98,6 +98,7 @@ export interface Vibe {
   content: string
   author: User
   images?: string[]
+  codeBlocks?: { language: string; code: string }[]
   tags: string[]
   likeCount: number
   commentCount: number
