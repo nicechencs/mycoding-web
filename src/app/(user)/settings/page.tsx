@@ -251,6 +251,12 @@ export default function SettingsPage() {
 
   return (
     <div>
+      {/* 页面标题 */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">个人中心</h1>
+        <p className="text-gray-600">管理您的个人信息和偏好设置</p>
+      </div>
+
       {/* 成功通知 */}
       {showSaveSuccess && (
         <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">

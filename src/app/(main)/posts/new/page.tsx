@@ -1,31 +1,36 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { ArticleEditor } from '@/components/features/posts/article-editor'
 import { ArticleFormData } from '@/types/article'
 import { articlesService } from '@/services/articles.service'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewArticlePage() {
   const router = useRouter()
   const { isAuthenticated, user } = useAuth()
   const [saving, setSaving] = useState(false)
 
-  // 如果未登录，重定向到登录页
-  if (!isAuthenticated) {
-    router.push('/auth/login?redirect=/posts/new')
-    return null
-  }
-
-  // 保存用户信息到localStorage（供Mock使用）
-  if (user) {
-    localStorage.setItem('userName', user.name)
-    localStorage.setItem('userEmail', user.email)
-    if (user.avatar) {
-      localStorage.setItem('userAvatar', user.avatar)
+  // 如果未登录，重定向到登录页（客户端环境下执行）
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login?redirect=/posts/new')
     }
-  }
+  }, [isAuthenticated, router])
+
+  // 保存用户信息到localStorage（仅在客户端执行，供Mock使用）
+  useEffect(() => {
+    if (user && typeof window !== 'undefined') {
+      localStorage.setItem('userName', user.name)
+      localStorage.setItem('userEmail', user.email)
+      if (user.avatar) {
+        localStorage.setItem('userAvatar', user.avatar)
+      }
+    }
+  }, [user])
 
   const handleSave = async (data: ArticleFormData, isDraft: boolean) => {
     setSaving(true)
@@ -64,6 +69,8 @@ export default function NewArticlePage() {
   }
 
   return (
+    // 未登录时不渲染内容，等待重定向
+    !isAuthenticated ? null : (
     <div className="container max-w-5xl py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">写文章</h1>
@@ -76,5 +83,6 @@ export default function NewArticlePage() {
         saving={saving}
       />
     </div>
+    )
   )
 }

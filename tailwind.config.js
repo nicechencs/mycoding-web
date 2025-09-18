@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        // Use HSL variables correctly for theming
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         // 品牌色系
         primary: {
           DEFAULT: 'var(--primary)',
@@ -26,7 +27,8 @@ module.exports = {
         error: 'var(--error)',
         info: 'var(--info)',
         // UI状态色系
-        ring: 'var(--ring)',
+        // Tailwind supports CSS color functions with alpha placeholders
+        ring: 'rgb(var(--ring) / <alpha-value>)',
         'ring-offset-background': 'var(--ring-offset-background)',
       },
       fontFamily: {

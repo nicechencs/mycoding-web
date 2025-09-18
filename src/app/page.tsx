@@ -7,7 +7,6 @@ import {
 } from '@/lib/utils/dynamic-imports'
 import {
   LoadingSuspense,
-  PageLoader,
   ComponentLoader,
 } from '@/components/ui/LoadingSuspense'
 import { HeroSection } from '@/components/features/home' // 保持Hero部分同步加载，因为是首屏内容

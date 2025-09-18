@@ -26,13 +26,13 @@ export function AuthGuard({
     if (!isLoading) {
       // 需要认证但未登录
       if (requireAuth && !isAuthenticated) {
-        router.push(redirectTo as any)
+        router.push(redirectTo)
         return
       }
 
       // 需要特定角色但角色不匹配
       if (requireRole && user?.role !== requireRole) {
-        router.push('/settings' as any)
+        router.push('/settings')
         return
       }
 
@@ -40,9 +40,10 @@ export function AuthGuard({
       if (
         !requireAuth &&
         isAuthenticated &&
+        typeof window !== 'undefined' &&
         window.location.pathname === '/login'
       ) {
-        router.push('/settings' as any)
+        router.push('/settings')
         return
       }
     }

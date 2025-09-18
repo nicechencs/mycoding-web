@@ -114,7 +114,6 @@ export class CacheManager {
    * 获取缓存统计信息
    */
   getStats() {
-    const now = Date.now()
     let expiredCount = 0
     let totalSize = 0
 

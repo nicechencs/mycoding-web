@@ -6,7 +6,6 @@ import { AuthProvider } from '@/components/auth/AuthProvider'
 import { Header } from '@/components/layout/header'
 // import { HeaderSimple } from '@/components/layout/header-simple'
 import { Footer } from '@/components/layout/footer'
-import { PerformanceWrapper } from '@/components/app/PerformanceWrapper'
 import { ToastProvider } from '@/components/ui/toast'
 
 const inter = Inter({ subsets: ['latin'] })

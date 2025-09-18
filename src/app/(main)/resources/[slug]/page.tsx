@@ -16,7 +16,6 @@ import { Avatar } from '@/components/ui/avatar'
 import { Markdown } from '@/components/ui/markdown'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { ResourceCard } from '@/components/features/resources/resource-card'
 
 export default function ResourceDetailPage() {
   const params = useParams()
@@ -36,11 +35,8 @@ export default function ResourceDetailPage() {
 
   const resourceId = resource?.id || ''
 
-  const {
-    comments,
-    loading: commentsLoading,
-    mutate: mutateComments,
-  } = useResourceComments(resourceId)
+  const { loading: commentsLoading, mutate: mutateComments } =
+    useResourceComments(resourceId)
 
   const {
     distribution: ratingDistribution,

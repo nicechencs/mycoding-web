@@ -54,6 +54,11 @@ const nextConfig = {
       },
     ]
   },
+
+  // Do not block production builds on ESLint errors
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig

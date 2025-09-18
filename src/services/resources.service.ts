@@ -1,10 +1,6 @@
 import { ApiClient, defaultApiClient, isDevelopment } from './base/api-client'
 import { globalCache, CacheManager } from './base/cache-manager'
-import {
-  ApiResponse,
-  QueryParams,
-  PaginatedResponse,
-} from './base/types'
+import { ApiResponse, QueryParams, PaginatedResponse } from './base/types'
 import {
   Resource,
   ResourceComment,

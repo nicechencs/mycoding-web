@@ -16,7 +16,9 @@ import { InteractionService } from '@/lib/interaction/interaction-service'
 
 export default function MyCommentsPage() {
   const { user, isAuthenticated } = useAuth()
-  const { overview, mutate: mutateOverview } = useUserOverviewStats(user?.id || '')
+  const { overview, mutate: mutateOverview } = useUserOverviewStats(
+    user?.id || ''
+  )
   const [activeTab, setActiveTab] = useState<
     'all' | 'resource' | 'post' | 'vibe'
   >('all')
@@ -24,7 +26,9 @@ export default function MyCommentsPage() {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   // 评论点赞状态
-  const [commentLikeStats, setCommentLikeStats] = useState<{[key: string]: {likeCount: number}}>({});
+  const [commentLikeStats] = useState<{
+    [key: string]: { likeCount: number }
+  }>({})
   // 切换标签时重置页码（需在任何返回前调用）
   useEffect(() => {
     setPage(1)
@@ -160,7 +164,7 @@ export default function MyCommentsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">我的评论</h1>
         <p className="text-gray-600">管理您发表的所有评论</p>
-        
+
         {/* 汇总统计 */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-white border border-gray-200 rounded-lg p-4">

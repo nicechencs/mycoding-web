@@ -30,7 +30,6 @@ export default function PostDetailPage() {
     useRelatedArticles(slug, 3)
 
   // 统一使用详情对象的评论总数进行展示（不单独请求评论列表统计）
-  const articleId = article?.id || ''
 
   // 关注作者状态与操作（使用mock服务）
   const authorId = article?.author?.id || ''

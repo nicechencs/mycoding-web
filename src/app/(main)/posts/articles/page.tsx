@@ -6,7 +6,7 @@ import { useArticles } from '@/hooks/use-articles'
 import { ArticleCard } from '@/components/features/community/article-card'
 import { ContentFilter } from '@/components/ui/content-filter'
 import { taxonomyManager } from '@/lib/taxonomy'
-import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
+import { PageLoader } from '@/components/ui/LoadingSuspense'
 
 export default function ArticlesPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')

@@ -232,7 +232,7 @@ export default function MyFavoritesPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">我的收藏</h1>
         <p className="text-gray-600">管理您收藏的资源、文章和动态</p>
-        
+
         {/* 汇总统计 */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-white border border-gray-200 rounded-lg p-4">

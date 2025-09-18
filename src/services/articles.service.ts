@@ -11,7 +11,6 @@ import {
 // Mock数据导入（开发模式使用）
 import {
   mockArticles,
-  mockArticleComments,
   getFeaturedArticles,
   getArticlesByCategory,
   getArticleBySlug,
@@ -413,7 +412,7 @@ export class ArticlesService implements IArticlesService {
   ): Promise<ApiResponse<Article>> {
     if (isDevelopment()) {
       // 生成URL友好的slug（处理中文）
-      const generateSlug = (title: string): string => {
+      const generateSlug = (): string => {
         const timestamp = Date.now().toString(36)
         const randomStr = Math.random().toString(36).substring(2, 5)
         return `article-${timestamp}-${randomStr}`
@@ -435,7 +434,7 @@ export class ArticlesService implements IArticlesService {
         title: data.title,
         content: data.content,
         excerpt: data.excerpt,
-        slug: generateSlug(data.title),
+        slug: generateSlug(),
         author: currentUser,
         category: data.category,
         tags: data.tags,

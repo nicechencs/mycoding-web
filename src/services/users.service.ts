@@ -258,7 +258,10 @@ export class UsersService implements IUsersService {
       const myArticles = mockArticles.filter(a => a.author.id === id)
       const myVibes = mockVibes.filter(v => v.author.id === id)
 
-      const totalViews = myArticles.reduce((sum, a) => sum + (a.viewCount || 0), 0)
+      const totalViews = myArticles.reduce(
+        (sum, a) => sum + (a.viewCount || 0),
+        0
+      )
       const totalLikes =
         myArticles.reduce((sum, a) => sum + (a.likeCount || 0), 0) +
         myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
@@ -291,7 +294,9 @@ export class UsersService implements IUsersService {
   /**
    * 获取个人中心概览统计（Mock/本地）
    */
-  async getUserOverviewStats(id: string): Promise<ApiResponse<UserOverviewStats>> {
+  async getUserOverviewStats(
+    id: string
+  ): Promise<ApiResponse<UserOverviewStats>> {
     const cacheKey = CacheManager.generateKey('users:overview-stats', { id })
 
     const cached = this.cache.get<ApiResponse<UserOverviewStats>>(cacheKey)
@@ -302,7 +307,10 @@ export class UsersService implements IUsersService {
       const myArticles = mockArticles.filter(a => a.author.id === id)
       const myVibes = mockVibes.filter(v => v.author.id === id)
 
-      const articleViews = myArticles.reduce((sum, a) => sum + (a.viewCount || 0), 0)
+      const articleViews = myArticles.reduce(
+        (sum, a) => sum + (a.viewCount || 0),
+        0
+      )
       const receivedLikes =
         myArticles.reduce((sum, a) => sum + (a.likeCount || 0), 0) +
         myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)

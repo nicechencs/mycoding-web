@@ -10,7 +10,7 @@ export default function UserLayout({
 }) {
   return (
     <AuthGuard requireAuth={true}>
-      <div>
+      <div className="min-h-screen">
         <UserNavigation />
         <div className="container py-8">{children}</div>
       </div>
