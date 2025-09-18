@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
+import { useUserOverviewStats } from '@/hooks/use-users'
 import { useUserFavorites } from '@/hooks/use-interactions'
 import Link from 'next/link'
 import { Avatar } from '@/components/ui/avatar'
@@ -10,6 +11,7 @@ import { zhCN } from 'date-fns/locale'
 
 export default function MyFavoritesPage() {
   const { user, isAuthenticated } = useAuth()
+  const { overview } = useUserOverviewStats(user?.id || '')
   const [activeTab, setActiveTab] = useState<
     'all' | 'resource' | 'post' | 'vibe'
   >('all')
@@ -116,6 +118,25 @@ export default function MyFavoritesPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">我的收藏</h1>
         <p className="text-gray-600">管理您收藏的资源、文章和动态</p>
+        {/* 汇总统计 */}
+        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="text-sm text-gray-500 mb-1">全部收藏</div>
+            <div className="text-2xl font-bold text-gray-900">{overview?.totalFavoritesCount ?? 0}</div>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="text-sm text-gray-500 mb-1">资源</div>
+            <div className="text-2xl font-bold text-green-600">{overview?.favoriteResourcesCount ?? 0}</div>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="text-sm text-gray-500 mb-1">文章</div>
+            <div className="text-2xl font-bold text-blue-600">{overview?.favoritePostsCount ?? 0}</div>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="text-sm text-gray-500 mb-1">动态</div>
+            <div className="text-2xl font-bold text-purple-600">{overview?.favoriteVibesCount ?? 0}</div>
+          </div>
+        </div>
       </div>
 
       {/* 筛选标签 */}
@@ -128,7 +149,7 @@ export default function MyFavoritesPage() {
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          全部 ({allFavorites.length})
+          全部 ({overview?.totalFavoritesCount ?? allFavorites.length})
         </button>
         <button
           onClick={() => setActiveTab('resource')}
@@ -138,7 +159,7 @@ export default function MyFavoritesPage() {
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          资源 ({resourceFavorites.length})
+          资源 ({overview?.favoriteResourcesCount ?? resourceFavorites.length})
         </button>
         <button
           onClick={() => setActiveTab('post')}
@@ -148,7 +169,7 @@ export default function MyFavoritesPage() {
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          文章 ({postFavorites.length})
+          文章 ({overview?.favoritePostsCount ?? postFavorites.length})
         </button>
         <button
           onClick={() => setActiveTab('vibe')}
@@ -158,7 +179,7 @@ export default function MyFavoritesPage() {
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          动态 ({vibeFavorites.length})
+          动态 ({overview?.favoriteVibesCount ?? vibeFavorites.length})
         </button>
       </div>
 

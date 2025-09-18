@@ -49,6 +49,11 @@ export interface UserOverviewStats {
   vibesCount: number
   receivedLikes: number
   articleViews: number
+  // comments summary
+  commentsOnResourcesCount: number
+  commentsOnPostsCount: number
+  commentsOnVibesCount: number
+  totalCommentsCount: number
 }
 
 /**
@@ -303,11 +308,15 @@ export class UsersService implements IUsersService {
         myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
 
       // 用户收藏（来自本地交互存储）
-      const [favRes, favPost, favVibe] = await Promise.all([
-        InteractionService.getUserFavorites(id, 'resource'),
-        InteractionService.getUserFavorites(id, 'post'),
-        InteractionService.getUserFavorites(id, 'vibe'),
-      ])
+      const [favRes, favPost, favVibe, comRes, comPost, comVibe] =
+        await Promise.all([
+          InteractionService.getUserFavorites(id, 'resource'),
+          InteractionService.getUserFavorites(id, 'post'),
+          InteractionService.getUserFavorites(id, 'vibe'),
+          InteractionService.getUserComments(id, 'resource'),
+          InteractionService.getUserComments(id, 'post'),
+          InteractionService.getUserComments(id, 'vibe'),
+        ])
 
       const data: UserOverviewStats = {
         favoriteResourcesCount: favRes.length,
@@ -318,6 +327,10 @@ export class UsersService implements IUsersService {
         vibesCount: myVibes.length,
         receivedLikes,
         articleViews,
+        commentsOnResourcesCount: comRes.length,
+        commentsOnPostsCount: comPost.length,
+        commentsOnVibesCount: comVibe.length,
+        totalCommentsCount: comRes.length + comPost.length + comVibe.length,
       }
 
       const result: ApiResponse<UserOverviewStats> = { success: true, data }
