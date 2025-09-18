@@ -463,6 +463,41 @@ export function useUserComments(type?: 'post' | 'resource' | 'vibe') {
   }
 }
 
+// 用户点赞列表 Hook
+export function useUserLikes(type?: 'post' | 'resource' | 'vibe') {
+  const { user, isAuthenticated } = useAuth()
+  const [likes, setLikes] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const fetchLikes = useCallback(async () => {
+    if (!user || !isAuthenticated) {
+      setLikes([])
+      return
+    }
+
+    setLoading(true)
+    try {
+      const data = await InteractionService.getUserLikes(user.id, type)
+      setLikes(data)
+    } catch (error) {
+      console.error('Failed to fetch user likes:', error)
+      setLikes([])
+    } finally {
+      setLoading(false)
+    }
+  }, [user, isAuthenticated, type])
+
+  useEffect(() => {
+    fetchLikes()
+  }, [fetchLikes])
+
+  return {
+    likes,
+    loading,
+    refresh: fetchLikes,
+  }
+}
+
 // 资源评分统计 Hook
 export function useResourceRating(resourceId: string) {
   const [ratingStats, setRatingStats] = useState<{
