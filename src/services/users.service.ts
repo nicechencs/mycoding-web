@@ -5,6 +5,9 @@ import { User } from '@/types'
 
 // Mock数据导入（开发模式使用）
 import { mockUsers, getCurrentUser } from '@/lib/mock/users'
+import { mockArticles } from '@/lib/mock/articles'
+import { mockVibes } from '@/lib/mock/vibes'
+import { InteractionService } from '@/lib/interaction/interaction-service'
 
 /**
  * 用户更新数据接口
@@ -32,6 +35,20 @@ export interface UserStats {
   followingCount: number
   totalLikes: number
   totalViews: number
+}
+
+/**
+ * 个人中心概览统计（基于Mock/本地交互数据）
+ */
+export interface UserOverviewStats {
+  favoriteResourcesCount: number
+  favoritePostsCount: number
+  favoriteVibesCount: number
+  totalFavoritesCount: number
+  articlesCount: number
+  vibesCount: number
+  receivedLikes: number
+  articleViews: number
 }
 
 /**
@@ -232,15 +249,23 @@ export class UsersService implements IUsersService {
     }
 
     if (isDevelopment()) {
-      // 模拟统计数据
+      // 基于Mock数据的确定性统计
+      const myArticles = mockArticles.filter(a => a.author.id === id)
+      const myVibes = mockVibes.filter(v => v.author.id === id)
+
+      const totalViews = myArticles.reduce((sum, a) => sum + (a.viewCount || 0), 0)
+      const totalLikes =
+        myArticles.reduce((sum, a) => sum + (a.likeCount || 0), 0) +
+        myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
+
       const mockStats: UserStats = {
-        articlesCount: Math.floor(Math.random() * 20) + 1,
-        resourcesCount: Math.floor(Math.random() * 15) + 1,
-        vibesCount: Math.floor(Math.random() * 50) + 5,
-        followersCount: Math.floor(Math.random() * 100) + 10,
-        followingCount: Math.floor(Math.random() * 80) + 5,
-        totalLikes: Math.floor(Math.random() * 500) + 50,
-        totalViews: Math.floor(Math.random() * 5000) + 500,
+        articlesCount: myArticles.length,
+        resourcesCount: 0, // 资源作者非当前用户，保持为0（Mock）
+        vibesCount: myVibes.length,
+        followersCount: 0,
+        followingCount: 0,
+        totalLikes,
+        totalViews,
       }
 
       const result: ApiResponse<UserStats> = {
@@ -248,12 +273,61 @@ export class UsersService implements IUsersService {
         data: mockStats,
       }
 
-      this.cache.set(cacheKey, result, { ttl: 10 * 60 * 1000 }) // 10分钟缓存
+      this.cache.set(cacheKey, result, { ttl: 5 * 60 * 1000 }) // 5分钟缓存
       return result
     } else {
       const response = await this.apiClient.get<UserStats>(`/users/${id}/stats`)
 
       this.cache.set(cacheKey, response, { ttl: 10 * 60 * 1000 }) // 10分钟缓存
+      return response
+    }
+  }
+
+  /**
+   * 获取个人中心概览统计（Mock/本地）
+   */
+  async getUserOverviewStats(id: string): Promise<ApiResponse<UserOverviewStats>> {
+    const cacheKey = CacheManager.generateKey('users:overview-stats', { id })
+
+    const cached = this.cache.get<ApiResponse<UserOverviewStats>>(cacheKey)
+    if (cached) return cached
+
+    if (isDevelopment()) {
+      // 文章/动态数据
+      const myArticles = mockArticles.filter(a => a.author.id === id)
+      const myVibes = mockVibes.filter(v => v.author.id === id)
+
+      const articleViews = myArticles.reduce((sum, a) => sum + (a.viewCount || 0), 0)
+      const receivedLikes =
+        myArticles.reduce((sum, a) => sum + (a.likeCount || 0), 0) +
+        myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
+
+      // 用户收藏（来自本地交互存储）
+      const [favRes, favPost, favVibe] = await Promise.all([
+        InteractionService.getUserFavorites(id, 'resource'),
+        InteractionService.getUserFavorites(id, 'post'),
+        InteractionService.getUserFavorites(id, 'vibe'),
+      ])
+
+      const data: UserOverviewStats = {
+        favoriteResourcesCount: favRes.length,
+        favoritePostsCount: favPost.length,
+        favoriteVibesCount: favVibe.length,
+        totalFavoritesCount: favRes.length + favPost.length + favVibe.length,
+        articlesCount: myArticles.length,
+        vibesCount: myVibes.length,
+        receivedLikes,
+        articleViews,
+      }
+
+      const result: ApiResponse<UserOverviewStats> = { success: true, data }
+      this.cache.set(cacheKey, result, { ttl: 60 * 1000 }) // 1分钟
+      return result
+    } else {
+      const response = await this.apiClient.get<UserOverviewStats>(
+        `/users/${id}/overview-stats`
+      )
+      this.cache.set(cacheKey, response, { ttl: 60 * 1000 })
       return response
     }
   }

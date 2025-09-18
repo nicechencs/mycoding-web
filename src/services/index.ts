@@ -25,6 +25,7 @@ export {
   type UserUpdateData,
   type UserStats,
   type UserPreferences,
+  type UserOverviewStats,
 } from './users.service'
 // 引入到本地作用域，供下方 ServiceManager 使用
 import { usersService as _usersService } from './users.service'

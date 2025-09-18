@@ -6,9 +6,8 @@ import { useUser } from '@/hooks/use-user'
 import { BaseCard } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useUserFavorites } from '@/hooks/use-interactions'
+import { useUserOverviewStats } from '@/hooks/use-users'
 import { mockArticles } from '@/lib/mock/articles'
-import { mockVibes } from '@/lib/mock/vibes'
 import { mockResources } from '@/lib/mock/resources'
 import { InteractionService } from '@/lib/interaction/interaction-service'
 import { formatDistanceToNow } from 'date-fns'
@@ -26,6 +25,7 @@ interface UserSettings {
 export default function SettingsPage() {
   const { user } = useUser()
   const userId = user?.id
+  const { overview } = useUserOverviewStats(userId || '')
 
   const [settings, setSettings] = useState<UserSettings>({
     name: user?.name || '',
@@ -41,35 +41,14 @@ export default function SettingsPage() {
     'overview' | 'profile' | 'account' | 'notifications' | 'privacy'
   >('overview')
 
-  // 用户收藏（仅统计资源类收藏）
-  const { favorites: resourceFavorites } = useUserFavorites('resource')
-
-  // 我发布的文章/动态（基于mock数据）
-  const myArticles = useMemo(
-    () => (userId ? mockArticles.filter(a => a.author.id === userId) : []),
-    [userId]
-  )
-  const myVibes = useMemo(
-    () => (userId ? mockVibes.filter(v => v.author.id === userId) : []),
-    [userId]
-  )
-
-  // 收到的点赞数：基于本人内容在mock数据中的 likeCount 汇总
-  const receivedLikes = useMemo(() => {
-    const articleLikes = myArticles.reduce(
-      (sum, a) => sum + (a.likeCount || 0),
-      0
-    )
-    const vibeLikes = myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
-    return articleLikes + vibeLikes
-  }, [myArticles, myVibes])
+  
 
   // 统计数据（保持与现有卡片一致）
   const stats = useMemo(
     () => [
       {
         label: '已收藏资源',
-        value: String(resourceFavorites.length || 0),
+        value: String(overview?.favoriteResourcesCount || 0),
         icon: '📚',
         color: 'text-blue-600',
         bg: 'bg-blue-50',
@@ -78,7 +57,7 @@ export default function SettingsPage() {
       },
       {
         label: '发表文章',
-        value: String(myArticles.length || 0),
+        value: String(overview?.articlesCount || 0),
         icon: '📝',
         color: 'text-green-600',
         bg: 'bg-green-50',
@@ -87,7 +66,7 @@ export default function SettingsPage() {
       },
       {
         label: '获得点赞',
-        value: String(receivedLikes || 0),
+        value: String(overview?.receivedLikes || 0),
         icon: '👍',
         color: 'text-red-600',
         bg: 'bg-red-50',
@@ -95,7 +74,7 @@ export default function SettingsPage() {
         description: '查看获得赞赏的内容',
       },
     ],
-    [resourceFavorites.length, myArticles.length, receivedLikes]
+    [overview?.favoriteResourcesCount, overview?.articlesCount, overview?.receivedLikes]
   )
 
   // 最近活动（基于交互服务 + mock 内容映射）

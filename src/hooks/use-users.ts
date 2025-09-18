@@ -4,6 +4,7 @@ import {
   UserUpdateData,
   UserStats,
   UserPreferences,
+  UserOverviewStats,
 } from '@/services/users.service'
 import { User } from '@/types'
 import { QueryParams, ApiResponse } from '@/services/base/types'
@@ -120,6 +121,33 @@ export function useUserStats(id: string, options: SWROptions = {}) {
 
   return {
     stats: data?.data,
+    loading: isLoading,
+    error: error || (data && !data.success ? data.error : null),
+    mutate,
+    isValidating,
+  }
+}
+
+/**
+ * 获取用户概览统计（个人中心专用）
+ */
+export function useUserOverviewStats(id: string, options: SWROptions = {}) {
+  const cacheKey = id ? ['users:overview-stats', id] : null
+
+  const { data, error, isLoading, mutate, isValidating } = useSWR(
+    cacheKey,
+    () => usersService.getUserOverviewStats(id),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      errorRetryCount: 3,
+      refreshInterval: 60 * 1000, // 1分钟
+      ...options,
+    }
+  )
+
+  return {
+    overview: data?.data as UserOverviewStats | undefined,
     loading: isLoading,
     error: error || (data && !data.success ? data.error : null),
     mutate,
