@@ -115,12 +115,14 @@ describe('ResourceCard Component', () => {
       expect(ratingStars).toHaveAttribute('data-total-count', '100')
     })
 
-    it('应该渲染统计信息', () => {
+    it('应该渲染统计信息（不重复评分）', () => {
       render(<ResourceCard resource={mockResource} />)
 
       expect(screen.getByText('1,500')).toBeInTheDocument() // viewCount
       expect(screen.getByText('25')).toBeInTheDocument() // commentCount
-      expect(screen.getByText('4.5')).toBeInTheDocument() // rating
+      // 评分在卡片右上角星级组件中展示，底部统计不再重复
+      const ratingStars = screen.getByTestId('rating-stars')
+      expect(ratingStars).toHaveAttribute('data-rating', '4.5')
     })
   })
 
@@ -270,15 +272,15 @@ describe('ResourceCard Component', () => {
       expect(screen.getByText('9,999')).toBeInTheDocument()
     })
 
-    it('应该正确格式化评分', () => {
+    it('应该正确格式化评分（展示在星级组件上）', () => {
       const resourceWithRating = {
         ...mockResource,
         rating: 3.7,
       }
 
       render(<ResourceCard resource={resourceWithRating} />)
-
-      expect(screen.getByText('3.7')).toBeInTheDocument()
+      const ratingStars = screen.getByTestId('rating-stars')
+      expect(ratingStars).toHaveAttribute('data-rating', '3.7')
     })
   })
 

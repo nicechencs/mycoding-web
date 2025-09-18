@@ -46,7 +46,6 @@ export const ResourceCard = React.memo(
                 rating={resource.rating}
                 totalCount={resource.ratingCount}
                 size="sm"
-                showCount={false}
               />
             </div>
           </div>
@@ -134,7 +133,6 @@ export const ResourceCard = React.memo(
                 commentCount: Number(resource.commentCount).toLocaleString(
                   'en-US'
                 ) as any,
-                rating: resource.rating,
                 onComment: e => {
                   e.stopPropagation()
                   // 这里可以添加评论相关逻辑，暂时保留原有行为
@@ -145,9 +143,6 @@ export const ResourceCard = React.memo(
               className="text-gray-500"
               interactive={false}
             />
-            <span className="text-yellow-500 font-medium text-xs">
-              ⭐ {resource.rating.toFixed(1)}
-            </span>
           </div>
         </div>
         {/* 个人资料预览（资源作者名称仅字符串，无ID） */}

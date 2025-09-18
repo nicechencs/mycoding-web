@@ -10,7 +10,6 @@ import { formatRelativeTime } from '@/utils/date'
 import { Comment } from '@/lib/interaction/interaction-types'
 import { useToast } from '@/components/ui/toast'
 import { CommentItem } from './comment-item'
-import { ResourceRatingStats } from './resource-rating-stats'
 import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
 
 interface ResourceCommentsProps {
@@ -137,8 +136,6 @@ export const ResourceComments = React.memo(function ResourceComments({
         </h3>
       </div>
 
-      {/* 评分统计 */}
-      <ResourceRatingStats resourceId={resourceId} />
 
       {/* 评论输入区域 */}
       {canComment ? (
