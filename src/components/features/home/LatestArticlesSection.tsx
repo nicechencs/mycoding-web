@@ -7,9 +7,10 @@ import { useFeaturedArticles } from '@/hooks/use-articles'
 import { Avatar } from '@/components/ui/avatar'
 import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { ListSkeleton } from '@/components/ui/LoadingSuspense'
+import ErrorView from '@/components/ui/ErrorView'
 
 export default function LatestArticlesSection() {
-  const { articles, loading, error } = useFeaturedArticles(3)
+  const { articles, loading, error, mutate } = useFeaturedArticles(3)
   const router = useRouter()
   const [showProfile, setShowProfile] = useState(false)
   const [profileUserId, setProfileUserId] = useState<string | undefined>(
@@ -59,24 +60,7 @@ export default function LatestArticlesSection() {
               <p className="text-gray-600 mt-2">最新的文章、推荐和笔记分享</p>
             </div>
           </div>
-          <div className="text-center py-12">
-            <div className="text-red-500 mb-4">
-              <svg
-                className="w-12 h-12 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <p className="text-gray-600">获取精选文章失败，请稍后重试</p>
-          </div>
+          <ErrorView message="获取精选文章失败，请稍后重试" onRetry={() => mutate()} />
         </div>
       </section>
     )
@@ -122,6 +106,15 @@ export default function LatestArticlesSection() {
               key={article.id}
               className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               onClick={e => handleCardClick(article.slug, e)}
+              role="link"
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  // 构造一个伪事件传递给处理函数
+                  handleCardClick(article.slug, (e as unknown) as React.MouseEvent)
+                }
+              }}
             >
               <div className="flex items-center space-x-3 mb-3">
                 <div

@@ -7,9 +7,10 @@ import { useLatestVibes } from '@/hooks/use-vibes'
 import { Avatar } from '@/components/ui/avatar'
 import { ProfilePreviewModal } from '@/components/features/user/profile-preview'
 import { ListSkeleton } from '@/components/ui/LoadingSuspense'
+import ErrorView from '@/components/ui/ErrorView'
 
 export default function LatestVibesSection() {
-  const { vibes, loading, error } = useLatestVibes(3)
+  const { vibes, loading, error, mutate } = useLatestVibes(3)
   const router = useRouter()
   const [showProfile, setShowProfile] = useState(false)
   const [profileUserId, setProfileUserId] = useState<string | undefined>(
@@ -58,24 +59,7 @@ export default function LatestVibesSection() {
               <p className="text-gray-600 mt-2">社区成员的编程生活分享</p>
             </div>
           </div>
-          <div className="text-center py-12">
-            <div className="text-red-500 mb-4">
-              <svg
-                className="w-12 h-12 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <p className="text-gray-600">获取最新动态失败，请稍后重试</p>
-          </div>
+          <ErrorView message="获取最新动态失败，请稍后重试" onRetry={() => mutate()} />
         </div>
       </section>
     )
@@ -121,6 +105,14 @@ export default function LatestVibesSection() {
               key={vibe.id}
               className="rounded-lg p-6 shadow-sm hover:shadow-lg transition-shadow cursor-pointer bg-white"
               onClick={e => handleCardClick(vibe.id, e)}
+              role="link"
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  handleCardClick(vibe.id, (e as unknown) as React.MouseEvent)
+                }
+              }}
             >
               <div className="flex items-start space-x-3">
                 <div

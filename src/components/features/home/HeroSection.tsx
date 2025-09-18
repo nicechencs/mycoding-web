@@ -13,6 +13,26 @@ export default function HeroSection() {
         <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           现代化编程学习平台，让代码与创意完美融合
         </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <Link
+            href="/resources"
+            className="inline-flex items-center px-5 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+          >
+            浏览资源
+          </Link>
+          <Link
+            href="/posts/new"
+            className="inline-flex items-center px-5 py-3 rounded-md bg-white text-blue-700 font-medium border border-blue-200 hover:bg-blue-50 transition-colors"
+          >
+            开始创作
+          </Link>
+          <Link
+            href="/vibes"
+            className="inline-flex items-center px-5 py-3 rounded-md bg-white text-blue-700 font-medium border border-blue-200 hover:bg-blue-50 transition-colors"
+          >
+            查看动态
+          </Link>
+        </div>
       </div>
     </section>
   )

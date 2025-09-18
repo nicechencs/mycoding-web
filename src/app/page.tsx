@@ -1,45 +1,31 @@
-'use client'
-
-import { useEffect } from 'react'
-import {
-  createDynamicComponent,
-  DynamicImportManager,
-} from '@/lib/utils/dynamic-imports'
-import {
-  LoadingSuspense,
-  ComponentLoader,
-} from '@/components/ui/LoadingSuspense'
+// Server Component by default
+import dynamic from 'next/dynamic'
+import { LoadingSuspense, ComponentLoader } from '@/components/ui/LoadingSuspense'
 import { HeroSection } from '@/components/features/home' // 保持Hero部分同步加载，因为是首屏内容
+import Preloader from '@/components/features/home/Preloader'
 
-// 动态导入非首屏组件
-const DynamicFeaturesSection = createDynamicComponent(
+// 动态导入非首屏组件（启用 Suspense，由外层 LoadingSuspense 提供 fallback）
+const DynamicFeaturesSection = dynamic(
   () => import('@/components/features/home/FeaturesSection'),
-  { loading: () => <ComponentLoader text="功能介绍加载中..." /> }
+  { ssr: true, suspense: true }
 )
 
-const DynamicFeaturedResourcesSection = createDynamicComponent(
+const DynamicFeaturedResourcesSection = dynamic(
   () => import('@/components/features/home/FeaturedResourcesSection'),
-  { loading: () => <ComponentLoader text="精选资源加载中..." /> }
+  { ssr: true, suspense: true }
 )
 
-const DynamicLatestArticlesSection = createDynamicComponent(
+const DynamicLatestArticlesSection = dynamic(
   () => import('@/components/features/home/LatestArticlesSection'),
-  { loading: () => <ComponentLoader text="最新文章加载中..." /> }
+  { ssr: true, suspense: true }
 )
 
-const DynamicLatestVibesSection = createDynamicComponent(
+const DynamicLatestVibesSection = dynamic(
   () => import('@/components/features/home/LatestVibesSection'),
-  { loading: () => <ComponentLoader text="最新动态加载中..." /> }
+  { ssr: true, suspense: true }
 )
 
 export default function HomePage() {
-  // 预加载相关组件
-  useEffect(() => {
-    // 预加载用户可能访问的组件
-    DynamicImportManager.preloadUserComponents()
-    DynamicImportManager.preloadEditorComponents()
-  }, [])
-
   return (
     <div className="space-y-0">
       {/* 首屏内容保持同步加载 */}
@@ -73,6 +59,8 @@ export default function HomePage() {
       >
         <DynamicLatestVibesSection />
       </LoadingSuspense>
+      {/* 空闲时预加载用户相关页面（客户端） */}
+      <Preloader />
     </div>
   )
 }

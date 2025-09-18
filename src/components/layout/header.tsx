@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { siteConfig, navConfig } from '@/lib/config'
+import { DynamicImportManager } from '@/lib/utils/dynamic-imports'
 import { useAuth } from '@/hooks/use-auth'
 import { useNavigationHandler } from '@/hooks/use-navigation-handler'
 
@@ -73,6 +74,11 @@ export function Header() {
             <div className="relative" data-testid="user-menu">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
+                onMouseEnter={() => {
+                  try {
+                    DynamicImportManager.preloadUserComponents()
+                  } catch {}
+                }}
                 className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 data-testid="user-menu-button"
                 aria-label="打开用户菜单"
@@ -115,6 +121,11 @@ export function Header() {
                     href="/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onClick={() => setUserMenuOpen(false)}
+                    onMouseEnter={() => {
+                      try {
+                        DynamicImportManager.preloadUserComponents()
+                      } catch {}
+                    }}
                   >
                     个人中心
                   </Link>
