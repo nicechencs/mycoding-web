@@ -7,11 +7,15 @@ import { BaseCard } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useUserOverviewStats } from '@/hooks/use-users'
+import { useUserFavorites, useUserComments } from '@/hooks/use-interactions'
 import { mockArticles } from '@/lib/mock/articles'
 import { mockResources } from '@/lib/mock/resources'
+import { mockVibes } from '@/lib/mock/vibes'
 import { InteractionService } from '@/lib/interaction/interaction-service'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import { Avatar } from '@/components/ui/avatar'
+import { Markdown } from '@/components/ui/markdown'
 
 interface UserSettings {
   name: string
@@ -26,6 +30,12 @@ export default function SettingsPage() {
   const { user } = useUser()
   const userId = user?.id
   const { overview } = useUserOverviewStats(userId || '')
+  
+  // 收藏相关hooks
+  const { favorites: allFavorites, loading: favoritesLoading } = useUserFavorites()
+  
+  // 评论相关hooks  
+  const { comments: userComments, loading: commentsLoading } = useUserComments()
 
   const [settings, setSettings] = useState<UserSettings>({
     name: user?.name || '',
@@ -39,7 +49,7 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showSaveSuccess, setShowSaveSuccess] = useState(false)
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'profile' | 'account' | 'notifications' | 'privacy'
+    'overview' | 'favorites' | 'comments' | 'profile' | 'account' | 'notifications' | 'privacy'
   >('overview')
 
   // 统计数据（保持与现有卡片一致）
@@ -243,6 +253,8 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: 'overview', name: '概览', icon: '📊' },
+    { id: 'favorites', name: '我的收藏', icon: '📚' },
+    { id: 'comments', name: '我的评论', icon: '💬' },
     { id: 'profile', name: '个人资料', icon: '👤' },
     { id: 'account', name: '账号安全', icon: '🔐' },
     { id: 'notifications', name: '通知设置', icon: '🔔' },
@@ -558,187 +570,169 @@ export default function SettingsPage() {
             </BaseCard>
           )}
 
-          {activeTab === 'account' && (
-            <BaseCard>
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  账号安全
-                </h2>
-                <p className="text-gray-600 mt-1">管理您的账号安全设置</p>
-              </div>
+          {activeTab === 'favorites' && (
+            <div className="space-y-6">
+              <BaseCard>
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900">我的收藏</h2>
+                  <p className="text-gray-600 mt-1">查看您收藏的所有内容</p>
+                </div>
 
-              <div className="space-y-6">
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex items-center">
-                    <svg
-                      className="w-5 h-5 text-yellow-600 mr-2"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium text-yellow-800">
-                      密码强度：中等
-                    </span>
+                {favoritesLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
-                  <p className="text-sm text-yellow-700 mt-1">
-                    建议使用包含大小写字母、数字和特殊字符的强密码
-                  </p>
-                </div>
-
-                <div>
-                  <Button variant="outline" className="mb-4">
-                    修改密码
-                  </Button>
-                  <p className="text-sm text-gray-500">
-                    修改密码后需要重新登录所有设备
-                  </p>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    危险区域
-                  </h3>
-
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-red-800 mb-2">
-                      删除账户
-                    </h4>
-                    <p className="text-sm text-red-700 mb-4">
-                      一旦删除账户，所有数据将永久丢失且无法恢复。
-                    </p>
-                    <Button variant="destructive" size="sm">
-                      删除我的账户
-                    </Button>
+                ) : allFavorites.length === 0 ? (
+                  <div className="text-center py-12 text-gray-500">
+                    <div className="text-4xl mb-2">📚</div>
+                    <p>还没有收藏任何内容</p>
                   </div>
-                </div>
-              </div>
-            </BaseCard>
+                ) : (
+                  <div className="space-y-4">
+                    {allFavorites.map((favorite) => {
+                      let item = null
+                      let itemUrl = '#'
+                      let itemType = '未知'
+
+                      if (favorite.targetType === 'resource') {
+                        item = mockResources.find(r => r.id === favorite.targetId)
+                        itemUrl = item ? `/resources/${item.slug}` : '#'
+                        itemType = '资源'
+                      } else if (favorite.targetType === 'post') {
+                        item = mockArticles.find(a => a.id === favorite.targetId)
+                        itemUrl = item ? `/posts/${item.slug}` : '#'
+                        itemType = '文章'
+                      } else if (favorite.targetType === 'vibe') {
+                        item = mockVibes.find(v => v.id === favorite.targetId)
+                        itemUrl = item ? `/vibes/${item.id}` : '#'
+                        itemType = '动态'
+                      }
+
+                      return (
+                        <Link key={favorite.id} href={itemUrl}>
+                          <div className="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded">
+                                  {itemType}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {formatDistanceToNow(new Date(favorite.createdAt), {
+                                    locale: zhCN,
+                                    addSuffix: true,
+                                  })}
+                                </span>
+                              </div>
+                              <h3 className="font-medium text-gray-900 mb-1">
+                                {item?.title || item?.content || '未找到内容'}
+                              </h3>
+                              {item?.description && (
+                                <p className="text-sm text-gray-600 line-clamp-2">
+                                  {item.description}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                )}
+              </BaseCard>
+            </div>
           )}
 
-          {activeTab === 'notifications' && (
-            <BaseCard>
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  通知设置
-                </h2>
-                <p className="text-gray-600 mt-1">选择您希望接收的通知类型</p>
-              </div>
+          {activeTab === 'comments' && (
+            <div className="space-y-6">
+              <BaseCard>
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900">我的评论</h2>
+                  <p className="text-gray-600 mt-1">查看您发表的所有评论</p>
+                </div>
 
-              <div className="space-y-6">
-                {[
-                  {
-                    title: '新文章推荐',
-                    desc: '当有新的优质文章时通知我',
-                    checked: true,
-                  },
-                  {
-                    title: '收到评论',
-                    desc: '当有人评论我的内容时通知我',
-                    checked: true,
-                  },
-                  {
-                    title: '收到点赞',
-                    desc: '当有人点赞我的内容时通知我',
-                    checked: false,
-                  },
-                  {
-                    title: '系统更新',
-                    desc: '接收系统功能更新和维护通知',
-                    checked: true,
-                  },
-                  {
-                    title: '营销推广',
-                    desc: '接收活动和产品推广信息',
-                    checked: false,
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <input
-                      type="checkbox"
-                      id={`notification-${index}`}
-                      defaultChecked={item.checked}
-                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor={`notification-${index}`}
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        {item.title}
-                      </label>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-                    </div>
+                {commentsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <Button>保存通知设置</Button>
-              </div>
-            </BaseCard>
-          )}
-
-          {activeTab === 'privacy' && (
-            <BaseCard>
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  隐私设置
-                </h2>
-                <p className="text-gray-600 mt-1">控制您的信息可见性</p>
-              </div>
-
-              <div className="space-y-6">
-                {[
-                  {
-                    title: '公开个人资料',
-                    desc: '允许其他用户查看您的个人资料',
-                    checked: true,
-                  },
-                  {
-                    title: '显示活动状态',
-                    desc: '显示您的在线状态和最近活动',
-                    checked: false,
-                  },
-                  {
-                    title: '允许搜索',
-                    desc: '允许通过邮箱或用户名搜索到您',
-                    checked: true,
-                  },
-                  {
-                    title: '数据分析',
-                    desc: '允许我们使用您的数据来改善服务',
-                    checked: true,
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <input
-                      type="checkbox"
-                      id={`privacy-${index}`}
-                      defaultChecked={item.checked}
-                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor={`privacy-${index}`}
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        {item.title}
-                      </label>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-                    </div>
+                ) : userComments.length === 0 ? (
+                  <div className="text-center py-12 text-gray-500">
+                    <div className="text-4xl mb-2">💬</div>
+                    <p>还没有发表任何评论</p>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className="space-y-4">
+                    {userComments.map((comment) => {
+                      let item = null
+                      let itemUrl = '#'
+                      let itemType = '未知'
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <Button>保存隐私设置</Button>
-              </div>
-            </BaseCard>
+                      if (comment.targetType === 'resource') {
+                        item = mockResources.find(r => r.id === comment.targetId)
+                        itemUrl = item ? `/resources/${item.slug}` : '#'
+                        itemType = '资源'
+                      } else if (comment.targetType === 'post') {
+                        item = mockArticles.find(a => a.id === comment.targetId)
+                        itemUrl = item ? `/posts/${item.slug}` : '#'
+                        itemType = '文章'
+                      } else if (comment.targetType === 'vibe') {
+                        item = mockVibes.find(v => v.id === comment.targetId)
+                        itemUrl = item ? `/vibes/${item.id}` : '#'
+                        itemType = '动态'
+                      }
+
+                      return (
+                        <Link key={comment.id} href={itemUrl}>
+                          <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div className="flex items-start space-x-3">
+                              <Avatar size="xs" theme="primary">
+                                {user?.name?.charAt(0) || 'U'}
+                              </Avatar>
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <span className="text-sm font-medium text-gray-900">
+                                    {user?.name}
+                                  </span>
+                                  <span className="inline-block px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded">
+                                    {itemType}
+                                  </span>
+                                  <span className="text-xs text-gray-500">
+                                    {formatDistanceToNow(new Date(comment.createdAt), {
+                                      locale: zhCN,
+                                      addSuffix: true,
+                                    })}
+                                  </span>
+                                </div>
+                                <div className="text-sm text-gray-800 mb-3">
+                                  <Markdown>{comment.content}</Markdown>
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  评论于: {item?.title || item?.content || '未找到内容'}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                )}
+              </BaseCard>
+            </div>
           )}
         </div>
       </div>
