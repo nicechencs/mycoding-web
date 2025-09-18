@@ -37,11 +37,10 @@ export default function SettingsPage() {
   })
 
   const [isLoading, setIsLoading] = useState(false)
+  const [showSaveSuccess, setShowSaveSuccess] = useState(false)
   const [activeTab, setActiveTab] = useState<
     'overview' | 'profile' | 'account' | 'notifications' | 'privacy'
   >('overview')
-
-  
 
   // 统计数据（保持与现有卡片一致）
   const stats = useMemo(
@@ -74,7 +73,11 @@ export default function SettingsPage() {
         description: '查看获得赞赏的内容',
       },
     ],
-    [overview?.favoriteResourcesCount, overview?.articlesCount, overview?.receivedLikes]
+    [
+      overview?.favoriteResourcesCount,
+      overview?.articlesCount,
+      overview?.receivedLikes,
+    ]
   )
 
   // 最近活动（基于交互服务 + mock 内容映射）
@@ -230,7 +233,12 @@ export default function SettingsPage() {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     setIsLoading(false)
-    alert('设置已保存')
+    setShowSaveSuccess(true)
+
+    // 3秒后自动隐藏通知
+    setTimeout(() => {
+      setShowSaveSuccess(false)
+    }, 3000)
   }
 
   const tabs = [
@@ -242,11 +250,50 @@ export default function SettingsPage() {
   ] as const
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">个人中心</h1>
-        <p className="text-gray-600">管理您的个人信息和偏好设置</p>
-      </div>
+    <div>
+      {/* 成功通知 */}
+      {showSaveSuccess && (
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg
+                className="w-5 h-5 text-green-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-green-800">
+                设置已保存成功！
+              </p>
+            </div>
+            <div className="ml-auto pl-3">
+              <button
+                onClick={() => setShowSaveSuccess(false)}
+                className="inline-flex text-green-400 hover:text-green-600 focus:outline-none"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* 侧边栏导航 */}

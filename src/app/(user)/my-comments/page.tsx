@@ -1,21 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserOverviewStats } from '@/hooks/use-users'
 import { useUserComments } from '@/hooks/use-interactions'
+import type { Comment as InteractionComment } from '@/lib/interaction/interaction-types'
 import Link from 'next/link'
 import { Avatar } from '@/components/ui/avatar'
 import { Markdown } from '@/components/ui/markdown'
+import { mockArticles } from '@/lib/mock/articles'
+import { mockResources } from '@/lib/mock/resources'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import { InteractionService } from '@/lib/interaction/interaction-service'
 
 export default function MyCommentsPage() {
   const { user, isAuthenticated } = useAuth()
-  const { overview } = useUserOverviewStats(user?.id || '')
+  const { overview, mutate: mutateOverview } = useUserOverviewStats(user?.id || '')
   const [activeTab, setActiveTab] = useState<
     'all' | 'resource' | 'post' | 'vibe'
   >('all')
+  // 分页（客户端）
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  // 评论点赞状态
+  const [commentLikeStats, setCommentLikeStats] = useState<{[key: string]: {likeCount: number}}>({});
+  // 切换标签时重置页码（需在任何返回前调用）
+  useEffect(() => {
+    setPage(1)
+  }, [activeTab])
 
   // 获取用户评论
   const { comments: allComments, loading, refresh } = useUserComments()
@@ -74,6 +87,30 @@ export default function MyCommentsPage() {
 
   const comments = getCurrentComments()
 
+  // 总数（显示用，使用统一统计，有回退）
+  const displayTotal = (() => {
+    switch (activeTab) {
+      case 'resource':
+        return overview?.commentsOnResourcesCount ?? comments.length
+      case 'post':
+        return overview?.commentsOnPostsCount ?? comments.length
+      case 'vibe':
+        return overview?.commentsOnVibesCount ?? comments.length
+      default:
+        return overview?.totalCommentsCount ?? comments.length
+    }
+  })()
+
+  // 分页数据
+  const totalPages = Math.max(1, Math.ceil(comments.length / pageSize))
+  const startIndex = (page - 1) * pageSize
+  const paginatedComments = comments.slice(startIndex, startIndex + pageSize)
+  if (typeof window !== 'undefined') {
+    if (page > totalPages) {
+      setTimeout(() => setPage(totalPages), 0)
+    }
+  }
+
   const getTypeLabel = (type: string) => {
     switch (type) {
       case 'resource':
@@ -100,12 +137,16 @@ export default function MyCommentsPage() {
     }
   }
 
-  const getItemUrl = (comment: any) => {
+  const getItemUrl = (comment: InteractionComment) => {
     switch (comment.targetType) {
-      case 'resource':
-        return `/resources/${comment.targetId}`
-      case 'post':
-        return `/posts/${comment.targetId}`
+      case 'resource': {
+        const res = mockResources.find(r => r.id === comment.targetId)
+        return res ? `/resources/${res.slug}` : '/resources'
+      }
+      case 'post': {
+        const art = mockArticles.find(a => a.id === comment.targetId)
+        return art ? `/posts/${art.slug}` : '/posts'
+      }
       case 'vibe':
         return `/vibes/${comment.targetId}`
       default:
@@ -114,28 +155,37 @@ export default function MyCommentsPage() {
   }
 
   return (
-    <div className="container py-8">
+    <div>
       {/* 页面标题 */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">我的评论</h1>
         <p className="text-gray-600">管理您发表的所有评论</p>
+        
         {/* 汇总统计 */}
-        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="text-sm text-gray-500 mb-1">全部评论</div>
-            <div className="text-2xl font-bold text-gray-900">{overview?.totalCommentsCount ?? 0}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {overview?.totalCommentsCount ?? 0}
+            </div>
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="text-sm text-gray-500 mb-1">资源</div>
-            <div className="text-2xl font-bold text-green-600">{overview?.commentsOnResourcesCount ?? 0}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {overview?.commentsOnResourcesCount ?? 0}
+            </div>
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="text-sm text-gray-500 mb-1">文章</div>
-            <div className="text-2xl font-bold text-blue-600">{overview?.commentsOnPostsCount ?? 0}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {overview?.commentsOnPostsCount ?? 0}
+            </div>
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="text-sm text-gray-500 mb-1">动态</div>
-            <div className="text-2xl font-bold text-purple-600">{overview?.commentsOnVibesCount ?? 0}</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {overview?.commentsOnVibesCount ?? 0}
+            </div>
           </div>
         </div>
       </div>
@@ -160,7 +210,8 @@ export default function MyCommentsPage() {
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          资源评论 ({overview?.commentsOnResourcesCount ?? resourceComments.length})
+          资源评论 (
+          {overview?.commentsOnResourcesCount ?? resourceComments.length})
         </button>
         <button
           onClick={() => setActiveTab('post')}
@@ -184,9 +235,54 @@ export default function MyCommentsPage() {
         </button>
       </div>
 
+      {/* 结果汇总与分页 */}
+      <div className="flex items-center justify-between mb-4 text-sm text-gray-600">
+        <div>
+          共 <span className="font-semibold text-gray-900">{displayTotal}</span>{' '}
+          条{activeTab !== 'all' && `（${getTypeLabel(activeTab)}）`}
+        </div>
+        <div className="flex items-center gap-3">
+          <label className="text-gray-500">每页</label>
+          <select
+            value={pageSize}
+            onChange={e => setPageSize(parseInt(e.target.value, 10))}
+            className="border border-gray-300 rounded px-2 py-1 bg-white"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page <= 1}
+            className={`px-3 py-1 rounded border ${
+              page <= 1
+                ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            上一页
+          </button>
+          <span>
+            第 <span className="font-medium">{page}</span> / {totalPages} 页
+          </span>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            className={`px-3 py-1 rounded border ${
+              page >= totalPages
+                ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            下一页
+          </button>
+        </div>
+      </div>
+
       {/* 评论列表 */}
       <div className="space-y-6">
-        {comments.length === 0 ? (
+        {paginatedComments.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">💬</div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -217,7 +313,7 @@ export default function MyCommentsPage() {
             </div>
           </div>
         ) : (
-          comments.map((comment: any) => (
+          paginatedComments.map((comment: InteractionComment) => (
             <div
               key={comment.id}
               className="bg-white rounded-lg border border-gray-200 overflow-hidden"
@@ -267,7 +363,7 @@ export default function MyCommentsPage() {
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                         />
                       </svg>
-                      {comment.likeCount || 0}
+                      {commentLikeStats[comment.id]?.likeCount || 0}
                     </span>
                   </div>
                 </div>
@@ -288,25 +384,31 @@ export default function MyCommentsPage() {
 
                     <div className="flex items-center gap-4 mt-3">
                       <Link
-                        href={getItemUrl(comment) as any}
+                        href={getItemUrl(comment)}
                         className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                       >
                         查看原文
                       </Link>
                       <button
                         onClick={() => {
-                          // 这里可以实现编辑评论功能
-                          console.log('编辑评论', comment.id)
+                          /* 预留编辑评论功能 */
                         }}
                         className="text-gray-600 hover:text-gray-700 text-sm"
                       >
                         编辑
                       </button>
                       <button
-                        onClick={() => {
-                          // 这里可以实现删除评论功能
-                          if (confirm('确定要删除这条评论吗？')) {
-                            console.log('删除评论', comment.id)
+                        onClick={async () => {
+                          if (!user?.id) return
+                          if (!confirm('确定要删除这条评论吗？')) return
+                          const ok = await InteractionService.deleteComment(
+                            comment.id,
+                            user.id
+                          )
+                          if (ok) {
+                            await refresh()
+                            await mutateOverview()
+                            setPage(1)
                           }
                         }}
                         className="text-red-600 hover:text-red-700 text-sm"
@@ -321,33 +423,35 @@ export default function MyCommentsPage() {
                         <div className="text-sm text-gray-600 font-medium">
                           {comment.replies.length} 条回复
                         </div>
-                        {comment.replies.slice(0, 2).map((reply: any) => (
-                          <div
-                            key={reply.id}
-                            className="bg-gray-50 rounded p-3"
-                          >
-                            <div className="flex items-center gap-2 mb-1">
-                              <Avatar size="xs" theme="secondary">
-                                {reply.userName.charAt(0)}
-                              </Avatar>
-                              <span className="font-medium text-sm text-gray-900">
-                                {reply.userName}
-                              </span>
-                              <span className="text-xs text-gray-500">
-                                {formatDistanceToNow(reply.createdAt, {
-                                  locale: zhCN,
-                                  addSuffix: true,
-                                })}
-                              </span>
+                        {comment.replies
+                          .slice(0, 2)
+                          .map((reply: InteractionComment) => (
+                            <div
+                              key={reply.id}
+                              className="bg-gray-50 rounded p-3"
+                            >
+                              <div className="flex items-center gap-2 mb-1">
+                                <Avatar size="xs" theme="secondary">
+                                  {reply.userName.charAt(0)}
+                                </Avatar>
+                                <span className="font-medium text-sm text-gray-900">
+                                  {reply.userName}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {formatDistanceToNow(reply.createdAt, {
+                                    locale: zhCN,
+                                    addSuffix: true,
+                                  })}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-700">
+                                {reply.content}
+                              </p>
                             </div>
-                            <p className="text-sm text-gray-700">
-                              {reply.content}
-                            </p>
-                          </div>
-                        ))}
+                          ))}
                         {comment.replies.length > 2 && (
                           <Link
-                            href={getItemUrl(comment) as any}
+                            href={getItemUrl(comment)}
                             className="text-blue-600 hover:text-blue-700 text-sm"
                           >
                             查看全部 {comment.replies.length} 条回复
