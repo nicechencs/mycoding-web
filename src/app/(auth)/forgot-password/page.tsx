@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { AuthService } from '@/lib/auth/auth-service'
@@ -53,8 +52,10 @@ export default function ForgotPasswordPage() {
     try {
       await AuthService.forgotPassword(formData)
       setIsSuccess(true)
-    } catch (error: any) {
-      setError(error.message || '发送重置邮件失败，请重试')
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error ? error.message : '发送重置邮件失败，请重试'
+      )
     } finally {
       setIsSubmitting(false)
     }

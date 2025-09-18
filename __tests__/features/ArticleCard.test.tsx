@@ -27,7 +27,7 @@ jest.mock('@/hooks/use-users', () => ({
     loading: false,
     error: null,
   }),
-}));
+}))
 
 describe('ArticleCard - profile preview', () => {
   const article: Article = {
@@ -62,4 +62,3 @@ describe('ArticleCard - profile preview', () => {
     expect(screen.getByText('关闭')).toBeInTheDocument()
   })
 })
-

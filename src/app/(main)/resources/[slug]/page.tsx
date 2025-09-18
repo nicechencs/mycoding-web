@@ -3,7 +3,12 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useResourceDetail } from '@/hooks/use-resource-detail'
+import {
+  useResourceBySlug,
+  useResourceComments,
+  useResourceRatingDistribution,
+  useRelatedResources,
+} from '@/hooks/use-resources'
 import { RatingStars } from '@/components/features/resources/rating-stars'
 import { ResourceActions } from '@/components/features/resources/ResourceActions'
 import { ResourceComments } from '@/components/features/resources/resource-comments'
@@ -21,16 +26,44 @@ export default function ResourceDetailPage() {
     'description' | 'comments' | 'ratings'
   >('description')
 
-  // 使用自定义 Hook 管理资源详情数据
+  // 使用组合Hook管理资源详情数据（按slug取资源，再按id取相关数据）
   const {
     resource,
+    loading: resourceLoading,
+    error: resourceError,
+    mutate: mutateResource,
+  } = useResourceBySlug(slug)
+
+  const resourceId = resource?.id || ''
+
+  const {
     comments,
-    relatedResources,
-    ratingDistribution,
-    loading,
-    error,
-    refresh,
-  } = useResourceDetail(slug)
+    loading: commentsLoading,
+    mutate: mutateComments,
+  } = useResourceComments(resourceId)
+
+  const {
+    distribution: ratingDistribution,
+    loading: distributionLoading,
+    mutate: mutateDistribution,
+  } = useResourceRatingDistribution(resourceId)
+
+  const {
+    resources: relatedResources,
+    loading: relatedLoading,
+    mutate: mutateRelated,
+  } = useRelatedResources(resourceId, 3)
+
+  const loading =
+    resourceLoading || commentsLoading || distributionLoading || relatedLoading
+  const error = resourceError
+
+  const refresh = () => {
+    mutateResource()
+    mutateComments()
+    mutateDistribution()
+    mutateRelated()
+  }
 
   // 加载状态
   if (loading) {
@@ -239,7 +272,7 @@ export default function ResourceDetailPage() {
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
-                评论 ({comments.length})
+                评论 ({resource.commentCount})
               </button>
               <button
                 onClick={() => setActiveTab('ratings')}
@@ -302,6 +335,7 @@ export default function ResourceDetailPage() {
                 <ResourceComments
                   resourceId={resource.id}
                   resourceTitle={resource.title}
+                  totalCount={resource.commentCount}
                 />
               )}
 

@@ -55,14 +55,14 @@ export function VibeCard({ vibe }: VibeCardProps) {
         setNewComment('')
         showToast({
           type: 'success',
-          title: '评论发表成功'
+          title: '评论发表成功',
         })
       } catch (error) {
         console.error('提交评论失败:', error)
         showToast({
           type: 'error',
           title: '评论发表失败',
-          message: '请稍后重试'
+          message: '请稍后重试',
         })
       }
     }

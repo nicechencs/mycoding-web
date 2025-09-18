@@ -1,6 +1,10 @@
 import { ApiClient, defaultApiClient, isDevelopment } from './base/api-client'
 import { globalCache, CacheManager } from './base/cache-manager'
-import { ApiResponse, QueryParams, PaginatedResponse } from './base/types'
+import {
+  ApiResponse,
+  QueryParams,
+  PaginatedResponse,
+} from './base/types'
 import {
   Resource,
   ResourceComment,
@@ -12,8 +16,6 @@ import {
 import {
   mockResources,
   mockResourceCategories,
-  mockResourceComments,
-  mockResourceRatings,
   getResourcesByCategory,
   getFeaturedResources,
   getResourceById,
@@ -246,19 +248,20 @@ export class ResourcesService implements IResourcesService {
       }
 
       // 应用评分过滤
-      if (params.filters?.rating) {
-        resources = resources.filter(
-          resource => resource.rating >= (params.filters?.rating || 0)
-        )
+      if (params.filters?.rating && typeof params.filters.rating === 'number') {
+        const rating = params.filters.rating
+        resources = resources.filter(resource => resource.rating >= rating)
       }
 
       // 应用标签过滤
-      if (params.filters?.tags && params.filters.tags.length > 0) {
-        resources = resources.filter(
-          resource =>
-            params.filters?.tags?.some((tag: string) =>
-              resource.tags.includes(tag)
-            ) || false
+      if (
+        params.filters?.tags &&
+        Array.isArray(params.filters.tags) &&
+        params.filters.tags.length > 0
+      ) {
+        const tags = params.filters.tags
+        resources = resources.filter(resource =>
+          tags.some((tag: string) => resource.tags.includes(tag))
         )
       }
 
@@ -579,19 +582,20 @@ export class ResourcesService implements IResourcesService {
     }
 
     // 应用评分过滤
-    if (params.filters?.rating) {
-      resources = resources.filter(
-        resource => resource.rating >= (params.filters?.rating || 0)
-      )
+    if (params.filters?.rating && typeof params.filters.rating === 'number') {
+      const rating = params.filters.rating
+      resources = resources.filter(resource => resource.rating >= rating)
     }
 
     // 应用标签过滤
-    if (params.filters?.tags && params.filters.tags.length > 0) {
-      resources = resources.filter(
-        resource =>
-          params.filters?.tags?.some((tag: string) =>
-            resource.tags.includes(tag)
-          ) || false
+    if (
+      params.filters?.tags &&
+      Array.isArray(params.filters.tags) &&
+      params.filters.tags.length > 0
+    ) {
+      const tags = params.filters.tags
+      resources = resources.filter(resource =>
+        tags.some((tag: string) => resource.tags.includes(tag))
       )
     }
 

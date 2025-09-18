@@ -8,6 +8,7 @@ import {
   Favorite,
 } from '@/lib/interaction/interaction-types'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/utils/logger'
 
 // 点赞 Hook
 export function useLike(
@@ -28,7 +29,7 @@ export function useLike(
           setIsLiked(stats.userLiked || false)
           setLikeCount(stats.likes)
         })
-        .catch(console.error)
+        .catch(logger.error)
     }
   }, [targetId, targetType, user?.id])
 
@@ -49,7 +50,7 @@ export function useLike(
       setIsLiked(newLikedState)
       setLikeCount(prev => (newLikedState ? prev + 1 : prev - 1))
     } catch (error) {
-      console.error('Failed to toggle like:', error)
+      logger.error('Failed to toggle like:', error)
     } finally {
       setIsLoading(false)
     }
@@ -82,7 +83,7 @@ export function useFavorite(
           setIsFavorited(stats.userFavorited || false)
           setFavoriteCount(stats.favorites)
         })
-        .catch(console.error)
+        .catch(logger.error)
     }
   }, [targetId, targetType, user?.id])
 
@@ -102,7 +103,7 @@ export function useFavorite(
       setIsFavorited(newFavoritedState)
       setFavoriteCount(prev => (newFavoritedState ? prev + 1 : prev - 1))
     } catch (error) {
-      console.error('Failed to toggle favorite:', error)
+      logger.error('Failed to toggle favorite:', error)
     } finally {
       setIsLoading(false)
     }
@@ -134,42 +135,49 @@ export function useComments(
     page: 1,
     total: 0,
     hasMore: false,
-    pageSize: options?.pageSize || 10
+    pageSize: options?.pageSize || 10,
   })
 
   // 获取评论列表
-  const fetchComments = useCallback(async (page = 1, append = false) => {
-    if (page === 1) {
-      setIsLoading(true)
-    } else {
-      setIsLoadingMore(true)
-    }
-    
-    try {
-      const data = await InteractionService.getComments(targetId, targetType, {
-        page,
-        pageSize: pagination.pageSize
-      })
-      
-      if (append) {
-        setComments(prev => [...prev, ...data.comments])
+  const fetchComments = useCallback(
+    async (page = 1, append = false) => {
+      if (page === 1) {
+        setIsLoading(true)
       } else {
-        setComments(data.comments)
+        setIsLoadingMore(true)
       }
-      
-      setPagination({
-        page: data.page,
-        total: data.total,
-        hasMore: data.hasMore,
-        pageSize: data.pageSize
-      })
-    } catch (error) {
-      console.error('Failed to fetch comments:', error)
-    } finally {
-      setIsLoading(false)
-      setIsLoadingMore(false)
-    }
-  }, [targetId, targetType, pagination.pageSize])
+
+      try {
+        const data = await InteractionService.getComments(
+          targetId,
+          targetType,
+          {
+            page,
+            pageSize: pagination.pageSize,
+          }
+        )
+
+        if (append) {
+          setComments(prev => [...prev, ...data.comments])
+        } else {
+          setComments(data.comments)
+        }
+
+        setPagination({
+          page: data.page,
+          total: data.total,
+          hasMore: data.hasMore,
+          pageSize: data.pageSize,
+        })
+      } catch (error) {
+        logger.error('Failed to fetch comments:', error)
+      } finally {
+        setIsLoading(false)
+        setIsLoadingMore(false)
+      }
+    },
+    [targetId, targetType, pagination.pageSize]
+  )
 
   // 加载更多评论
   const loadMoreComments = useCallback(() => {
@@ -203,7 +211,7 @@ export function useComments(
         setComments(prev => [newComment, ...prev])
         return newComment
       } catch (error) {
-        console.error('Failed to create comment:', error)
+        logger.error('Failed to create comment:', error)
         throw error
       } finally {
         setIsSubmitting(false)
@@ -261,7 +269,7 @@ export function useCommentLike(commentId: string) {
           setIsLiked(stats.isLiked)
           setLikeCount(stats.likeCount)
         })
-        .catch(console.error)
+        .catch(logger.error)
     }
   }, [commentId, user?.id])
 
@@ -312,7 +320,7 @@ export function useRating(targetId: string) {
           setAverageRating(stats.averageRating)
           setTotalRatings(stats.totalRatings || 0)
         })
-        .catch(console.error)
+        .catch(logger.error)
     }
   }, [targetId, user?.id])
 
@@ -377,7 +385,7 @@ export function useInteractionStats(
       setIsLoading(true)
       InteractionService.getInteractionStats(targetId, targetType, user?.id)
         .then(setStats)
-        .catch(console.error)
+        .catch(logger.error)
         .finally(() => setIsLoading(false))
     }
   }, [targetId, targetType, user?.id])
@@ -457,19 +465,24 @@ export function useUserComments(type?: 'post' | 'resource' | 'vibe') {
 
 // 资源评分统计 Hook
 export function useResourceRating(resourceId: string) {
-  const [ratingStats, setRatingStats] = useState({
+  const [ratingStats, setRatingStats] = useState<{
+    averageRating: number
+    totalRatings: number
+    ratingDistribution: Record<number, number>
+  }>({
     averageRating: 0,
     totalRatings: 0,
-    ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+    ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
   })
   const [loading, setLoading] = useState(false)
 
   const fetchRatingStats = useCallback(async () => {
     if (!resourceId) return
-    
+
     setLoading(true)
     try {
-      const stats = await InteractionService.getResourceRatingFromComments(resourceId)
+      const stats =
+        await InteractionService.getResourceRatingFromComments(resourceId)
       setRatingStats(stats)
     } catch (error) {
       console.error('Failed to fetch rating stats:', error)

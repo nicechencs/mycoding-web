@@ -10,16 +10,25 @@ import { formatRelativeTime } from '@/utils/date'
 import { Comment } from '@/lib/interaction/interaction-types'
 import { useToast } from '@/components/ui/toast'
 import { CommentItem } from './comment-item'
-import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
+import {
+  CommentSkeleton,
+  CommentInputSkeleton,
+  CommentHeaderSkeleton,
+} from '@/components/ui/comment-skeleton'
 
 interface ResourceCommentsProps {
   resourceId: string
   className?: string
+  resourceTitle?: string
+  // 统一展示口径时传入的评论总数（来自详情对象）
+  totalCount?: number
 }
 
 export const ResourceComments = React.memo(function ResourceComments({
   resourceId,
   className = '',
+  resourceTitle,
+  totalCount,
 }: ResourceCommentsProps) {
   const { user, isAuthenticated } = useAuth()
   const { showToast } = useToast()
@@ -41,57 +50,66 @@ export const ResourceComments = React.memo(function ResourceComments({
     // deleteComment,
     // refreshComments,
   } = useComments(resourceId, 'resource', { pageSize: 10 })
-  
+
   const canComment = useMemo(() => isAuthenticated, [isAuthenticated])
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newComment.trim() || isSubmitting) return
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!newComment.trim() || isSubmitting) return
 
-    try {
-      const result = await createComment(newComment, showRating && rating > 0 ? rating : undefined)
-      if (result) {
-        setNewComment('')
-        setRating(0)
-        setShowRating(false)
+      try {
+        const result = await createComment(
+          newComment,
+          showRating && rating > 0 ? rating : undefined
+        )
+        if (result) {
+          setNewComment('')
+          setRating(0)
+          setShowRating(false)
+          showToast({
+            type: 'success',
+            title: '评论发表成功',
+            message: '感谢您的分享！',
+          })
+        }
+      } catch (error) {
+        console.error('Submit comment error:', error)
         showToast({
-          type: 'success',
-          title: '评论发表成功',
-          message: '感谢您的分享！'
+          type: 'error',
+          title: '评论发表失败',
+          message: '请稍后重试',
         })
       }
-    } catch (error) {
-      console.error('Submit comment error:', error)
-      showToast({
-        type: 'error',
-        title: '评论发表失败',
-        message: '请稍后重试'
-      })
-    }
-  }, [newComment, isSubmitting, createComment, showToast, showRating, rating])
+    },
+    [newComment, isSubmitting, createComment, showToast, showRating, rating]
+  )
 
-  const handleReply = useCallback(async (parentId: string) => {
-    if (!replyContent.trim() || isSubmitting) return
+  const handleReply = useCallback(
+    async (parentId: string) => {
+      if (!replyContent.trim() || isSubmitting) return
 
-    try {
-      const result = await createComment(replyContent)
-      if (result) {
-        setReplyContent('')
-        setReplyTo(null)
+      try {
+        const result = await createComment(replyContent)
+        if (result) {
+          setReplyContent('')
+          setReplyTo(null)
+          showToast({
+            type: 'success',
+            title: '回复发表成功',
+          })
+        }
+      } catch (error) {
+        console.error('Submit reply error:', error)
         showToast({
-          type: 'success',
-          title: '回复发表成功'
+          type: 'error',
+          title: '回复发表失败',
+          message: '请稍后重试',
         })
       }
-    } catch (error) {
-      console.error('Submit reply error:', error)
-      showToast({
-        type: 'error',
-        title: '回复发表失败',
-        message: '请稍后重试'
-      })
-    }
-  }, [replyContent, isSubmitting, createComment, showToast])
+    },
+    [replyContent, isSubmitting, createComment, showToast]
+  )
 
   const handleLoadMore = useCallback(() => {
     if (pagination.hasMore && !isLoadingMore) {
@@ -132,10 +150,9 @@ export const ResourceComments = React.memo(function ResourceComments({
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">
-          评论 ({pagination.total || comments.length})
+          评论 ({totalCount ?? pagination.total ?? comments.length})
         </h3>
       </div>
-
 
       {/* 评论输入区域 */}
       {canComment ? (
@@ -230,8 +247,8 @@ export const ResourceComments = React.memo(function ResourceComments({
         ) : (
           <>
             {comments.map(comment => (
-              <CommentItem 
-                key={comment.id} 
+              <CommentItem
+                key={comment.id}
                 comment={comment}
                 onReply={handleReplyToComment}
                 replyTo={replyTo}
@@ -242,7 +259,7 @@ export const ResourceComments = React.memo(function ResourceComments({
                 isSubmitting={isSubmitting}
               />
             ))}
-            
+
             {/* 加载更多按钮 */}
             {pagination.hasMore && (
               <div className="pt-6 border-t border-gray-100">

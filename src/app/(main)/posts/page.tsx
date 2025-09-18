@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useFeaturedArticles, useLatestArticles } from '@/hooks/use-articles'
 import { ArticleCard } from '@/components/features/community/article-card'
-import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
+import { ListSkeleton } from '@/components/ui/LoadingSuspense'
 
 export default function PostsPage() {
   const {

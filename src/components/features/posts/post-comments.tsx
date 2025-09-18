@@ -9,16 +9,23 @@ import { LoginPromptInline } from '@/components/ui/login-prompt'
 import { Comment } from '@/lib/interaction/interaction-types'
 import { useToast } from '@/components/ui/toast'
 import { CommentItem } from '@/components/features/resources/comment-item'
-import { CommentSkeleton, CommentInputSkeleton, CommentHeaderSkeleton } from '@/components/ui/comment-skeleton'
+import {
+  CommentSkeleton,
+  CommentInputSkeleton,
+  CommentHeaderSkeleton,
+} from '@/components/ui/comment-skeleton'
 
 interface PostCommentsProps {
   postId: string
   className?: string
+  // 统一展示口径时传入的评论总数（来自详情对象）
+  totalCount?: number
 }
 
-export const PostComments = React.memo(function PostComments({ 
-  postId, 
-  className = '' 
+export const PostComments = React.memo(function PostComments({
+  postId,
+  className = '',
+  totalCount,
 }: PostCommentsProps) {
   const { user, isAuthenticated } = useAuth()
   const { showToast } = useToast()
@@ -36,55 +43,61 @@ export const PostComments = React.memo(function PostComments({
     createComment,
     loadMoreComments,
   } = useComments(postId, 'post', { pageSize: 10 })
-  
+
   const canComment = useMemo(() => isAuthenticated, [isAuthenticated])
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newComment.trim() || isSubmitting) return
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!newComment.trim() || isSubmitting) return
 
-    try {
-      const result = await createComment(newComment)
-      if (result) {
-        setNewComment('')
+      try {
+        const result = await createComment(newComment)
+        if (result) {
+          setNewComment('')
+          showToast({
+            type: 'success',
+            title: '评论发表成功',
+            message: '感谢您的分享！',
+          })
+        }
+      } catch (error) {
+        console.error('Submit comment error:', error)
         showToast({
-          type: 'success',
-          title: '评论发表成功',
-          message: '感谢您的分享！'
+          type: 'error',
+          title: '评论发表失败',
+          message: '请稍后重试',
         })
       }
-    } catch (error) {
-      console.error('Submit comment error:', error)
-      showToast({
-        type: 'error',
-        title: '评论发表失败',
-        message: '请稍后重试'
-      })
-    }
-  }, [newComment, isSubmitting, createComment, showToast])
+    },
+    [newComment, isSubmitting, createComment, showToast]
+  )
 
-  const handleReply = useCallback(async (parentId: string) => {
-    if (!replyContent.trim() || isSubmitting) return
+  const handleReply = useCallback(
+    async (parentId: string) => {
+      if (!replyContent.trim() || isSubmitting) return
 
-    try {
-      const result = await createComment(replyContent)
-      if (result) {
-        setReplyContent('')
-        setReplyTo(null)
+      try {
+        const result = await createComment(replyContent)
+        if (result) {
+          setReplyContent('')
+          setReplyTo(null)
+          showToast({
+            type: 'success',
+            title: '回复发表成功',
+          })
+        }
+      } catch (error) {
+        console.error('Submit reply error:', error)
         showToast({
-          type: 'success',
-          title: '回复发表成功'
+          type: 'error',
+          title: '回复发表失败',
+          message: '请稍后重试',
         })
       }
-    } catch (error) {
-      console.error('Submit reply error:', error)
-      showToast({
-        type: 'error',
-        title: '回复发表失败',
-        message: '请稍后重试'
-      })
-    }
-  }, [replyContent, isSubmitting, createComment, showToast])
+    },
+    [replyContent, isSubmitting, createComment, showToast]
+  )
 
   const handleLoadMore = useCallback(() => {
     if (pagination.hasMore && !isLoadingMore) {
@@ -123,7 +136,7 @@ export const PostComments = React.memo(function PostComments({
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">
-          评论 ({pagination.total || comments.length})
+          评论 ({totalCount ?? pagination.total ?? comments.length})
         </h3>
       </div>
 
@@ -182,8 +195,8 @@ export const PostComments = React.memo(function PostComments({
         ) : (
           <>
             {comments.map(comment => (
-              <CommentItem 
-                key={comment.id} 
+              <CommentItem
+                key={comment.id}
                 comment={comment}
                 onReply={handleReplyToComment}
                 replyTo={replyTo}
@@ -194,7 +207,7 @@ export const PostComments = React.memo(function PostComments({
                 isSubmitting={isSubmitting}
               />
             ))}
-            
+
             {/* 加载更多按钮 */}
             {pagination.hasMore && (
               <div className="pt-6 border-t border-gray-100">

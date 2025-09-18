@@ -6,7 +6,6 @@ import { Vibe, VibeComment } from '@/types'
 // Mock数据导入（开发模式使用）
 import {
   mockVibes,
-  mockVibeComments,
   getLatestVibes,
   getVibeById,
   getVibesByUser,
@@ -483,14 +482,16 @@ export class VibesService implements IVibesService {
     }
 
     // 应用标签过滤
-    if (params.filters?.tags && params.filters.tags.length > 0) {
-      vibes = vibes.filter(
-        vibe =>
-          params.filters?.tags?.some((tag: string) =>
-            vibe.tags.some(
-              vibeTag => vibeTag.toLowerCase() === tag.toLowerCase()
-            )
-          ) || false
+    if (
+      params.filters?.tags &&
+      Array.isArray(params.filters.tags) &&
+      params.filters.tags.length > 0
+    ) {
+      const tags = params.filters.tags
+      vibes = vibes.filter(vibe =>
+        tags.some((tag: string) =>
+          vibe.tags.some(vibeTag => vibeTag.toLowerCase() === tag.toLowerCase())
+        )
       )
     }
 

@@ -5,7 +5,7 @@ import { useResources } from '@/hooks/use-resources'
 import { ResourceCard } from '@/components/features/resources/resource-card'
 import { ContentFilter } from '@/components/ui/content-filter'
 import { taxonomyManager } from '@/lib/taxonomy'
-import { ListSkeleton, PageLoader } from '@/components/ui/LoadingSuspense'
+import { PageLoader } from '@/components/ui/LoadingSuspense'
 
 export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
@@ -14,7 +14,7 @@ export default function ResourcesPage() {
 
   // 构建查询参数
   const queryParams = useMemo(() => {
-    const params: any = {}
+    const params: Record<string, unknown> = {}
     if (selectedCategory !== 'all') {
       params.filters = {
         category: selectedCategory,

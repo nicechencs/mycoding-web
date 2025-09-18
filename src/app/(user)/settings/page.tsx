@@ -1,11 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useUser } from '@/hooks/use-user'
 import { BaseCard } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useUserFavorites } from '@/hooks/use-interactions'
+import { mockArticles } from '@/lib/mock/articles'
+import { mockVibes } from '@/lib/mock/vibes'
+import { mockResources } from '@/lib/mock/resources'
+import { InteractionService } from '@/lib/interaction/interaction-service'
+import { formatDistanceToNow } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
 
 interface UserSettings {
   name: string
@@ -18,6 +25,7 @@ interface UserSettings {
 
 export default function SettingsPage() {
   const { user } = useUser()
+  const userId = user?.id
 
   const [settings, setSettings] = useState<UserSettings>({
     name: user?.name || '',
@@ -33,68 +41,199 @@ export default function SettingsPage() {
     'overview' | 'profile' | 'account' | 'notifications' | 'privacy'
   >('overview')
 
-  // 统计数据
-  const stats = [
-    {
-      label: '已收藏资源',
-      value: '12',
-      icon: '📚',
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
-      href: '/my-favorites',
-      description: '查看您收藏的所有学习资源',
-    },
-    {
-      label: '发表文章',
-      value: '3',
-      icon: '📝',
-      color: 'text-green-600',
-      bg: 'bg-green-50',
-      href: '/posts/articles',
-      description: '管理您发布的文章内容',
-    },
-    {
-      label: '获得点赞',
-      value: '28',
-      icon: '👍',
-      color: 'text-red-600',
-      bg: 'bg-red-50',
-      href: '/my-favorites',
-      description: '查看获得赞赏的内容',
-    },
-  ]
+  // 用户收藏（仅统计资源类收藏）
+  const { favorites: resourceFavorites } = useUserFavorites('resource')
 
-  // 最近活动
-  const recentActivities = [
-    {
-      type: 'bookmark',
-      title: '收藏了《React 性能优化指南》',
-      time: '2小时前',
-      icon: '📚',
-      href: '/resources/react-performance-guide',
-    },
-    {
-      type: 'comment',
-      title: '评论了《Vue 3 新特性详解》',
-      time: '5小时前',
-      icon: '💬',
-      href: '/posts/articles/vue3-features',
-    },
-    {
-      type: 'like',
-      title: '点赞了《JavaScript 设计模式》',
-      time: '1天前',
-      icon: '👍',
-      href: '/posts/articles/js-design-patterns',
-    },
-    {
-      type: 'article',
-      title: '发表了《TypeScript 实战总结》',
-      time: '3天前',
-      icon: '📝',
-      href: '/posts/articles/typescript-practice',
-    },
-  ]
+  // 我发布的文章/动态（基于mock数据）
+  const myArticles = useMemo(
+    () => (userId ? mockArticles.filter(a => a.author.id === userId) : []),
+    [userId]
+  )
+  const myVibes = useMemo(
+    () => (userId ? mockVibes.filter(v => v.author.id === userId) : []),
+    [userId]
+  )
+
+  // 收到的点赞数：基于本人内容在mock数据中的 likeCount 汇总
+  const receivedLikes = useMemo(() => {
+    const articleLikes = myArticles.reduce(
+      (sum, a) => sum + (a.likeCount || 0),
+      0
+    )
+    const vibeLikes = myVibes.reduce((sum, v) => sum + (v.likeCount || 0), 0)
+    return articleLikes + vibeLikes
+  }, [myArticles, myVibes])
+
+  // 统计数据（保持与现有卡片一致）
+  const stats = useMemo(
+    () => [
+      {
+        label: '已收藏资源',
+        value: String(resourceFavorites.length || 0),
+        icon: '📚',
+        color: 'text-blue-600',
+        bg: 'bg-blue-50',
+        href: '/my-favorites',
+        description: '查看您收藏的所有学习资源',
+      },
+      {
+        label: '发表文章',
+        value: String(myArticles.length || 0),
+        icon: '📝',
+        color: 'text-green-600',
+        bg: 'bg-green-50',
+        href: '/posts/articles',
+        description: '管理您发布的文章内容',
+      },
+      {
+        label: '获得点赞',
+        value: String(receivedLikes || 0),
+        icon: '👍',
+        color: 'text-red-600',
+        bg: 'bg-red-50',
+        href: '/posts/articles',
+        description: '查看获得赞赏的内容',
+      },
+    ],
+    [resourceFavorites.length, myArticles.length, receivedLikes]
+  )
+
+  // 最近活动（基于交互服务 + mock 内容映射）
+  type ActivityItem = {
+    type: 'favorite' | 'comment' | 'like'
+    title: string
+    href: string
+    icon: string
+    createdAt: Date
+  }
+
+  const [recentActivities, setRecentActivities] = useState<ActivityItem[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const loadActivities = async () => {
+      if (!userId) {
+        setRecentActivities([])
+        return
+      }
+      try {
+        const [favorites, comments, likes] = await Promise.all([
+          InteractionService.getUserFavorites(userId),
+          InteractionService.getUserComments(userId),
+          InteractionService.getUserLikes(userId),
+        ])
+
+        const mapFavorite = (f: any): ActivityItem => {
+          if (f.targetType === 'resource') {
+            const res = mockResources.find(r => r.id === f.targetId)
+            return {
+              type: 'favorite',
+              title: `收藏了《${res?.title || '资源'}》`,
+              href: res ? `/resources/${res.slug}` : '/resources',
+              icon: '📚',
+              createdAt: new Date(f.createdAt),
+            }
+          }
+          if (f.targetType === 'post') {
+            const art = mockArticles.find(a => a.id === f.targetId)
+            return {
+              type: 'favorite',
+              title: `收藏了《${art?.title || '文章'}》`,
+              href: art ? `/posts/${art.slug}` : '/posts',
+              icon: '📌',
+              createdAt: new Date(f.createdAt),
+            }
+          }
+          // vibe
+          return {
+            type: 'favorite',
+            title: '收藏了一个动态',
+            href: `/vibes/${f.targetId}`,
+            icon: '📌',
+            createdAt: new Date(f.createdAt),
+          }
+        }
+
+        const mapComment = (c: any): ActivityItem => {
+          if (c.targetType === 'resource') {
+            const res = mockResources.find(r => r.id === c.targetId)
+            return {
+              type: 'comment',
+              title: `评论了《${res?.title || '资源'}》`,
+              href: res ? `/resources/${res.slug}` : '/resources',
+              icon: '💬',
+              createdAt: new Date(c.createdAt),
+            }
+          }
+          if (c.targetType === 'post') {
+            const art = mockArticles.find(a => a.id === c.targetId)
+            return {
+              type: 'comment',
+              title: `评论了《${art?.title || '文章'}》`,
+              href: art ? `/posts/${art.slug}` : '/posts',
+              icon: '💬',
+              createdAt: new Date(c.createdAt),
+            }
+          }
+          return {
+            type: 'comment',
+            title: '评论了一个动态',
+            href: `/vibes/${c.targetId}`,
+            icon: '💬',
+            createdAt: new Date(c.createdAt),
+          }
+        }
+
+        const mapLike = (l: any): ActivityItem => {
+          if (l.targetType === 'resource') {
+            const res = mockResources.find(r => r.id === l.targetId)
+            return {
+              type: 'like',
+              title: `点赞了《${res?.title || '资源'}》`,
+              href: res ? `/resources/${res.slug}` : '/resources',
+              icon: '👍',
+              createdAt: new Date(l.createdAt),
+            }
+          }
+          if (l.targetType === 'post') {
+            const art = mockArticles.find(a => a.id === l.targetId)
+            return {
+              type: 'like',
+              title: `点赞了《${art?.title || '文章'}》`,
+              href: art ? `/posts/${art.slug}` : '/posts',
+              icon: '👍',
+              createdAt: new Date(l.createdAt),
+            }
+          }
+          return {
+            type: 'like',
+            title: '点赞了一个动态',
+            href: `/vibes/${l.targetId}`,
+            icon: '👍',
+            createdAt: new Date(l.createdAt),
+          }
+        }
+
+        const items: ActivityItem[] = [
+          ...favorites.map(mapFavorite),
+          ...comments.map(mapComment),
+          ...likes.map(mapLike),
+        ]
+          .filter(Boolean)
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .slice(0, 8)
+
+        if (mounted) setRecentActivities(items)
+      } catch (e) {
+        if (mounted) setRecentActivities([])
+      }
+    }
+
+    loadActivities()
+    return () => {
+      mounted = false
+    }
+  }, [userId])
 
   const handleInputChange =
     (field: keyof UserSettings) =>
@@ -250,7 +389,10 @@ export default function SettingsPage() {
                             {activity.title}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {activity.time}
+                            {formatDistanceToNow(activity.createdAt, {
+                              locale: zhCN,
+                              addSuffix: true,
+                            })}
                           </p>
                         </div>
                       </div>

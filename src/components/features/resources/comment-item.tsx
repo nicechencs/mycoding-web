@@ -46,7 +46,7 @@ export const CommentItem = memo(function CommentItem({
       showToast({
         type: 'error',
         title: '操作失败',
-        message: '请稍后重试'
+        message: '请稍后重试',
       })
     }
   }, [commentLike.toggleLike, showToast])
@@ -106,10 +106,7 @@ export const CommentItem = memo(function CommentItem({
               )}
             >
               <svg
-                className={cn(
-                  'w-4 h-4',
-                  commentLike.isLiked && 'fill-current'
-                )}
+                className={cn('w-4 h-4', commentLike.isLiked && 'fill-current')}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -185,10 +182,10 @@ export const CommentItem = memo(function CommentItem({
         {comment.replies && comment.replies.length > 0 && (
           <div className="mt-4 space-y-3">
             {comment.replies.map((reply: Comment) => (
-              <CommentItem 
-                key={reply.id} 
-                comment={reply} 
-                isReply 
+              <CommentItem
+                key={reply.id}
+                comment={reply}
+                isReply
                 onReply={onReply}
                 replyTo={replyTo}
                 replyContent={replyContent}

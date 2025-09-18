@@ -7,7 +7,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 export type Environment = 'development' | 'production' | 'test'
 
 /** API 响应基础类型 */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean
   data?: T
   message?: string
@@ -41,11 +41,20 @@ export interface SortParams {
   sortOrder?: 'asc' | 'desc'
 }
 
+/** 筛选参数类型 */
+export interface FilterParams {
+  category?: string
+  rating?: number
+  tags?: string[]
+  author?: string
+  [key: string]: unknown
+}
+
 /** 查询参数类型 */
 export interface QueryParams extends PaginationParams, SortParams {
   search?: string
-  filters?: Record<string, any>
-  [key: string]: any
+  filters?: FilterParams
+  [key: string]: unknown
 }
 
 /** HTTP 请求配置 */
@@ -53,15 +62,15 @@ export interface RequestConfig {
   headers?: Record<string, string>
   timeout?: number
   baseURL?: string
-  params?: Record<string, any>
-  data?: any
+  params?: Record<string, unknown>
+  data?: unknown
 }
 
 /** API 错误类型 */
 export interface ApiError {
   code: string | number
   message: string
-  details?: any
+  details?: unknown
   timestamp?: string
 }
 
@@ -88,7 +97,7 @@ export type RequestInterceptor = (
 ) => RequestConfig | Promise<RequestConfig>
 
 /** 响应拦截器类型 */
-export type ResponseInterceptor<T = any> = (
+export type ResponseInterceptor<T = unknown> = (
   response: ApiResponse<T>
 ) => ApiResponse<T> | Promise<ApiResponse<T>>
 

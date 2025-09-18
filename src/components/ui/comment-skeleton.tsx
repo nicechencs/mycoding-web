@@ -5,7 +5,10 @@ interface CommentSkeletonProps {
   showReplies?: boolean
 }
 
-export function CommentSkeleton({ count = 3, showReplies = false }: CommentSkeletonProps) {
+export function CommentSkeleton({
+  count = 3,
+  showReplies = false,
+}: CommentSkeletonProps) {
   return (
     <div className="space-y-4">
       {[...Array(count)].map((_, index) => (
@@ -38,26 +41,28 @@ export function CommentSkeleton({ count = 3, showReplies = false }: CommentSkele
               {/* 回复骨架（如果启用） */}
               {showReplies && index < 2 && (
                 <div className="ml-12 space-y-3">
-                  {[...Array(Math.max(1, Math.floor(Math.random() * 3)))].map((_, replyIndex) => (
-                    <div key={replyIndex} className="flex gap-3">
-                      <div className="w-6 h-6 bg-gray-200 rounded-full flex-shrink-0"></div>
-                      <div className="flex-1 space-y-2">
-                        <div className="bg-gray-100 rounded-lg p-3 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 bg-gray-200 rounded w-16"></div>
-                            <div className="h-3 bg-gray-200 rounded w-12"></div>
+                  {[...Array(Math.max(1, Math.floor(Math.random() * 3)))].map(
+                    (_, replyIndex) => (
+                      <div key={replyIndex} className="flex gap-3">
+                        <div className="w-6 h-6 bg-gray-200 rounded-full flex-shrink-0"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="bg-gray-100 rounded-lg p-3 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <div className="h-3 bg-gray-200 rounded w-16"></div>
+                              <div className="h-3 bg-gray-200 rounded w-12"></div>
+                            </div>
+                            <div className="h-3 bg-gray-200 rounded w-5/6"></div>
                           </div>
-                          <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 bg-gray-200 rounded"></div>
-                            <div className="h-3 bg-gray-200 rounded w-4"></div>
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 bg-gray-200 rounded"></div>
+                              <div className="h-3 bg-gray-200 rounded w-4"></div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               )}
             </div>

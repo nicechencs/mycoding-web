@@ -171,8 +171,6 @@ describe('Header Component', () => {
       expect(screen.getByText('退出登录')).toBeInTheDocument()
     })
 
-    
-
     it('点击退出登录应该调用logout函数', async () => {
       render(<Header />)
 

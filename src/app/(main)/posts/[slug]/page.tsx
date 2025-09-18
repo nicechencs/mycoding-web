@@ -3,11 +3,8 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import {
-  getArticleBySlug,
-  getArticleComments,
-  getRelatedArticles,
-} from '@/lib/mock/articles'
+import { useArticle, useRelatedArticles } from '@/hooks/use-articles'
+import { useIsFollowing, useUserActions } from '@/hooks/use-users'
 import { PostActions } from '@/components/features/posts/post-actions'
 import { PostComments } from '@/components/features/posts/post-comments'
 import { Avatar } from '@/components/ui/avatar'
@@ -19,8 +16,70 @@ export default function PostDetailPage() {
   const params = useParams()
   const slug = params.slug as string
 
-  const article = getArticleBySlug(slug)
   const [activeTab, setActiveTab] = useState<'content' | 'comments'>('content')
+
+  // 文章详情
+  const {
+    article,
+    loading: articleLoading,
+    error: articleError,
+  } = useArticle(slug)
+
+  // 相关文章
+  const { articles: relatedArticles, loading: relatedLoading } =
+    useRelatedArticles(slug, 3)
+
+  // 统一使用详情对象的评论总数进行展示（不单独请求评论列表统计）
+  const articleId = article?.id || ''
+
+  // 关注作者状态与操作（使用mock服务）
+  const authorId = article?.author?.id || ''
+  const { isFollowing, loading: followStateLoading } = useIsFollowing(authorId)
+  const { followUser, unfollowUser } = useUserActions()
+  const [followLoading, setFollowLoading] = useState(false)
+
+  const handleToggleFollow = async () => {
+    if (!authorId) return
+    setFollowLoading(true)
+    try {
+      if (isFollowing) {
+        await unfollowUser(authorId)
+      } else {
+        await followUser(authorId)
+      }
+    } catch (e) {
+      console.error('Follow toggle failed:', e)
+    } finally {
+      setFollowLoading(false)
+    }
+  }
+
+  const loading = articleLoading || relatedLoading
+
+  if (loading) {
+    return (
+      <div className="container py-16 text-center">
+        <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-gray-600">正在加载文章详情...</p>
+      </div>
+    )
+  }
+
+  if (articleError) {
+    return (
+      <div className="container py-16 text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">加载出错</h1>
+        <p className="text-gray-600 mb-6">{String(articleError)}</p>
+        <Link
+          href="/posts"
+          className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          返回文章列表
+        </Link>
+      </div>
+    )
+  }
 
   if (!article) {
     return (
@@ -37,9 +96,6 @@ export default function PostDetailPage() {
       </div>
     )
   }
-
-  const comments = getArticleComments(article.id)
-  const relatedArticles = getRelatedArticles(article.slug, 3)
 
   return (
     <div className="container py-8">
@@ -171,7 +227,7 @@ export default function PostDetailPage() {
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       />
                     </svg>
-                    {comments.length} 评论
+                    {article.commentCount} 评论
                   </span>
                 </div>
               </div>
@@ -215,7 +271,7 @@ export default function PostDetailPage() {
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
-                评论 ({comments.length})
+                评论 ({article.commentCount})
               </button>
             </div>
 
@@ -251,7 +307,12 @@ export default function PostDetailPage() {
               )}
 
               {/* 评论列表 */}
-              {activeTab === 'comments' && <PostComments postId={article.id} />}
+              {activeTab === 'comments' && (
+                <PostComments
+                  postId={article.id}
+                  totalCount={article.commentCount}
+                />
+              )}
             </div>
           </article>
         </div>
@@ -275,8 +336,19 @@ export default function PostDetailPage() {
             <p className="text-sm text-gray-600 mb-4">
               热爱编程和技术分享的开发者，专注于现代Web开发技术栈。
             </p>
-            <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              关注作者
+            <button
+              onClick={handleToggleFollow}
+              disabled={!authorId || followLoading || followStateLoading}
+              className={`w-full px-4 py-2 rounded-lg transition-colors text-sm font-medium 
+                ${isFollowing ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-blue-600 text-white hover:bg-blue-700'}
+                ${followLoading || followStateLoading ? 'opacity-60 cursor-not-allowed' : ''}
+              `}
+            >
+              {followLoading || followStateLoading
+                ? '处理中...'
+                : isFollowing
+                  ? '已关注'
+                  : '关注作者'}
             </button>
           </div>
 
@@ -392,7 +464,7 @@ export default function PostDetailPage() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">评论数</span>
                 <span className="font-medium text-gray-900">
-                  {comments.length}
+                  {article.commentCount}
                 </span>
               </div>
               <div className="flex items-center justify-between">

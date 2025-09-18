@@ -8,6 +8,7 @@ import {
   RequestInterceptor,
   ResponseInterceptor,
   ErrorInterceptor,
+  Environment,
 } from './types'
 
 /**
@@ -28,7 +29,7 @@ export class ApiClient {
         process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
       timeout: 10000,
       retryCount: 3,
-      environment: (process.env.NODE_ENV as any) || 'development',
+      environment: (process.env.NODE_ENV as Environment) || 'development',
       enableLogging: process.env.NODE_ENV === 'development',
       cache: {
         ttl: 5 * 60 * 1000,
@@ -56,7 +57,7 @@ export class ApiClient {
    */
   async post<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     config: RequestConfig = {}
   ): Promise<ApiResponse<T>> {
     return this.request<T>('POST', endpoint, { ...config, data })
@@ -67,7 +68,7 @@ export class ApiClient {
    */
   async put<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     config: RequestConfig = {}
   ): Promise<ApiResponse<T>> {
     return this.request<T>('PUT', endpoint, { ...config, data })
@@ -88,7 +89,7 @@ export class ApiClient {
    */
   async patch<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     config: RequestConfig = {}
   ): Promise<ApiResponse<T>> {
     return this.request<T>('PATCH', endpoint, { ...config, data })
@@ -156,7 +157,7 @@ export class ApiClient {
 
       // 应用响应拦截器
       for (const interceptor of this.interceptors.response || []) {
-        result = await interceptor(result)
+        result = (await interceptor(result)) as ApiResponse<T>
       }
 
       this.log('RESPONSE', { url, result })
@@ -214,7 +215,7 @@ export class ApiClient {
   /**
    * 构建URL
    */
-  private buildUrl(endpoint: string, params?: Record<string, any>): string {
+  private buildUrl(endpoint: string, params?: Record<string, unknown>): string {
     let url = endpoint.startsWith('http')
       ? endpoint
       : `${this.config.baseURL}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`
@@ -283,7 +284,7 @@ export class ApiClient {
   /**
    * 日志记录
    */
-  private log(type: string, data: any): void {
+  private log(type: string, data: unknown): void {
     if (this.config.enableLogging) {
       console.log(`[API Client - ${type}]`, data)
     }
@@ -309,4 +310,7 @@ export const defaultApiClient = new ApiClient()
 
 // 环境适配工具
 export const isProduction = () => process.env.NODE_ENV === 'production'
-export const isDevelopment = () => process.env.NODE_ENV === 'development'
+// 开关：当设置 NEXT_PUBLIC_USE_MOCK=true 时，强制走 Mock 分支（即使在非 development 环境）
+export const isDevelopment = () =>
+  process.env.NODE_ENV === 'development' ||
+  process.env.NEXT_PUBLIC_USE_MOCK === 'true'
