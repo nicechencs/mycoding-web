@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/hooks/use-user'
 import { BaseCard } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useUserOverviewStats } from '@/hooks/use-users'
+import { useUserOverviewStats, useUserPreferences } from '@/hooks/use-users'
+import { usersService } from '@/services/users.service'
 import { useUserFavorites, useUserComments, useUserLikes } from '@/hooks/use-interactions'
 import { mockArticles } from '@/lib/mock/articles'
 import { mockResources } from '@/lib/mock/resources'
@@ -28,17 +30,20 @@ interface UserSettings {
 
 export default function SettingsPage() {
   const { user } = useUser()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const userId = user?.id
   const { overview } = useUserOverviewStats(userId || '')
+  const { preferences, loading: prefsLoading, mutate: mutatePrefs } = useUserPreferences(userId || '')
   
   // 收藏相关hooks
-  const { favorites: allFavorites, loading: favoritesLoading } = useUserFavorites()
+  const { favorites: allFavorites, loading: favoritesLoading, refresh: refreshFavorites } = useUserFavorites()
   
   // 评论相关hooks  
-  const { comments: userComments, loading: commentsLoading } = useUserComments()
+  const { comments: userComments, loading: commentsLoading, refresh: refreshComments } = useUserComments()
   
   // 点赞相关hooks
-  const { likes: allLikes, loading: likesLoading } = useUserLikes()
+  const { likes: allLikes, loading: likesLoading, refresh: refreshLikes } = useUserLikes()
 
   const [settings, setSettings] = useState<UserSettings>({
     name: user?.name || '',
@@ -51,9 +56,17 @@ export default function SettingsPage() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [showSaveSuccess, setShowSaveSuccess] = useState(false)
+  const [isSavingPref, setIsSavingPref] = useState(false)
+  // 列表筛选/排序状态
+  const [favoriteType, setFavoriteType] = useState<'all' | 'resource' | 'post' | 'vibe'>('all')
+  const [favoriteSort, setFavoriteSort] = useState<'newest' | 'oldest' | 'type' | 'title'>('newest')
+  const [commentType, setCommentType] = useState<'all' | 'resource' | 'post' | 'vibe'>('all')
+  const [commentSort, setCommentSort] = useState<'newest' | 'oldest' | 'most-liked' | 'most-replied'>('newest')
+  const [likeType, setLikeType] = useState<'all' | 'resource' | 'post' | 'vibe'>('all')
+  const [likeRange, setLikeRange] = useState<'all' | 'week' | 'month' | 'year'>('all')
   const [activeTab, setActiveTab] = useState<
     'overview' | 'favorites' | 'comments' | 'likes' | 'profile' | 'account' | 'notifications' | 'privacy'
-  >('favorites')
+  >('overview')
 
   // 统计数据 - 扩展更多统计信息
   const stats = useMemo(
@@ -269,18 +282,27 @@ export default function SettingsPage() {
     }
 
   const handleSave = async () => {
+    if (!user?.id) return
     setIsLoading(true)
-
-    // 模拟保存
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    setIsLoading(false)
-    setShowSaveSuccess(true)
-
-    // 3秒后自动隐藏通知
-    setTimeout(() => {
-      setShowSaveSuccess(false)
-    }, 3000)
+    try {
+      const payload = {
+        name: settings.name,
+        bio: settings.bio,
+        website: settings.website,
+        github: settings.github,
+        twitter: settings.twitter,
+      }
+      const res = await usersService.updateUser(user.id, payload)
+      if (!res.success) throw new Error(res.error || '保存失败')
+      setShowSaveSuccess(true)
+      // 3秒后自动隐藏通知
+      setTimeout(() => setShowSaveSuccess(false), 3000)
+    } catch (e) {
+      console.error('保存用户资料失败:', e)
+      alert('保存失败，请稍后再试。')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const tabs = [
@@ -293,6 +315,43 @@ export default function SettingsPage() {
     { id: 'notifications', name: '通知设置', icon: '🔔' },
     { id: 'privacy', name: '隐私设置', icon: '🔒' },
   ] as const
+
+  // 更新用户偏好设置（通知/隐私）
+  const updatePreference = async <K extends keyof UserSettings | any>(
+    key: 'emailNotifications' | 'pushNotifications' | 'newsletter' | 'publicProfile' | 'showActivity',
+    value: boolean
+  ) => {
+    if (!userId) return
+    setIsSavingPref(true)
+    try {
+      const res = await usersService.updateUserPreferences(userId, { [key]: value })
+      if (!res.success) throw new Error(res.error || '更新失败')
+      // 直接用返回值更新 SWR 缓存，避免开发模式下重新获取默认值
+      await mutatePrefs(res as any, { revalidate: false })
+    } catch (e) {
+      console.error('更新偏好设置失败:', e)
+      alert('更新失败，请稍后重试。')
+    } finally {
+      setIsSavingPref(false)
+    }
+  }
+
+  // 从 URL 恢复当前 tab
+  useEffect(() => {
+    const tab = searchParams.get('tab') as typeof activeTab | null
+    if (tab && ['overview','favorites','comments','likes','profile','account','notifications','privacy'].includes(tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
+
+  // 将当前 tab 写入 URL（不刷新页面）
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.set('tab', activeTab)
+      router.replace(url.pathname + '?' + url.searchParams.toString())
+    }
+  }, [activeTab, router])
 
   return (
     <div>
@@ -787,8 +846,9 @@ export default function SettingsPage() {
                         ].map(type => (
                           <button
                             key={type.id}
+                            onClick={() => setFavoriteType(type.id as any)}
                             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                              'all' === type.id
+                              favoriteType === (type.id as any)
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                             }`}
@@ -802,7 +862,11 @@ export default function SettingsPage() {
                     {/* 排序选项 */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">排序方式</label>
-                      <select className="block w-full sm:w-48 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                      <select
+                        className="block w-full sm:w-48 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+                        value={favoriteSort}
+                        onChange={e => setFavoriteSort(e.target.value as any)}
+                      >
                         <option value="newest">最新收藏</option>
                         <option value="oldest">最早收藏</option>
                         <option value="type">按类型分组</option>
@@ -845,7 +909,36 @@ export default function SettingsPage() {
                   </BaseCard>
                 ) : (
                   <div className="space-y-4">
-                    {allFavorites.map((favorite) => {
+                    {(() => {
+                      let list = allFavorites
+                      if (favoriteType !== 'all') {
+                        list = list.filter(f => f.targetType === favoriteType)
+                      }
+                      switch (favoriteSort) {
+                        case 'newest':
+                          list = [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          break
+                        case 'oldest':
+                          list = [...list].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                          break
+                        case 'type':
+                          const order = { resource: 0, post: 1, vibe: 2 } as Record<string, number>
+                          list = [...list].sort((a, b) => (order[a.targetType] ?? 99) - (order[b.targetType] ?? 99))
+                          break
+                        case 'title':
+                          list = [...list].sort((a, b) => {
+                            const getTitle = (x: any) => {
+                              if (x.targetType === 'resource') return (mockResources.find(r => r.id === x.targetId)?.title || '')
+                              if (x.targetType === 'post') return (mockArticles.find(r => r.id === x.targetId)?.title || '')
+                              if (x.targetType === 'vibe') return (mockVibes.find(r => r.id === x.targetId)?.content || '')
+                              return ''
+                            }
+                            return getTitle(a).localeCompare(getTitle(b))
+                          })
+                          break
+                      }
+                      return list
+                    })().map((favorite) => {
                       let item = null
                       let itemUrl = '#'
                       let itemType = '未知'
@@ -903,7 +996,14 @@ export default function SettingsPage() {
                                 <Link href={itemUrl} className="text-blue-600 hover:text-blue-700 font-medium">
                                   查看详情
                                 </Link>
-                                <button className="text-red-600 hover:text-red-700 font-medium">
+                                <button
+                                  onClick={async () => {
+                                    if (!userId) return
+                                    await InteractionService.toggleFavorite(favorite.targetId, favorite.targetType, userId)
+                                    refreshFavorites()
+                                  }}
+                                  className="text-red-600 hover:text-red-700 font-medium"
+                                >
                                   取消收藏
                                 </button>
                                 <span className="flex items-center gap-1">
@@ -1027,8 +1127,9 @@ export default function SettingsPage() {
                         ].map(type => (
                           <button
                             key={type.id}
+                            onClick={() => setCommentType(type.id as any)}
                             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                              'all' === type.id
+                              commentType === (type.id as any)
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                             }`}
@@ -1043,7 +1144,11 @@ export default function SettingsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">排序方式</label>
-                        <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                        <select
+                          className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+                          value={commentSort}
+                          onChange={e => setCommentSort(e.target.value as any)}
+                        >
                           <option value="newest">最新发表</option>
                           <option value="oldest">最早发表</option>
                           <option value="most-liked">最多点赞</option>
@@ -1097,7 +1202,27 @@ export default function SettingsPage() {
                   </BaseCard>
                 ) : (
                   <div className="space-y-6">
-                    {userComments.map((comment) => {
+                    {(() => {
+                      let list = userComments
+                      if (commentType !== 'all') {
+                        list = list.filter(c => c.targetType === commentType)
+                      }
+                      switch (commentSort) {
+                        case 'newest':
+                          list = [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          break
+                        case 'oldest':
+                          list = [...list].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                          break
+                        case 'most-liked':
+                          list = [...list].sort((a, b) => (b.likes || 0) - (a.likes || 0))
+                          break
+                        case 'most-replied':
+                          list = [...list].sort((a, b) => (b.replies?.length || 0) - (a.replies?.length || 0))
+                          break
+                      }
+                      return list
+                    })().map((comment) => {
                       let item = null
                       let itemUrl = '#'
                       let itemType = '未知'
@@ -1187,7 +1312,14 @@ export default function SettingsPage() {
                                   <button className="text-gray-600 hover:text-gray-700 text-sm">
                                     编辑
                                   </button>
-                                  <button className="text-red-600 hover:text-red-700 text-sm">
+                                  <button
+                                    onClick={async () => {
+                                      if (!userId) return
+                                      const ok = await InteractionService.deleteComment(comment.id, userId)
+                                      if (ok) refreshComments()
+                                    }}
+                                    className="text-red-600 hover:text-red-700 text-sm"
+                                  >
                                     删除
                                   </button>
                                 </div>
@@ -1298,8 +1430,9 @@ export default function SettingsPage() {
                         ].map(type => (
                           <button
                             key={type.id}
+                            onClick={() => setLikeType(type.id as any)}
                             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                              'all' === type.id
+                              likeType === (type.id as any)
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                             }`}
@@ -1313,7 +1446,11 @@ export default function SettingsPage() {
                     {/* 时间筛选 */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">时间范围</label>
-                      <select className="block w-full sm:w-48 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                      <select
+                        className="block w-full sm:w-48 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+                        value={likeRange}
+                        onChange={e => setLikeRange(e.target.value as any)}
+                      >
                         <option value="all">全部时间</option>
                         <option value="week">最近一周</option>
                         <option value="month">最近一月</option>
@@ -1356,7 +1493,23 @@ export default function SettingsPage() {
                   </BaseCard>
                 ) : (
                   <div className="space-y-4">
-                    {allLikes.map((like) => {
+                    {(() => {
+                      let list = allLikes
+                      if (likeType !== 'all') {
+                        list = list.filter(l => l.targetType === likeType)
+                      }
+                      if (likeRange !== 'all') {
+                        const now = new Date()
+                        const threshold = new Date()
+                        if (likeRange === 'week') threshold.setDate(now.getDate() - 7)
+                        if (likeRange === 'month') threshold.setMonth(now.getMonth() - 1)
+                        if (likeRange === 'year') threshold.setFullYear(now.getFullYear() - 1)
+                        list = list.filter(l => new Date(l.createdAt) >= threshold)
+                      }
+                      // 默认按最新时间排序
+                      list = [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                      return list
+                    })().map((like) => {
                       let item = null
                       let itemUrl = '#'
                       let itemType = '未知'
@@ -1414,9 +1567,14 @@ export default function SettingsPage() {
                                 <Link href={itemUrl} className="text-blue-600 hover:text-blue-700 font-medium">
                                   查看详情
                                 </Link>
-                                <button className="text-red-600 hover:text-red-700 font-medium">
-                                  取消点赞
-                                </button>
+                                <button
+                                  onClick={async () => {
+                                    if (!userId) return
+                                    await InteractionService.toggleLike(like.targetId, like.targetType, userId)
+                                    refreshLikes()
+                                  }}
+                                  className="text-red-600 hover:text-red-700 font-medium"
+                                >取消点赞</button>
                               </div>
                             </div>
 
@@ -1437,183 +1595,8 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {activeTab === 'overview' && (
-            <div className="space-y-6">
-              {/* 简化的数据统计区域 */}
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-                  📊 数据概览
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                  {stats.map((stat, index) => (
-                    <div key={index} className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
-                      <div className="flex flex-col items-center text-center">
-                        <div className={`w-12 h-12 rounded-lg ${stat.bg} flex items-center justify-center mb-2`}>
-                          <span className="text-xl">{stat.icon}</span>
-                        </div>
-                        <div className={`text-2xl font-bold ${stat.color} mb-1`}>
-                          {stat.value}
-                        </div>
-                        <div className="text-xs font-medium text-gray-700">
-                          {stat.label}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 最近活动时间线 */}
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-                  ⚡ 最近活动
-                </h2>
-                <BaseCard>
-                  <div className="space-y-4">
-                    {recentActivities.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500">
-                        <p>暂无活动记录</p>
-                      </div>
-                    ) : (
-                      recentActivities.slice(0, 10).map((activity, index) => (
-                        <Link key={index} href={activity.href}>
-                          <div className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer group">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                              <span className="text-lg">{activity.icon}</span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                                {activity.title}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {formatDistanceToNow(activity.createdAt, {
-                                  locale: zhCN,
-                                  addSuffix: true,
-                                })}
-                              </p>
-                            </div>
-                            <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </div>
-                        </Link>
-                      ))
-                    )}
-                  </div>
-                </BaseCard>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'profile' && (
-            <BaseCard>
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  个人资料
-                </h2>
-                <p className="text-gray-600 mt-1">更新您的个人信息</p>
-              </div>
-
-              {/* 头像设置 */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  头像
-                </label>
-                <div className="flex items-center space-x-4">
-                  <Avatar size="lg" theme="primary">
-                    {user?.name?.charAt(0)}
-                  </Avatar>
-                  <Button variant="outline" size="sm">
-                    更换头像
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Input
-                    label="姓名"
-                    value={settings.name}
-                    onChange={handleInputChange('name')}
-                    placeholder="请输入您的姓名"
-                  />
-                </div>
-                <div>
-                  <Input
-                    label="用户名"
-                    value={settings.username}
-                    onChange={handleInputChange('username')}
-                    placeholder="请输入用户名"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <Input
-                    label="邮箱"
-                    type="email"
-                    value={settings.email}
-                    onChange={handleInputChange('email')}
-                    placeholder="请输入邮箱地址"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    个人简介
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={settings.bio}
-                    onChange={handleInputChange('bio')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="介绍一下您自己..."
-                  />
-                </div>
-                <div>
-                  <Input
-                    label="GitHub"
-                    value={settings.github}
-                    onChange={handleInputChange('github')}
-                    placeholder="GitHub用户名"
-                    leftIcon={
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    }
-                  />
-                </div>
-                <div>
-                  <Input
-                    label="Twitter"
-                    value={settings.twitter}
-                    onChange={handleInputChange('twitter')}
-                    placeholder="twitter用户名"
-                    leftIcon={
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                      </svg>
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <Button onClick={handleSave} disabled={isLoading}>
-                  {isLoading ? '保存中...' : '保存更改'}
-                </Button>
-              </div>
-            </BaseCard>
-          )}
+          
+          
 
           {activeTab === 'account' && (
             <BaseCard>
@@ -1667,24 +1650,45 @@ export default function SettingsPage() {
               </div>
               
               <div className="space-y-6">
-                {[
-                  { id: 'email', label: '邮件通知', description: '接收重要更新和消息' },
-                  { id: 'push', label: '推送通知', description: '接收浏览器推送通知' },
-                  { id: 'comments', label: '评论通知', description: '有人回复您的评论时通知' },
-                  { id: 'likes', label: '点赞通知', description: '有人点赞您的内容时通知' },
-                ].map((setting) => (
-                  <div key={setting.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{setting.label}</p>
-                      <p className="text-sm text-gray-600">{setting.description}</p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">邮件通知</p>
+                    <p className="text-sm text-gray-600">接收重要更新和消息</p>
                   </div>
-                ))}
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={!!preferences?.emailNotifications}
+                    disabled={prefsLoading || isSavingPref}
+                    onChange={e => updatePreference('emailNotifications', e.target.checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">推送通知</p>
+                    <p className="text-sm text-gray-600">接收浏览器推送通知</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={!!preferences?.pushNotifications}
+                    disabled={prefsLoading || isSavingPref}
+                    onChange={e => updatePreference('pushNotifications', e.target.checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">订阅简报</p>
+                    <p className="text-sm text-gray-600">接收产品和内容更新邮件</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={!!preferences?.newsletter}
+                    disabled={prefsLoading || isSavingPref}
+                    onChange={e => updatePreference('newsletter', e.target.checked)}
+                  />
+                </div>
               </div>
             </BaseCard>
           )}
@@ -1697,23 +1701,32 @@ export default function SettingsPage() {
               </div>
               
               <div className="space-y-6">
-                {[
-                  { id: 'profile', label: '公开个人资料', description: '允许其他用户查看您的个人资料' },
-                  { id: 'activity', label: '公开活动记录', description: '显示您的点赞、评论等活动' },
-                  { id: 'analytics', label: '数据分析', description: '允许我们使用您的数据改进服务' },
-                ].map((setting) => (
-                  <div key={setting.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{setting.label}</p>
-                      <p className="text-sm text-gray-600">{setting.description}</p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">公开个人资料</p>
+                    <p className="text-sm text-gray-600">允许其他用户查看您的个人资料</p>
                   </div>
-                ))}
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={!!preferences?.publicProfile}
+                    disabled={prefsLoading || isSavingPref}
+                    onChange={e => updatePreference('publicProfile', e.target.checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">公开活动记录</p>
+                    <p className="text-sm text-gray-600">显示您的点赞、评论等活动</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={!!preferences?.showActivity}
+                    disabled={prefsLoading || isSavingPref}
+                    onChange={e => updatePreference('showActivity', e.target.checked)}
+                  />
+                </div>
               </div>
             </BaseCard>
           )}

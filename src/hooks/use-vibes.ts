@@ -87,6 +87,11 @@ export function useLatestVibes(limit: number = 10, options: SWROptions = {}) {
       revalidateOnReconnect: true,
       errorRetryCount: 3,
       refreshInterval: 1 * 60 * 1000, // 1分钟
+      // Avoid getting stuck in loading state if API is unreachable
+      shouldRetryOnError: false,
+      revalidateIfStale: false,
+      // Provide immediate fallback to render UI while fetching
+      fallbackData: { success: true, data: [] },
       ...options,
     }
   )

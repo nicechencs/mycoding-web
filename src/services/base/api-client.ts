@@ -25,9 +25,13 @@ export class ApiClient {
 
   constructor(config: Partial<ServiceConfig> = {}) {
     this.config = {
-      baseURL:
-        process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
-      timeout: 10000,
+      // Default to same-origin API to avoid cross-origin localhost issues in production
+      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
+      // Allow overriding timeout via env; default 10s
+      timeout:
+        (process.env.NEXT_PUBLIC_REQUEST_TIMEOUT
+          ? Number(process.env.NEXT_PUBLIC_REQUEST_TIMEOUT)
+          : undefined) || 10000,
       retryCount: 3,
       environment: (process.env.NODE_ENV as Environment) || 'development',
       enableLogging: process.env.NODE_ENV === 'development',
